@@ -1,0 +1,241 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">Like Live</string>
+
+    <string name="stream_live">LIVE</string>
+    <string name="stream_thousands_viewers_count">%s.%sK</string>
+    <string name="stream_add_comment">Add comment…</string>
+    <string name="need_camera_permisseon">The application requires access to the camera</string>
+    <string name="need_read_external_storage_permisseon">The application requires access to the photos</string>
+
+    <string name="preparation_edit_photo">Edit photo</string>
+    <string name="preparation_username">Username</string>
+    <string name="preparation_username_hint">user_name</string>
+    <string name="preparation_viewer_count">Viewer count</string>
+    <string name="preparation_start_live">Start Live</string>
+
+    <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
+        <item>S</item>
+        <item>O</item>
+        <item>R</item>
+        <item>U</item>
+        <item>H</item>
+        <item>F</item>
+        <item>Z</item>
+        <item>+</item>
+        <item>)</item>
+        <item>-</item>
+        <item>(</item>
+        <item>!</item>
+    </string-array>
+
+    <string-array name="two_letter_comments" tools:ignore="InconsistentArrays">
+        <item>Hi</item>
+        <item>No</item>
+        <item>Ok</item>
+        <item>By</item>
+        <item>Up</item>
+        <item>Go</item>
+        <item>On</item>
+        <item>Up</item>
+        <item>It</item>
+        <item>Me</item>
+        <item>Do</item>
+        <item>Ye</item>
+        <item>Up</item>
+        <item>So</item>
+        <item>Hi</item>
+        <item>Oh</item>
+        <item>Be</item>
+        <item>If</item>
+        <item>As</item>
+        <item>Of</item>
+        <item>Hm</item>
+    </string-array>
+
+    <string-array name="three_letter_comments" tools:ignore="InconsistentArrays">
+        <item>Wow</item>
+        <item>Yes</item>
+        <item>Nop</item>
+        <item>Fun</item>
+        <item>Hey</item>
+        <item>Hmm</item>
+        <item>Lol</item>
+        <item>Wow</item>
+        <item>Yep</item>
+        <item>Bye</item>
+        <item>Try</item>
+        <item>Win</item>
+        <item>Yay</item>
+        <item>Got</item>
+        <item>Top</item>
+        <item>Run</item>
+        <item>Joy</item>
+        <item>Nah</item>
+        <item>New</item>
+        <item>Fix</item>
+        <item>How</item>
+        <item>Low</item>
+        <item>Mad</item>
+        <item>Zen</item>
+        <item>Fly</item>
+        <item>Woo</item>
+        <item>Raw</item>
+        <item>Fun</item>
+        <item>Cut</item>
+        <item>Sun</item>
+        <item>Hot</item>
+        <item>Cry</item>
+        <item>Now</item>
+    </string-array>
+
+    <string-array name="one_word_comment" tools:ignore="InconsistentArrays">
+        <item>Awesome</item>
+        <item>Cool</item>
+        <item>Nice</item>
+        <item>Great</item>
+        <item>Amazing</item>
+        <item>Fantastic</item>
+        <item>Super</item>
+        <item>Excellent</item>
+        <item>Love</item>
+        <item>Beautiful</item>
+        <item>Impressive</item>
+        <item>Fantastic</item>
+        <item>Bravo</item>
+        <item>Epic</item>
+        <item>Sweet</item>
+        <item>Outstanding</item>
+        <item>Terrific</item>
+        <item>Incredible</item>
+        <item>Fabulous</item>
+        <item>Perfect</item>
+        <item>Wonderful</item>
+        <item>Splendid</item>
+        <item>Majestic</item>
+        <item>Stunning</item>
+        <item>Charming</item>
+        <item>Vibrant</item>
+        <item>Gorgeous</item>
+        <item>Dazzling</item>
+        <item>Astonishing</item>
+        <item>Delightful</item>
+        <item>Exquisite</item>
+        <item>Superb</item>
+        <item>Spectacular</item>
+        <item>Captivating</item>
+        <item>Stellar</item>
+        <item>Breathtaking</item>
+    </string-array>
+
+    <string-array name="long_comments" tools:ignore="InconsistentArrays">
+        <item>This is incredible</item>
+        <item>You did an amazing job</item>
+        <item>So much fun to watch</item>
+        <item>Absolutely fantastic content</item>
+        <item>I\'m loving every moment</item>
+        <item>You\'re truly talented</item>
+        <item>This is pure entertainment</item>
+        <item>Thanks for making my day</item>
+        <item>You never disappoint, always great</item>
+        <item>Your energy is contagious</item>
+        <item>I\'m hooked, can\'t stop watching</item>
+        <item>Incredible skills on display</item>
+        <item>You always bring joy</item>
+        <item>You\'re making a difference</item>
+        <item>What a delightful surprise</item>
+        <item>You\'re a true inspiration</item>
+        <item>Such a positive vibe here</item>
+        <item>Keep up the good work</item>
+        <item>You\'ve got a fan for life</item>
+        <item>Your creativity is outstanding</item>
+        <item>This is so entertaining</item>
+        <item>I\'m impressed, keep it up</item>
+        <item>You\'re a source of inspiration</item>
+        <item>I can\'t get enough of this</item>
+        <item>Thanks for brightening my day</item>
+        <item>Your content is always top-notch</item>
+        <item>You bring so much joy to us</item>
+        <item>Absolutely love your style</item>
+        <item>Such a great atmosphere here</item>
+        <item>You make everything more fun</item>
+        <item>This is absolutely captivating</item>
+        <item>You have a unique charm</item>
+        <item>Your dedication is admirable</item>
+        <item>This is a masterpiece</item>
+        <item>Your passion shines through</item>
+        <item>You\'ve created something special</item>
+        <item>Thanks for the positive vibes</item>
+        <item>Your efforts are truly appreciated</item>
+        <item>This is a highlight of my day</item>
+        <item>You\'ve got a special talent</item>
+        <item>Consistently engaging content, your creativity brings joy to every viewer</item>
+        <item>Your storytelling captivates; each video is a memorable, delightful adventure</item>
+        <item>Top-tier quality, your dedication shines in every video you produce</item>
+        <item>You\'re a source of inspiration, turning creativity into a masterpiece</item>
+        <item>Authentic, entertaining, and positively impactful — your content is exceptional</item>
+        <item>Intriguing narratives, your videos are a breath of fresh creativity</item>
+        <item>Captivating charisma, your presence makes every moment thoroughly enjoyable</item>
+        <item>Skillful storytelling, your videos leave a lasting and positive impression</item>
+        <item>Consistent excellence, your content elevates the online experience for everyone</item>
+        <item>Creative brilliance, your unique approach sets you apart in every aspect</item>
+        <item>Entertaining escapades, your videos are a delightful journey of discovery</item>
+        <item>Enthusiastic and engaging, your content brightens even the gloomiest days</item>
+        <item>Your work radiates passion, making each piece truly extraordinary and memorable</item>
+        <item>Artistic flair, your videos are a testament to your creative prowess</item>
+        <item>Relatable and authentic, your content feels like a genuine connection</item>
+    </string-array>
+
+    <string-array name="question_comments" tools:ignore="InconsistentArrays">
+        <item>What inspired your latest video?</item>
+        <item>How do you stay creative and motivated?</item>
+        <item>Any exciting projects or collaborations?</item>
+        <item>Favorite part about creating content?</item>
+        <item>Behind-the-scenes moment from your latest video?</item>
+        <item>How do you handle creative challenges?</item>
+        <item>Future content topic or theme you\'re eager about?</item>
+        <item>Tips for aspiring content creators?</item>
+        <item>How do you engage with your audience?</item>
+        <item>Most rewarding aspect of being a content creator?</item>
+        <item>Any favorite tools or apps for content creation?</item>
+        <item>What\'s your go-to source of inspiration?</item>
+        <item>How do you balance creativity with consistency?</item>
+        <item>What\'s the most memorable comment you\'ve received?</item>
+        <item>Any upcoming events or milestones to celebrate?</item>
+        <item>How has your content evolved over time?</item>
+        <item>Do you have a specific routine before filming?</item>
+        <item>Any advice for overcoming creative blocks?</item>
+        <item>What platforms do you find most engaging for your content?</item>
+        <item>How do you decide on the topics for your videos?</item>
+        <item>Can you share a funny or unexpected moment during filming?</item>
+        <item>What\'s your favorite aspect of interacting with your audience?</item>
+        <item>How do you approach balancing work and personal life?</item>
+        <item>Do you have a dream project you\'d love to work on?</item>
+        <item>What\'s the most challenging part of content creation for you?</item>
+        <item>How do you choose music for your videos?</item>
+        <item>Is there a specific goal you\'re working towards currently?</item>
+        <item>Do you prefer scripted or spontaneous content?</item>
+        <item>How do you stay updated on trends in your content niche?</item>
+        <item>What impact do you hope your content has on viewers?</item>
+        <item>Your favorite video you\'ve ever made?</item>
+        <item>Preferred editing software?</item>
+        <item>How often do you post content?</item>
+        <item>Top tip for new creators?</item>
+        <item>Ideal collaboration partner?</item>
+        <item>Favorite camera for filming?</item>
+        <item>Biggest lesson in content creation?</item>
+        <item>Best moment with your audience?</item>
+        <item>Current favorite content trend?</item>
+        <item>Next big goal for your channel?</item>
+        <item>Your quick fix for creative blocks?</item>
+        <item>Top source for content ideas?</item>
+        <item>Preferred filming location?</item>
+        <item>Your favorite video genre to create?</item>
+        <item>How do you unwind after filming?</item>
+        <item>Most used social media platform?</item>
+        <item>Preferred video length?</item>
+        <item>Biggest challenge you\'ve overcome?</item>
+        <item>Any content creation rituals?</item>
+        <item>Favorite part of the editing process?</item>
+    </string-array>
+
+</resources>
