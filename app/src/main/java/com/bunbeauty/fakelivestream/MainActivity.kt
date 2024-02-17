@@ -1,10 +1,8 @@
 package com.bunbeauty.fakelivestream
 
 import android.Manifest.permission.CAMERA
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,16 +44,6 @@ class MainActivity : ComponentActivity() {
         if (!isGranted) {
             AlertDialog.Builder(this)
                 .setMessage(resources.getString(R.string.need_camera_permisseon))
-                .show()
-        }
-    }
-
-    private val requestReadExternalStoragePermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (!isGranted) {
-            AlertDialog.Builder(this)
-                .setMessage(resources.getString(R.string.need_read_external_storage_permisseon))
                 .show()
         }
     }
