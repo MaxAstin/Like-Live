@@ -27,3 +27,10 @@ The project is built using the following technologies and libraries:
 ## Download
 
 Google Play: coming soon
+
+## Contact
+
+For any questions or feedback, feel free to contact:
+
+- Telegram: [@maxastin](https://t.me/maxastin)
+- LinkedIn: [@maxastin](https://www.linkedin.com/in/maxastin/)
