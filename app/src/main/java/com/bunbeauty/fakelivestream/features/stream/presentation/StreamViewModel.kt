@@ -44,6 +44,7 @@ class StreamViewModel @Inject constructor(
             username = "",
             viewersCount = 0,
             comments = emptyList(),
+            reactionCount = 0,
         )
     )
     val state: StateFlow<StreamViewState> = mutableState.map(::mapState)
@@ -79,7 +80,10 @@ class StreamViewModel @Inject constructor(
         viewModelScope.launch {
             val viewerCount = getViewerCountUseCase()
             mutableState.update { state ->
-                state.copy(viewersCount = viewerCount.min)
+                state.copy(
+                    viewersCount = viewerCount.min,
+                    reactionCount = min(10, viewerCount.min / 100 + 1)
+                )
             }
 
             startGenerateViewersCount(
@@ -186,6 +190,7 @@ class StreamViewModel @Inject constructor(
                         text = comment.text,
                     )
                 },
+                reactionCount = reactionCount,
             )
         }
     }

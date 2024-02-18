@@ -8,4 +8,5 @@ data class StreamDataState(
     val username: String,
     val viewersCount: Int,
     val comments: List<Comment>,
+    val reactionCount: Int,
 )

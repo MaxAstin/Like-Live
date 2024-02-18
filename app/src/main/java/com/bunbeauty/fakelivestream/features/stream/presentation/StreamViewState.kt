@@ -9,6 +9,7 @@ data class StreamViewState(
     val username: String,
     val viewersCount: ViewersCount,
     val comments: List<CommentUi>,
+    val reactionCount: Int,
 )
 
 @Immutable

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -126,7 +125,15 @@ fun StreamScreen(
                         comments = state.comments,
                     )
                 }
+            }
 
+            repeat(state.reactionCount) { i ->
+                AnimatedReaction(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 16.dp),
+                    order = i
+                )
             }
         }
         BottomPanel()
@@ -191,7 +198,7 @@ private fun AvatarImage(
 }
 
 @Composable
-private fun RowScope.UsernameRow(
+private fun UsernameRow(
     username: String,
     modifier: Modifier = Modifier,
 ) {
@@ -469,7 +476,8 @@ private fun StreamScreenPreview() {
                         username = "username3",
                         text = "Text 3",
                     ),
-                )
+                ),
+                reactionCount = 10
             ),
             navController = rememberNavController(),
         )
