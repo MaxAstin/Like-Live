@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.bunbeauty.fakelivestream.BuildConfig.SHOW_CAMERA
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
@@ -191,6 +192,7 @@ class StreamViewModel @Inject constructor(
                     )
                 },
                 reactionCount = reactionCount,
+                showCamera = SHOW_CAMERA,
             )
         }
     }

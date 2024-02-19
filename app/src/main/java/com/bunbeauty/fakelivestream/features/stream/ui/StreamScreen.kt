@@ -1,9 +1,6 @@
 package com.bunbeauty.fakelivestream.features.stream.ui
 
 import androidx.annotation.DrawableRes
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -23,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,14 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.R
@@ -51,8 +44,6 @@ import com.bunbeauty.fakelivestream.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
-import com.bunbeauty.fakelivestream.utils.getCameraProvider
-import androidx.camera.core.Preview as CameraPreview
 
 @Composable
 fun StreamScreen(
@@ -72,7 +63,18 @@ fun StreamScreen(
                 mutableStateOf(true)
             }
 
-            Camera(isFrontCamera = isFrontCamera)
+            val modifier = Modifier
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(8.dp))
+            if (state.showCamera) {
+                CameraComponent(
+                    modifier = modifier,
+                    isFront = isFrontCamera
+                )
+            } else {
+                VideoComponent(modifier = modifier)
+            }
+
             Column {
                 Box(
                     modifier = Modifier
@@ -138,48 +140,6 @@ fun StreamScreen(
         }
         BottomPanel()
     }
-}
-
-@Composable
-private fun Camera(
-    isFrontCamera: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    val previewView = remember { PreviewView(context) }
-
-    LaunchedEffect(isFrontCamera) {
-        val cameraProvider = context.getCameraProvider()
-        val lensFacing = if (isFrontCamera) {
-            CameraSelector.LENS_FACING_FRONT
-        } else {
-            CameraSelector.LENS_FACING_BACK
-        }
-        val cameraSelector = CameraSelector.Builder()
-            .requireLensFacing(lensFacing)
-            .build()
-        val preview = CameraPreview.Builder().build()
-        val imageCapture = ImageCapture.Builder().build()
-
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            cameraSelector,
-            preview,
-            imageCapture
-        )
-
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-    }
-
-    AndroidView(
-        factory = { previewView },
-        modifier = modifier
-            .fillMaxHeight()
-            .clip(RoundedCornerShape(8.dp))
-    )
 }
 
 @Composable
@@ -477,7 +437,8 @@ private fun StreamScreenPreview() {
                         text = "Text 3",
                     ),
                 ),
-                reactionCount = 10
+                reactionCount = 10,
+                showCamera = true,
             ),
             navController = rememberNavController(),
         )
