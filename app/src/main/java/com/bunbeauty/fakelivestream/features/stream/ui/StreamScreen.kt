@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -62,14 +61,19 @@ fun StreamScreen(
             var isFrontCamera by remember {
                 mutableStateOf(true)
             }
+            var isCameraEnabled by remember {
+                mutableStateOf(true)
+            }
 
             val modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxSize()
                 .clip(RoundedCornerShape(8.dp))
             if (state.showCamera) {
                 CameraComponent(
                     modifier = modifier,
-                    isFront = isFrontCamera
+                    isFront = isFrontCamera,
+                    isEnabled = isCameraEnabled,
+                    image = state.image
                 )
             } else {
                 VideoComponent(modifier = modifier)
@@ -90,7 +94,10 @@ fun StreamScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            AvatarImage(image = state.image)
+                            AvatarImage(
+                                image = state.image,
+                                modifier = Modifier.size(32.dp)
+                            )
                             UsernameRow(
                                 modifier = Modifier
                                     .padding(start = 12.dp)
@@ -119,6 +126,9 @@ fun StreamScreen(
                             modifier = Modifier.padding(top = 16.dp),
                             onSwitchClick = {
                                 isFrontCamera = !isFrontCamera
+                            },
+                            onCameraClick = { isEnabled ->
+                                isCameraEnabled = isEnabled
                             }
                         )
                     }
@@ -140,21 +150,6 @@ fun StreamScreen(
         }
         BottomPanel()
     }
-}
-
-@Composable
-private fun AvatarImage(
-    image: ImageSource<*>,
-    modifier: Modifier = Modifier,
-) {
-    CachedImage(
-        modifier = modifier
-            .size(32.dp)
-            .clip(CircleShape),
-        imageSource = image,
-        cacheKey = image.data.toString(),
-        contentDescription = "Avatar"
-    )
 }
 
 @Composable
@@ -241,6 +236,7 @@ private fun ViewersCard(
 private fun Actions(
     modifier: Modifier = Modifier,
     onSwitchClick: () -> Unit,
+    onCameraClick: (Boolean) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -248,6 +244,9 @@ private fun Actions(
     ) {
         var isMicMuted by remember {
             mutableStateOf(false)
+        }
+        var isCameraEnabled by remember {
+            mutableStateOf(true)
         }
 
         ActionIcon(
@@ -264,20 +263,32 @@ private fun Actions(
             contentDescription = "Mic",
         )
         ActionIcon(
-            iconResId = R.drawable.ic_camera,
+            modifier = Modifier.clickableWithoutIndication(
+                onClick = {
+                    isCameraEnabled = !isCameraEnabled
+                    onCameraClick(isCameraEnabled)
+                }
+            ),
+            iconResId = if (isCameraEnabled) {
+                R.drawable.ic_camera
+            } else {
+                R.drawable.ic_camera_crossed_out
+            },
             contentDescription = "Camera",
         )
-        ActionIcon(
-            modifier = Modifier.clickableWithoutIndication(
-                onClick = onSwitchClick
-            ),
-            iconResId = R.drawable.ic_switch,
-            contentDescription = "Switch camera",
-        )
-        ActionIcon(
-            iconResId = R.drawable.ic_effect,
-            contentDescription = "Effect",
-        )
+        if (isCameraEnabled) {
+            ActionIcon(
+                modifier = Modifier.clickableWithoutIndication(
+                    onClick = onSwitchClick
+                ),
+                iconResId = R.drawable.ic_switch,
+                contentDescription = "Switch camera",
+            )
+            ActionIcon(
+                iconResId = R.drawable.ic_effect,
+                contentDescription = "Effect",
+            )
+        }
     }
 }
 
