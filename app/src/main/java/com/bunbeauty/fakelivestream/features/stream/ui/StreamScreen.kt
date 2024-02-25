@@ -55,6 +55,10 @@ fun StreamScreen(
             .background(FakeLiveStreamTheme.colors.surface)
             .padding(vertical = 24.dp)
     ) {
+        var showFilters by remember {
+            mutableStateOf(false)
+        }
+
         Box(
             modifier = Modifier.weight(1f)
         ) {
@@ -129,6 +133,9 @@ fun StreamScreen(
                             },
                             onCameraClick = { isEnabled ->
                                 isCameraEnabled = isEnabled
+                            },
+                            onFiltersClick = {
+                                showFilters = !showFilters
                             }
                         )
                     }
@@ -148,7 +155,12 @@ fun StreamScreen(
                 )
             }
         }
-        BottomPanel()
+        Column {
+            BottomPanel()
+            if (showFilters) {
+                FiltersRow()
+            }
+        }
     }
 }
 
@@ -237,6 +249,7 @@ private fun Actions(
     modifier: Modifier = Modifier,
     onSwitchClick: () -> Unit,
     onCameraClick: (Boolean) -> Unit,
+    onFiltersClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -285,6 +298,11 @@ private fun Actions(
                 contentDescription = "Switch camera",
             )
             ActionIcon(
+                modifier = Modifier.clickableWithoutIndication(
+                    onClick = {
+                        onFiltersClick()
+                    }
+                ),
                 iconResId = R.drawable.ic_effect,
                 contentDescription = "Effect",
             )
@@ -344,9 +362,7 @@ private fun CommentItem(
 }
 
 @Composable
-private fun BottomPanel(
-    modifier: Modifier = Modifier,
-) {
+private fun BottomPanel(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -401,7 +417,6 @@ private fun BottomPanel(
             contentDescription = "Direct",
         )
     }
-
 }
 
 @Composable
