@@ -136,17 +136,26 @@ class StreamViewModel @Inject constructor(
         viewModelScope.launch {
             val viewerCount = getViewerCountUseCase()
             mutableState.update { state ->
-                state.copy(
-                    viewersCount = viewerCount.min,
-                    reactionCount = min(10, viewerCount.min / 100 + 1)
-                )
+                state.copy(viewersCount = viewerCount.min)
             }
 
+            startGenerateReactions(viewerCount = viewerCount.min)
             startGenerateViewersCount(
                 min = viewerCount.min,
                 max = viewerCount.max
             )
             startGenerateComments()
+        }
+    }
+
+    private fun startGenerateReactions(viewerCount: Int) {
+        viewModelScope.launch {
+            delay(5_000)
+            mutableState.update { state ->
+                state.copy(
+                    reactionCount = min(10, viewerCount / 100 + 1)
+                )
+            }
         }
     }
 
@@ -196,7 +205,9 @@ class StreamViewModel @Inject constructor(
                 }
 
                 mutableState.update { state ->
-                    state.copy(comments = newComments + state.comments.take(100))
+                    state.copy(
+                        comments = newComments + state.comments.take(100)
+                    )
                 }
             }
         }
