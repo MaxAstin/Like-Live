@@ -12,9 +12,21 @@
     <string name="preparation_viewer_count">Количество зрителей</string>
     <string name="preparation_start_live">Начать стрим</string>
 
+    <string name="stream_join_requests_title">Запросы на присоединение</string>
+    <string name="stream_join_requests_body">Запросов пока нет</string>
+    <string name="stream_join_requests_description">Здесь показываются запросы на роль соорганизатора.</string>
+
+    <string name="stream_invite_title">Отправте приглашение</string>
+    <string name="stream_invite_body">Приглашение недоступно</string>
+    <string name="stream_invite_description">Когда кто-то присоединяется к комнате, этот прямой эфир становится доступен всем, кто может смотреть прямые эфиры этого человека.</string>
+
     <string name="stream_questions_title">Вопросы</string>
-    <string name="stream_questions_body">Пока нет вопросов</string>
-    <string name="stream_questions_description">Любой, кто смотрит, может отправлять и просматривать здесь вопросы.</string>
+    <string name="stream_questions_body">Вопросов пока нет</string>
+    <string name="stream_questions_description">Все зрители могут отправлять и видеть здесь вопросы.</string>
+
+    <string name="stream_direct_title">Поделитесь</string>
+    <string name="stream_direct_body">Поделиться недоступно</string>
+    <string name="stream_direct_description">Нет возможности отправить этот прямой эфир.</string>
 
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>А</item>

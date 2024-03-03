@@ -45,7 +45,10 @@ class StreamViewModel @Inject constructor(
             viewersCount = 0,
             comments = emptyList(),
             reactionCount = 0,
+            showJoinRequests = false,
+            showInvite = false,
             showQuestions = false,
+            showDirect = false,
         )
     )
     val state = mutableState.map(::mapState)
@@ -63,14 +66,51 @@ class StreamViewModel @Inject constructor(
 
     fun onAction(action: Stream.Action) {
         when (action) {
+            Stream.Action.ShowJoinRequests -> {
+                mutableState.update { state ->
+                    state.copy(showJoinRequests = true)
+                }
+            }
+
+            Stream.Action.HideJoinRequests -> {
+                mutableState.update { state ->
+                    state.copy(showJoinRequests = false)
+                }
+            }
+
+            Stream.Action.ShowInvite -> {
+                mutableState.update { state ->
+                    state.copy(showInvite = true)
+                }
+            }
+
+            Stream.Action.HideInvite -> {
+                mutableState.update { state ->
+                    state.copy(showInvite = false)
+                }
+            }
+
             Stream.Action.ShowQuestions -> {
                 mutableState.update { state ->
                     state.copy(showQuestions = true)
                 }
             }
+
             Stream.Action.HideQuestions -> {
                 mutableState.update { state ->
                     state.copy(showQuestions = false)
+                }
+            }
+
+            Stream.Action.ShowDirect -> {
+                mutableState.update { state ->
+                    state.copy(showDirect = true)
+                }
+            }
+
+            Stream.Action.HideDirect -> {
+                mutableState.update { state ->
+                    state.copy(showDirect = false)
                 }
             }
         }
@@ -208,7 +248,10 @@ class StreamViewModel @Inject constructor(
                 },
                 reactionCount = reactionCount,
                 showCamera = SHOW_CAMERA,
+                showJoinRequests = showJoinRequests,
+                showInvite = showInvite,
                 showQuestions = showQuestions,
+                showDirect = showDirect,
             )
         }
     }

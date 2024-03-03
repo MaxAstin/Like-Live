@@ -13,7 +13,10 @@ interface Stream {
         val viewersCount: Int,
         val comments: List<Comment>,
         val reactionCount: Int,
+        val showJoinRequests: Boolean,
+        val showInvite: Boolean,
         val showQuestions: Boolean,
+        val showDirect: Boolean,
     )
 
     @Immutable
@@ -24,7 +27,10 @@ interface Stream {
         val comments: List<CommentUi>,
         val reactionCount: Int,
         val showCamera: Boolean,
+        val showJoinRequests: Boolean,
+        val showInvite: Boolean,
         val showQuestions: Boolean,
+        val showDirect: Boolean,
     )
 
     @Immutable
@@ -49,7 +55,13 @@ interface Stream {
     )
 
     sealed interface Action {
+        data object ShowJoinRequests: Action
+        data object HideJoinRequests: Action
+        data object ShowInvite: Action
+        data object HideInvite: Action
         data object ShowQuestions: Action
         data object HideQuestions: Action
+        data object ShowDirect: Action
+        data object HideDirect: Action
     }
 }

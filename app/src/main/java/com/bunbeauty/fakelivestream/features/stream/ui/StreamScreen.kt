@@ -169,16 +169,33 @@ fun StreamScreen(
             }
         }
 
-        if (state.showQuestions) {
-            EmptyBottomSheet(
-                onDismissRequest = {
-                    onAction(Stream.Action.HideQuestions)
-                },
-                titleResId = R.string.stream_questions_title,
-                bodyResId = R.string.stream_questions_body,
-                descriptionResId = R.string.stream_questions_description,
-            )
-        }
+        JoinRequestsBottomSheet(
+            show = state.showJoinRequests,
+            onDismiss = {
+                onAction(Stream.Action.HideJoinRequests)
+            }
+        )
+
+        InviteBottomSheet(
+            show = state.showInvite,
+            onDismiss = {
+                onAction(Stream.Action.HideInvite)
+            }
+        )
+
+        QuestionsBottomSheet(
+            show = state.showQuestions,
+            onDismiss = {
+                onAction(Stream.Action.HideQuestions)
+            }
+        )
+
+        DirectBottomSheet(
+            show = state.showDirect,
+            onDismiss = {
+                onAction(Stream.Action.HideDirect)
+            }
+        )
     }
 }
 
@@ -422,10 +439,20 @@ private fun BottomPanel(
             )
         }
         ActionIcon(
+            modifier = Modifier.clickableWithoutIndication(
+                onClick = {
+                    onAction(Stream.Action.ShowJoinRequests)
+                }
+            ),
             iconResId = R.drawable.ic_camera_plus,
             contentDescription = "Add camera",
         )
         ActionIcon(
+            modifier = Modifier.clickableWithoutIndication(
+                onClick = {
+                    onAction(Stream.Action.ShowInvite)
+                }
+            ),
             iconResId = R.drawable.ic_invite,
             contentDescription = "Invite",
         )
@@ -439,6 +466,11 @@ private fun BottomPanel(
             contentDescription = "Question",
         )
         ActionIcon(
+            modifier = Modifier.clickableWithoutIndication(
+                onClick = {
+                    onAction(Stream.Action.ShowDirect)
+                }
+            ),
             iconResId = R.drawable.ic_direct,
             contentDescription = "Direct",
         )
@@ -457,6 +489,66 @@ private fun ActionIcon(
         contentDescription = contentDescription,
         tint = FakeLiveStreamTheme.colors.icon,
     )
+}
+
+@Composable
+private fun JoinRequestsBottomSheet(
+    show: Boolean,
+    onDismiss: () -> Unit,
+) {
+    if (show) {
+        EmptyBottomSheet(
+            onDismissRequest = onDismiss,
+            titleResId = R.string.stream_join_requests_title,
+            bodyResId = R.string.stream_join_requests_body,
+            descriptionResId = R.string.stream_join_requests_description,
+        )
+    }
+}
+
+@Composable
+private fun InviteBottomSheet(
+    show: Boolean,
+    onDismiss: () -> Unit,
+) {
+    if (show) {
+        EmptyBottomSheet(
+            onDismissRequest = onDismiss,
+            titleResId = R.string.stream_invite_title,
+            bodyResId = R.string.stream_invite_body,
+            descriptionResId = R.string.stream_invite_description,
+        )
+    }
+}
+
+@Composable
+private fun QuestionsBottomSheet(
+    show: Boolean,
+    onDismiss: () -> Unit,
+) {
+    if (show) {
+        EmptyBottomSheet(
+            onDismissRequest = onDismiss,
+            titleResId = R.string.stream_questions_title,
+            bodyResId = R.string.stream_questions_body,
+            descriptionResId = R.string.stream_questions_description,
+        )
+    }
+}
+
+@Composable
+private fun DirectBottomSheet(
+    show: Boolean,
+    onDismiss: () -> Unit,
+) {
+    if (show) {
+        EmptyBottomSheet(
+            onDismissRequest = onDismiss,
+            titleResId = R.string.stream_direct_title,
+            bodyResId = R.string.stream_direct_body,
+            descriptionResId = R.string.stream_direct_description,
+        )
+    }
 }
 
 @LocalePreview
@@ -490,7 +582,10 @@ private fun StreamScreenPreview() {
                 ),
                 reactionCount = 10,
                 showCamera = true,
+                showJoinRequests = false,
+                showInvite = false,
                 showQuestions = false,
+                showDirect = false,
             ),
             onAction = {},
             navController = rememberNavController(),
