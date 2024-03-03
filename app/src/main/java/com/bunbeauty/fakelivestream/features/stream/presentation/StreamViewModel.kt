@@ -21,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -40,15 +39,16 @@ class StreamViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(
-        StreamDataState(
+        Stream.DataState(
             imageUri = null,
             username = "",
             viewersCount = 0,
             comments = emptyList(),
             reactionCount = 0,
+            showQuestions = false,
         )
     )
-    val state: StateFlow<StreamViewState> = mutableState.map(::mapState)
+    val state = mutableState.map(::mapState)
         .stateIn(
             scope = viewModelScope,
             started = Eagerly,
@@ -59,6 +59,21 @@ class StreamViewModel @Inject constructor(
         getAvatar()
         getUsername()
         getViewerCount()
+    }
+
+    fun onAction(action: Stream.Action) {
+        when (action) {
+            Stream.Action.ShowQuestions -> {
+                mutableState.update { state ->
+                    state.copy(showQuestions = true)
+                }
+            }
+            Stream.Action.HideQuestions -> {
+                mutableState.update { state ->
+                    state.copy(showQuestions = false)
+                }
+            }
+        }
     }
 
     private fun getAvatar() {
@@ -161,9 +176,9 @@ class StreamViewModel @Inject constructor(
         applicationContext.imageLoader.enqueue(request)
     }
 
-    private fun mapState(dataState: StreamDataState): StreamViewState {
+    private fun mapState(dataState: Stream.DataState): Stream.ViewState {
         return dataState.run {
-            StreamViewState(
+            Stream.ViewState(
                 image = if (dataState.imageUri == null) {
                     ImageSource.Res(R.drawable.img_default_avatar)
                 } else {
@@ -171,17 +186,17 @@ class StreamViewModel @Inject constructor(
                 },
                 username = username,
                 viewersCount = if (viewersCount < 1_000) {
-                    ViewersCount.UpToThousand(count = viewersCount.toString())
+                    Stream.ViewersCountUi.UpToThousand(count = viewersCount.toString())
                 } else {
                     val thousands = viewersCount / 1_000
                     val hundreds = viewersCount % 1_000 / 100
-                    ViewersCount.Thousands(
+                    Stream.ViewersCountUi.Thousands(
                         thousands = thousands.toString(),
                         hundreds = hundreds.toString(),
                     )
                 },
                 comments = comments.map { comment ->
-                    CommentUi(
+                    Stream.CommentUi(
                         picture = if (comment.picture == null) {
                             ImageSource.Res(R.drawable.img_default_avatar)
                         } else {
@@ -193,6 +208,7 @@ class StreamViewModel @Inject constructor(
                 },
                 reactionCount = reactionCount,
                 showCamera = SHOW_CAMERA,
+                showQuestions = showQuestions,
             )
         }
     }

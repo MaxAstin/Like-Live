@@ -13,6 +13,10 @@
     <string name="preparation_viewer_count">Viewer count</string>
     <string name="preparation_start_live">Start Live</string>
 
+    <string name="stream_questions_title">Questions</string>
+    <string name="stream_questions_body">No Questions Yet</string>
+    <string name="stream_questions_description">Anyone watching can send and see questions here.</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>S</item>
         <item>O</item>

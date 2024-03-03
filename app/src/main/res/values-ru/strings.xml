@@ -12,6 +12,10 @@
     <string name="preparation_viewer_count">Количество зрителей</string>
     <string name="preparation_start_live">Начать стрим</string>
 
+    <string name="stream_questions_title">Вопросы</string>
+    <string name="stream_questions_body">Пока нет вопросов</string>
+    <string name="stream_questions_description">Любой, кто смотрит, может отправлять и просматривать здесь вопросы.</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>А</item>
         <item>У</item>

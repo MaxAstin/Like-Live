@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,14 +32,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.R
-import com.bunbeauty.fakelivestream.features.stream.presentation.CommentUi
-import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewState
-import com.bunbeauty.fakelivestream.features.stream.presentation.ViewersCount
+import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
+import com.bunbeauty.fakelivestream.ui.LocalePreview
 import com.bunbeauty.fakelivestream.ui.blurTop
 import com.bunbeauty.fakelivestream.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.ui.components.CachedImage
@@ -46,120 +46,138 @@ import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 
 @Composable
 fun StreamScreen(
-    state: StreamViewState,
+    state: Stream.ViewState,
+    onAction: (Stream.Action) -> Unit,
     navController: NavHostController,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(FakeLiveStreamTheme.colors.surface)
-            .padding(vertical = 24.dp)
-    ) {
-        var showFilters by remember {
-            mutableStateOf(false)
-        }
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            var isFrontCamera by remember {
-                mutableStateOf(true)
-            }
-            var isCameraEnabled by remember {
-                mutableStateOf(true)
-            }
-
-            val modifier = Modifier
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = FakeLiveStreamTheme.colors.surface,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { padding ->
+        Column(
+            modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(8.dp))
-            if (state.showCamera) {
-                CameraComponent(
-                    modifier = modifier,
-                    isFront = isFrontCamera,
-                    isEnabled = isCameraEnabled,
-                    image = state.image
-                )
-            } else {
-                VideoComponent(modifier = modifier)
+                .padding(padding)
+                .padding(vertical = 24.dp)
+        ) {
+            var showFilters by remember {
+                mutableStateOf(false)
             }
 
-            Column {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 12.dp, bottom = 16.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.align(Alignment.TopEnd),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            AvatarImage(
-                                image = state.image,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            UsernameRow(
-                                modifier = Modifier
-                                    .padding(start = 12.dp)
-                                    .weight(1f),
-                                username = state.username
-                            )
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                var isFrontCamera by remember {
+                    mutableStateOf(true)
+                }
+                var isCameraEnabled by remember {
+                    mutableStateOf(true)
+                }
 
-                            LiveCard(modifier = Modifier.padding(start = 12.dp))
-                            ViewersCard(
-                                modifier = Modifier.padding(start = 8.dp),
-                                viewersCount = state.viewersCount
-                            )
-                            ActionIcon(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clickableWithoutIndication(
-                                        onClick = {
-                                            navController.popBackStack()
-                                        }
-                                    ),
-                                iconResId = R.drawable.ic_close,
-                                contentDescription = "Close",
+                val modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(8.dp))
+                if (state.showCamera) {
+                    CameraComponent(
+                        modifier = modifier,
+                        isFront = isFrontCamera,
+                        isEnabled = isCameraEnabled,
+                        image = state.image
+                    )
+                } else {
+                    VideoComponent(modifier = modifier)
+                }
+
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 12.dp, bottom = 16.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.align(Alignment.TopEnd),
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                AvatarImage(
+                                    image = state.image,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                                UsernameRow(
+                                    modifier = Modifier
+                                        .padding(start = 12.dp)
+                                        .weight(1f),
+                                    username = state.username
+                                )
+
+                                LiveCard(modifier = Modifier.padding(start = 12.dp))
+                                ViewersCard(
+                                    modifier = Modifier.padding(start = 8.dp),
+                                    viewersCount = state.viewersCount
+                                )
+                                ActionIcon(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .clickableWithoutIndication(
+                                            onClick = {
+                                                navController.popBackStack()
+                                            }
+                                        ),
+                                    iconResId = R.drawable.ic_close,
+                                    contentDescription = "Close",
+                                )
+                            }
+                            Actions(
+                                modifier = Modifier.padding(top = 16.dp),
+                                onSwitchClick = {
+                                    isFrontCamera = !isFrontCamera
+                                },
+                                onCameraClick = { isEnabled ->
+                                    isCameraEnabled = isEnabled
+                                },
+                                onFiltersClick = {
+                                    showFilters = !showFilters
+                                }
                             )
                         }
-                        Actions(
-                            modifier = Modifier.padding(top = 16.dp),
-                            onSwitchClick = {
-                                isFrontCamera = !isFrontCamera
-                            },
-                            onCameraClick = { isEnabled ->
-                                isCameraEnabled = isEnabled
-                            },
-                            onFiltersClick = {
-                                showFilters = !showFilters
-                            }
+                        Comments(
+                            modifier = Modifier.align(Alignment.BottomStart),
+                            comments = state.comments,
                         )
                     }
-                    Comments(
-                        modifier = Modifier.align(Alignment.BottomStart),
-                        comments = state.comments,
+                }
+
+                repeat(state.reactionCount) { i ->
+                    AnimatedReaction(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 16.dp),
+                        order = i
                     )
                 }
             }
-
-            repeat(state.reactionCount) { i ->
-                AnimatedReaction(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 16.dp),
-                    order = i
-                )
+            Column {
+                BottomPanel(onAction = onAction)
+                if (showFilters) {
+                    FiltersRow()
+                }
             }
         }
-        Column {
-            BottomPanel()
-            if (showFilters) {
-                FiltersRow()
-            }
+
+        if (state.showQuestions) {
+            EmptyBottomSheet(
+                onDismissRequest = {
+                    onAction(Stream.Action.HideQuestions)
+                },
+                titleResId = R.string.stream_questions_title,
+                bodyResId = R.string.stream_questions_body,
+                descriptionResId = R.string.stream_questions_description,
+            )
         }
     }
 }
@@ -177,7 +195,7 @@ private fun UsernameRow(
             modifier = Modifier.weight(1f, false),
             text = username,
             color = FakeLiveStreamTheme.colors.onSurface,
-            style = FakeLiveStreamTheme.typography.title,
+            style = FakeLiveStreamTheme.typography.titleSmall,
             overflow = Ellipsis,
             maxLines = 1,
         )
@@ -210,7 +228,7 @@ private fun LiveCard(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ViewersCard(
-    viewersCount: ViewersCount,
+    viewersCount: Stream.ViewersCountUi,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -227,8 +245,8 @@ private fun ViewersCard(
                 tint = FakeLiveStreamTheme.colors.icon,
             )
             val viewersCountText = when (viewersCount) {
-                is ViewersCount.UpToThousand -> viewersCount.count
-                is ViewersCount.Thousands -> stringResource(
+                is Stream.ViewersCountUi.UpToThousand -> viewersCount.count
+                is Stream.ViewersCountUi.Thousands -> stringResource(
                     R.string.stream_thousands_viewers_count,
                     viewersCount.thousands,
                     viewersCount.hundreds
@@ -313,7 +331,7 @@ private fun Actions(
 @Composable
 private fun Comments(
     modifier: Modifier = Modifier,
-    comments: List<CommentUi>,
+    comments: List<Stream.CommentUi>,
 ) {
     LazyColumn(
         modifier = modifier
@@ -331,7 +349,7 @@ private fun Comments(
 
 @Composable
 private fun CommentItem(
-    comment: CommentUi,
+    comment: Stream.CommentUi,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -350,7 +368,7 @@ private fun CommentItem(
             Text(
                 text = comment.username,
                 color = FakeLiveStreamTheme.colors.onSurface,
-                style = FakeLiveStreamTheme.typography.title,
+                style = FakeLiveStreamTheme.typography.titleSmall,
             )
             Text(
                 text = comment.text,
@@ -362,7 +380,10 @@ private fun CommentItem(
 }
 
 @Composable
-private fun BottomPanel(modifier: Modifier = Modifier) {
+private fun BottomPanel(
+    onAction: (Stream.Action) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -409,6 +430,11 @@ private fun BottomPanel(modifier: Modifier = Modifier) {
             contentDescription = "Invite",
         )
         ActionIcon(
+            modifier = Modifier.clickableWithoutIndication(
+                onClick = {
+                    onAction(Stream.Action.ShowQuestions)
+                }
+            ),
             iconResId = R.drawable.ic_question,
             contentDescription = "Question",
         )
@@ -433,31 +459,30 @@ private fun ActionIcon(
     )
 }
 
-@Preview(locale = "en")
-@Preview(locale = "ru")
+@LocalePreview
 @Composable
 private fun StreamScreenPreview() {
     FakeLiveStreamTheme {
         StreamScreen(
-            state = StreamViewState(
+            state = Stream.ViewState(
                 image = ImageSource.Res(R.drawable.img_default_avatar),
                 username = "long_user_name",
-                viewersCount = ViewersCount.Thousands(
+                viewersCount = Stream.ViewersCountUi.Thousands(
                     thousands = "10",
                     hundreds = "4",
                 ),
                 comments = listOf(
-                    CommentUi(
+                    Stream.CommentUi(
                         picture = ImageSource.Res(R.drawable.img_default_avatar),
                         username = "username1",
                         text = "Text 1",
                     ),
-                    CommentUi(
+                    Stream.CommentUi(
                         picture = ImageSource.Res(R.drawable.img_default_avatar),
                         username = "username2",
                         text = "Text 2",
                     ),
-                    CommentUi(
+                    Stream.CommentUi(
                         picture = ImageSource.Res(R.drawable.img_default_avatar),
                         username = "username3",
                         text = "Text 3",
@@ -465,7 +490,9 @@ private fun StreamScreenPreview() {
                 ),
                 reactionCount = 10,
                 showCamera = true,
+                showQuestions = false,
             ),
+            onAction = {},
             navController = rememberNavController(),
         )
     }
