@@ -26,7 +26,7 @@ The project is built using the following technologies and libraries:
 
 ## Download
 
-Google Play: coming soon
+<a align="center" href="https://play.google.com/store/apps/details?id=com.bunbeauty.fakelivestream&gl=us"><img style="margin: 10px" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Git" height="80" /></a>
 
 ## Contact
 
