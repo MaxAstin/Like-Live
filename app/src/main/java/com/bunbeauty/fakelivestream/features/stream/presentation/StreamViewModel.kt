@@ -2,27 +2,21 @@ package com.bunbeauty.fakelivestream.features.stream.presentation
 
 import android.content.Context
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.bunbeauty.fakelivestream.BuildConfig.SHOW_CAMERA
-import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
+import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.stream.domain.Comment
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsUseCase
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,11 +29,11 @@ class StreamViewModel @Inject constructor(
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val getComments: GetCommentsUseCase,
+    private val analyticsManager: AnalyticsManager,
     @ApplicationContext private val applicationContext: Context
-) : ViewModel() {
-
-    private val mutableState = MutableStateFlow(
-        Stream.DataState(
+) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
+    initState = {
+        Stream.State(
             imageUri = null,
             username = "",
             viewersCount = 0,
@@ -50,13 +44,8 @@ class StreamViewModel @Inject constructor(
             showQuestions = false,
             showDirect = false,
         )
-    )
-    val state = mutableState.map(::mapState)
-        .stateIn(
-            scope = viewModelScope,
-            started = Eagerly,
-            initialValue = mapState(mutableState.value),
-        )
+    }
+) {
 
     init {
         getAvatar()
@@ -64,7 +53,7 @@ class StreamViewModel @Inject constructor(
         getViewerCount()
     }
 
-    fun onAction(action: Stream.Action) {
+    override fun onAction(action: Stream.Action) {
         when (action) {
             Stream.Action.ShowJoinRequests -> {
                 mutableState.update { state ->
@@ -112,6 +101,11 @@ class StreamViewModel @Inject constructor(
                 mutableState.update { state ->
                     state.copy(showDirect = false)
                 }
+            }
+
+            Stream.Action.FinishStreamClick -> {
+                analyticsManager.trackStreamFinish()
+                sendEvent(Stream.Event.GoBack)
             }
         }
     }
@@ -227,43 +221,4 @@ class StreamViewModel @Inject constructor(
         applicationContext.imageLoader.enqueue(request)
     }
 
-    private fun mapState(dataState: Stream.DataState): Stream.ViewState {
-        return dataState.run {
-            Stream.ViewState(
-                image = if (dataState.imageUri == null) {
-                    ImageSource.Res(R.drawable.img_default_avatar)
-                } else {
-                    ImageSource.Device(data = dataState.imageUri)
-                },
-                username = username,
-                viewersCount = if (viewersCount < 1_000) {
-                    Stream.ViewersCountUi.UpToThousand(count = viewersCount.toString())
-                } else {
-                    val thousands = viewersCount / 1_000
-                    val hundreds = viewersCount % 1_000 / 100
-                    Stream.ViewersCountUi.Thousands(
-                        thousands = thousands.toString(),
-                        hundreds = hundreds.toString(),
-                    )
-                },
-                comments = comments.map { comment ->
-                    Stream.CommentUi(
-                        picture = if (comment.picture == null) {
-                            ImageSource.Res(R.drawable.img_default_avatar)
-                        } else {
-                            ImageSource.Url(data = comment.picture)
-                        },
-                        username = comment.username,
-                        text = comment.text,
-                    )
-                },
-                reactionCount = reactionCount,
-                showCamera = SHOW_CAMERA,
-                showJoinRequests = showJoinRequests,
-                showInvite = showInvite,
-                showQuestions = showQuestions,
-                showDirect = showDirect,
-            )
-        }
-    }
 }

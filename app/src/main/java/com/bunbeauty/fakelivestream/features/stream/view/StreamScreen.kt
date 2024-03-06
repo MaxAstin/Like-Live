@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.features.stream.ui
+package com.bunbeauty.fakelivestream.features.stream.view
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -33,10 +33,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
+import com.bunbeauty.fakelivestream.features.stream.view.ui.AnimatedReaction
+import com.bunbeauty.fakelivestream.features.stream.view.ui.AvatarImage
+import com.bunbeauty.fakelivestream.features.stream.view.ui.CameraComponent
+import com.bunbeauty.fakelivestream.features.stream.view.ui.EmptyBottomSheet
+import com.bunbeauty.fakelivestream.features.stream.view.ui.FiltersRow
+import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
 import com.bunbeauty.fakelivestream.ui.LocalePreview
 import com.bunbeauty.fakelivestream.ui.blurTop
 import com.bunbeauty.fakelivestream.ui.clickableWithoutIndication
@@ -46,9 +50,8 @@ import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 
 @Composable
 fun StreamScreen(
-    state: Stream.ViewState,
+    state: ViewState,
     onAction: (Stream.Action) -> Unit,
-    navController: NavHostController,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -125,7 +128,7 @@ fun StreamScreen(
                                         .padding(start = 8.dp)
                                         .clickableWithoutIndication(
                                             onClick = {
-                                                navController.popBackStack()
+                                                onAction(Stream.Action.FinishStreamClick)
                                             }
                                         ),
                                     iconResId = R.drawable.ic_close,
@@ -245,7 +248,7 @@ private fun LiveCard(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ViewersCard(
-    viewersCount: Stream.ViewersCountUi,
+    viewersCount: ViewersCountUi,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -262,8 +265,8 @@ private fun ViewersCard(
                 tint = FakeLiveStreamTheme.colors.icon,
             )
             val viewersCountText = when (viewersCount) {
-                is Stream.ViewersCountUi.UpToThousand -> viewersCount.count
-                is Stream.ViewersCountUi.Thousands -> stringResource(
+                is ViewersCountUi.UpToThousand -> viewersCount.count
+                is ViewersCountUi.Thousands -> stringResource(
                     R.string.stream_thousands_viewers_count,
                     viewersCount.thousands,
                     viewersCount.hundreds
@@ -348,7 +351,7 @@ private fun Actions(
 @Composable
 private fun Comments(
     modifier: Modifier = Modifier,
-    comments: List<Stream.CommentUi>,
+    comments: List<CommentUi>,
 ) {
     LazyColumn(
         modifier = modifier
@@ -366,7 +369,7 @@ private fun Comments(
 
 @Composable
 private fun CommentItem(
-    comment: Stream.CommentUi,
+    comment: CommentUi,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -556,25 +559,25 @@ private fun DirectBottomSheet(
 private fun StreamScreenPreview() {
     FakeLiveStreamTheme {
         StreamScreen(
-            state = Stream.ViewState(
+            state = ViewState(
                 image = ImageSource.Res(R.drawable.img_default_avatar),
                 username = "long_user_name",
-                viewersCount = Stream.ViewersCountUi.Thousands(
+                viewersCount = ViewersCountUi.Thousands(
                     thousands = "10",
                     hundreds = "4",
                 ),
                 comments = listOf(
-                    Stream.CommentUi(
+                    CommentUi(
                         picture = ImageSource.Res(R.drawable.img_default_avatar),
                         username = "username1",
                         text = "Text 1",
                     ),
-                    Stream.CommentUi(
+                    CommentUi(
                         picture = ImageSource.Res(R.drawable.img_default_avatar),
                         username = "username2",
                         text = "Text 2",
                     ),
-                    Stream.CommentUi(
+                    CommentUi(
                         picture = ImageSource.Res(R.drawable.img_default_avatar),
                         username = "username3",
                         text = "Text 3",
@@ -588,7 +591,6 @@ private fun StreamScreenPreview() {
                 showDirect = false,
             ),
             onAction = {},
-            navController = rememberNavController(),
         )
     }
 }

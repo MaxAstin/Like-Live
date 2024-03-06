@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.features.preparation.ui
+package com.bunbeauty.fakelivestream.features.preparation.view
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,10 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.R
-import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
 import com.bunbeauty.fakelivestream.ui.LocalePreview
@@ -47,7 +44,6 @@ import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 @Composable
 fun PreparationScreen(
     state: Preparation.State,
-    navController: NavHostController,
     onAction: (Preparation.Action) -> Unit
 ) {
     val contentResolver = LocalContext.current.contentResolver
@@ -173,7 +169,6 @@ fun PreparationScreen(
             shape = RoundedCornerShape(6.dp),
             onClick = {
                 onAction(Preparation.Action.StartStreamClick)
-                navController.navigate(NavigationDestinations.STREAM)
             }
         ) {
             Text(
@@ -198,7 +193,6 @@ private fun PreparationStreamPreview() {
                 username = "",
                 viewerCount = ViewerCount.V_100_200
             ),
-            navController = rememberNavController(),
             onAction = {}
         )
     }
