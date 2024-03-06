@@ -13,6 +13,22 @@
     <string name="preparation_viewer_count">Viewer count</string>
     <string name="preparation_start_live">Start Live</string>
 
+    <string name="stream_join_requests_title">Requests to join</string>
+    <string name="stream_join_requests_body">No Requests Yet</string>
+    <string name="stream_join_requests_description">Requests to co-host show up here.</string>
+
+    <string name="stream_invite_title">Invite to join</string>
+    <string name="stream_invite_body">Invite not available</string>
+    <string name="stream_invite_description">When someone joins, anyone who can see their live videos can also watch this one.</string>
+
+    <string name="stream_questions_title">Questions</string>
+    <string name="stream_questions_body">No Questions Yet</string>
+    <string name="stream_questions_description">Anyone watching can send and see questions here.</string>
+
+    <string name="stream_direct_title">Direct</string>
+    <string name="stream_direct_body">Direct not available</string>
+    <string name="stream_direct_description">There is no way to send this live stream.</string>
+
     <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
         <item>S</item>
         <item>O</item>
@@ -80,7 +96,6 @@
         <item>Fly</item>
         <item>Woo</item>
         <item>Raw</item>
-        <item>Fun</item>
         <item>Cut</item>
         <item>Sun</item>
         <item>Hot</item>

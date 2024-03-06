@@ -1,10 +1,8 @@
 package com.bunbeauty.fakelivestream
 
 import android.Manifest.permission.CAMERA
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,6 +30,7 @@ import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STR
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
 import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
 import com.bunbeauty.fakelivestream.features.preparation.ui.PreparationScreen
+import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.ui.StreamScreen
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
@@ -46,16 +45,6 @@ class MainActivity : ComponentActivity() {
         if (!isGranted) {
             AlertDialog.Builder(this)
                 .setMessage(resources.getString(R.string.need_camera_permisseon))
-                .show()
-        }
-    }
-
-    private val requestReadExternalStoragePermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (!isGranted) {
-            AlertDialog.Builder(this)
-                .setMessage(resources.getString(R.string.need_read_external_storage_permisseon))
                 .show()
         }
     }
@@ -128,7 +117,16 @@ class MainActivity : ComponentActivity() {
             composable(route = STREAM) {
                 val viewModel: StreamViewModel = hiltViewModel()
                 val state by viewModel.state.collectAsState()
-                StreamScreen(state = state, navController = navController)
+                val onAction = remember {
+                    { action: Stream.Action ->
+                        viewModel.onAction(action)
+                    }
+                }
+                StreamScreen(
+                    state = state,
+                    onAction = onAction,
+                    navController = navController
+                )
             }
         }
     }

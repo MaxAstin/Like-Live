@@ -13,11 +13,23 @@ internal val LocalFakeLiveStreamTypography = staticCompositionLocalOf { FakeLive
 
 @Immutable
 data class FakeLiveStreamTypography(
-    val title: TextStyle = TextStyle(
+    val titleSmall: TextStyle = TextStyle(
         fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight.W500,
         fontSize = 14.sp,
         lineHeight = 20.sp
+    ),
+    val titleMedium: TextStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.roboto_medium)),
+        fontWeight = FontWeight.W500,
+        fontSize = 18.sp,
+        lineHeight = 24.sp
+    ),
+    val titleLarge: TextStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        fontSize = 24.sp,
+        lineHeight = 30.sp
     ),
     val bodySmall: TextStyle = TextStyle(
         fontFamily = FontFamily(Font(R.font.roboto_regular)),

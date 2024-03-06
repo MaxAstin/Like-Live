@@ -25,14 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
@@ -99,7 +97,7 @@ fun PreparationScreen(
                     modifier = Modifier.padding(16.dp),
                     text = stringResource(R.string.preparation_edit_photo),
                     color = FakeLiveStreamTheme.colors.interactive,
-                    style = FakeLiveStreamTheme.typography.title,
+                    style = FakeLiveStreamTheme.typography.titleSmall,
                 )
             }
 
@@ -184,7 +182,7 @@ fun PreparationScreen(
                     .padding(12.dp),
                 text = stringResource(R.string.preparation_start_live),
                 color = FakeLiveStreamTheme.colors.onSurface,
-                style = FakeLiveStreamTheme.typography.title,
+                style = FakeLiveStreamTheme.typography.titleSmall,
             )
         }
     }

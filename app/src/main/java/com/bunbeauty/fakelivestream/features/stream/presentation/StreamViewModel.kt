@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.bunbeauty.fakelivestream.BuildConfig.SHOW_CAMERA
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
@@ -20,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -39,14 +39,19 @@ class StreamViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(
-        StreamDataState(
+        Stream.DataState(
             imageUri = null,
             username = "",
             viewersCount = 0,
             comments = emptyList(),
+            reactionCount = 0,
+            showJoinRequests = false,
+            showInvite = false,
+            showQuestions = false,
+            showDirect = false,
         )
     )
-    val state: StateFlow<StreamViewState> = mutableState.map(::mapState)
+    val state = mutableState.map(::mapState)
         .stateIn(
             scope = viewModelScope,
             started = Eagerly,
@@ -57,6 +62,58 @@ class StreamViewModel @Inject constructor(
         getAvatar()
         getUsername()
         getViewerCount()
+    }
+
+    fun onAction(action: Stream.Action) {
+        when (action) {
+            Stream.Action.ShowJoinRequests -> {
+                mutableState.update { state ->
+                    state.copy(showJoinRequests = true)
+                }
+            }
+
+            Stream.Action.HideJoinRequests -> {
+                mutableState.update { state ->
+                    state.copy(showJoinRequests = false)
+                }
+            }
+
+            Stream.Action.ShowInvite -> {
+                mutableState.update { state ->
+                    state.copy(showInvite = true)
+                }
+            }
+
+            Stream.Action.HideInvite -> {
+                mutableState.update { state ->
+                    state.copy(showInvite = false)
+                }
+            }
+
+            Stream.Action.ShowQuestions -> {
+                mutableState.update { state ->
+                    state.copy(showQuestions = true)
+                }
+            }
+
+            Stream.Action.HideQuestions -> {
+                mutableState.update { state ->
+                    state.copy(showQuestions = false)
+                }
+            }
+
+            Stream.Action.ShowDirect -> {
+                mutableState.update { state ->
+                    state.copy(showDirect = true)
+                }
+            }
+
+            Stream.Action.HideDirect -> {
+                mutableState.update { state ->
+                    state.copy(showDirect = false)
+                }
+            }
+        }
     }
 
     private fun getAvatar() {
@@ -82,11 +139,23 @@ class StreamViewModel @Inject constructor(
                 state.copy(viewersCount = viewerCount.min)
             }
 
+            startGenerateReactions(viewerCount = viewerCount.min)
             startGenerateViewersCount(
                 min = viewerCount.min,
                 max = viewerCount.max
             )
             startGenerateComments()
+        }
+    }
+
+    private fun startGenerateReactions(viewerCount: Int) {
+        viewModelScope.launch {
+            delay(5_000)
+            mutableState.update { state ->
+                state.copy(
+                    reactionCount = min(10, viewerCount / 100 + 1)
+                )
+            }
         }
     }
 
@@ -136,7 +205,9 @@ class StreamViewModel @Inject constructor(
                 }
 
                 mutableState.update { state ->
-                    state.copy(comments = newComments + state.comments.take(100))
+                    state.copy(
+                        comments = newComments + state.comments.take(100)
+                    )
                 }
             }
         }
@@ -156,9 +227,9 @@ class StreamViewModel @Inject constructor(
         applicationContext.imageLoader.enqueue(request)
     }
 
-    private fun mapState(dataState: StreamDataState): StreamViewState {
+    private fun mapState(dataState: Stream.DataState): Stream.ViewState {
         return dataState.run {
-            StreamViewState(
+            Stream.ViewState(
                 image = if (dataState.imageUri == null) {
                     ImageSource.Res(R.drawable.img_default_avatar)
                 } else {
@@ -166,17 +237,17 @@ class StreamViewModel @Inject constructor(
                 },
                 username = username,
                 viewersCount = if (viewersCount < 1_000) {
-                    ViewersCount.UpToThousand(count = viewersCount.toString())
+                    Stream.ViewersCountUi.UpToThousand(count = viewersCount.toString())
                 } else {
                     val thousands = viewersCount / 1_000
                     val hundreds = viewersCount % 1_000 / 100
-                    ViewersCount.Thousands(
+                    Stream.ViewersCountUi.Thousands(
                         thousands = thousands.toString(),
                         hundreds = hundreds.toString(),
                     )
                 },
                 comments = comments.map { comment ->
-                    CommentUi(
+                    Stream.CommentUi(
                         picture = if (comment.picture == null) {
                             ImageSource.Res(R.drawable.img_default_avatar)
                         } else {
@@ -186,6 +257,12 @@ class StreamViewModel @Inject constructor(
                         text = comment.text,
                     )
                 },
+                reactionCount = reactionCount,
+                showCamera = SHOW_CAMERA,
+                showJoinRequests = showJoinRequests,
+                showInvite = showInvite,
+                showQuestions = showQuestions,
+                showDirect = showDirect,
             )
         }
     }
