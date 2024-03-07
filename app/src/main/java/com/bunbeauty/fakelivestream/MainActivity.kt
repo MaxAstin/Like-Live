@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -148,6 +150,12 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }.launchIn(scope)
+                }
+                LifecycleEventEffect(Lifecycle.Event.ON_START) {
+                    onAction(Stream.Action.Start)
+                }
+                LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+                    onAction(Stream.Action.Stop)
                 }
 
                 StreamScreen(

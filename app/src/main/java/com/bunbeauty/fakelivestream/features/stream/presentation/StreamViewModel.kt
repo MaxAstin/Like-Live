@@ -103,6 +103,14 @@ class StreamViewModel @Inject constructor(
                 }
             }
 
+            Stream.Action.Start -> {
+                analyticsManager.trackStreamResumption()
+            }
+
+            Stream.Action.Stop -> {
+                analyticsManager.trackStreamStop()
+            }
+
             Stream.Action.FinishStreamClick -> {
                 analyticsManager.trackStreamFinish()
                 sendEvent(Stream.Event.GoBack)

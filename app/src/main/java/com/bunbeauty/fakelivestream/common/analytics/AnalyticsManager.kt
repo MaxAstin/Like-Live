@@ -8,6 +8,7 @@ import javax.inject.Singleton
 
 private const val STREAM_STARTED = "stream_started"
 private const val USERNAME_PARAM = "username"
+private const val STREAM_STOPPED = "stream_stopped"
 private const val STREAM_FINISHED = "stream_finished"
 private const val STREAM_DURATION_PARAM = "stream_duration"
 
@@ -26,14 +27,32 @@ class AnalyticsManager @Inject constructor(
         }
     }
 
+    fun trackStreamResumption() {
+        startStreamTimeMillis = System.currentTimeMillis()
+    }
+
+    fun trackStreamStop() {
+        val duration = getStreamDuration() ?: return
+
+        firebaseAnalytics.logEvent(STREAM_STOPPED) {
+            param(STREAM_DURATION_PARAM, duration)
+        }
+    }
+
     fun trackStreamFinish() {
-        val start = startStreamTimeMillis ?: return
-        startStreamTimeMillis = null
-        val finish = System.currentTimeMillis()
-        val duration = (finish - start).toTimeString()
+        val duration = getStreamDuration() ?: return
 
         firebaseAnalytics.logEvent(STREAM_FINISHED) {
             param(STREAM_DURATION_PARAM, duration)
         }
     }
+
+    private fun getStreamDuration(): String? {
+        val start = startStreamTimeMillis ?: return null
+        startStreamTimeMillis = null
+        val finish = System.currentTimeMillis()
+
+        return (finish - start).toTimeString()
+    }
+
 }

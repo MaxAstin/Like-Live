@@ -1,5 +1,6 @@
 package com.bunbeauty.fakelivestream.features.stream.view
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,6 +54,10 @@ fun StreamScreen(
     state: ViewState,
     onAction: (Stream.Action) -> Unit,
 ) {
+    BackHandler {
+        onAction(Stream.Action.FinishStreamClick)
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = FakeLiveStreamTheme.colors.surface,

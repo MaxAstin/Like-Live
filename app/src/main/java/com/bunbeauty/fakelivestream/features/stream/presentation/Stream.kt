@@ -27,6 +27,8 @@ interface Stream {
         data object HideQuestions: Action
         data object ShowDirect: Action
         data object HideDirect: Action
+        data object Start: Action
+        data object Stop: Action
         data object FinishStreamClick: Action
     }
 
