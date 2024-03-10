@@ -14,13 +14,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,12 +33,15 @@ import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PRE
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
 import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
-import com.bunbeauty.fakelivestream.features.preparation.ui.PreparationScreen
+import com.bunbeauty.fakelivestream.features.preparation.view.PreparationScreen
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
-import com.bunbeauty.fakelivestream.features.stream.ui.StreamScreen
+import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
+import com.bunbeauty.fakelivestream.features.stream.view.toViewState
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -108,9 +115,20 @@ class MainActivity : ComponentActivity() {
                         viewModel.onAction(action)
                     }
                 }
+
+                val scope = rememberCoroutineScope()
+                LaunchedEffect(Unit) {
+                    viewModel.event.onEach { event ->
+                        when(event) {
+                            Preparation.Event.OpenStream -> {
+                                navController.navigate(STREAM)
+                            }
+                        }
+                    }.launchIn(scope)
+                }
+
                 PreparationScreen(
                     state = state,
-                    navController = navController,
                     onAction = onAction
                 )
             }
@@ -122,10 +140,27 @@ class MainActivity : ComponentActivity() {
                         viewModel.onAction(action)
                     }
                 }
+
+                val scope = rememberCoroutineScope()
+                LaunchedEffect(Unit) {
+                    viewModel.event.onEach { event ->
+                        when(event) {
+                            Stream.Event.GoBack -> {
+                                navController.popBackStack()
+                            }
+                        }
+                    }.launchIn(scope)
+                }
+                LifecycleEventEffect(Lifecycle.Event.ON_START) {
+                    onAction(Stream.Action.Start)
+                }
+                LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+                    onAction(Stream.Action.Stop)
+                }
+
                 StreamScreen(
-                    state = state,
+                    state = state.toViewState(),
                     onAction = onAction,
-                    navController = navController
                 )
             }
         }

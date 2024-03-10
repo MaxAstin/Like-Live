@@ -4,6 +4,8 @@ plugins {
     id("kotlinx-serialization")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -14,8 +16,8 @@ android {
         applicationId = "com.bunbeauty.fakelivestream"
         minSdk = 27
         targetSdk = 34
-        versionCode = 103
-        versionName = "1.0.3"
+        versionCode = 110
+        versionName = "1.1.0"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -72,6 +74,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -109,6 +112,11 @@ dependencies {
     // Media3
     implementation("androidx.media3:media3-ui:1.2.1")
     implementation("androidx.media3:media3-exoplayer:1.2.1")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
 }
 
 kapt {

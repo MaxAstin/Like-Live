@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.features.stream.ui
+package com.bunbeauty.fakelivestream.features.stream.view.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column

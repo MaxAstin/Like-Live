@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.features.preparation.ui
+package com.bunbeauty.fakelivestream.features.preparation.view
 
 import androidx.compose.foundation.background
 import androidx.compose.material3.DropdownMenu
@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
-import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 
 @Composable

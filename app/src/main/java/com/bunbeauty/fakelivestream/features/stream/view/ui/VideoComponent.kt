@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.features.stream.ui
+package com.bunbeauty.fakelivestream.features.stream.view.ui
 
 import androidx.annotation.OptIn
 import androidx.compose.runtime.Composable

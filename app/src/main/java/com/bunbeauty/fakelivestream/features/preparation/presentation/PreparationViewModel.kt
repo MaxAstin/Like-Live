@@ -1,9 +1,10 @@
 package com.bunbeauty.fakelivestream.features.preparation.presentation
 
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
+import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
@@ -14,8 +15,6 @@ import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
 import com.bunbeauty.fakelivestream.ui.components.ImageSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -33,23 +32,23 @@ class PreparationViewModel @Inject constructor(
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
-) : ViewModel() {
-
-    private val mutableState = MutableStateFlow(
+    private val analyticsManager: AnalyticsManager,
+) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
+    initState = {
         Preparation.State(
             image = ImageSource.Res(R.drawable.img_default_avatar),
             username = "",
             viewerCount = ViewerCount.V_100_200,
         )
-    )
-    val state = mutableState.asStateFlow()
+    }
+) {
 
     init {
         initState()
         observeAndSaveUsername()
     }
 
-    fun onAction(action: Preparation.Action) {
+    override fun onAction(action: Preparation.Action) {
         when (action) {
             is Preparation.Action.ImageSelect -> {
                 action.uri?.let { imageUri ->
@@ -79,7 +78,9 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.StartStreamClick -> {
                 viewModelScope.launch {
+                    analyticsManager.trackStreamStart(mutableState.value.username)
                     saveUsernameUseCase(mutableState.value.username)
+                    sendEvent(Preparation.Event.OpenStream)
                 }
             }
         }
