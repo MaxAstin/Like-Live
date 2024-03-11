@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<S : Base.State, A : Base.Action, E : Base.Event>(
@@ -21,6 +22,12 @@ abstract class BaseViewModel<S : Base.State, A : Base.Action, E : Base.Event>(
     val event: Flow<E> = mutableEvent.receiveAsFlow()
 
     abstract fun onAction(action: A)
+
+    protected fun setState(block: S.() -> S) {
+        mutableState.update { state ->
+            state.block()
+        }
+    }
 
     protected fun sendEvent(event: E) {
         viewModelScope.launch {

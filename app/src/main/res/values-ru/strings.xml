@@ -3,8 +3,10 @@
     <string name="stream_live">ПРЯМОЙ ЭФИР</string>
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
     <string name="stream_add_comment">Добавьте комментарий…</string>
-    <string name="need_camera_permisseon">Для работы приложения необходим доступ к камере</string>
-    <string name="need_read_external_storage_permisseon">Для работы приложения необходим доступ к фото</string>
+    <string name="required_camera_permisseon_title">Разрешите %s to доступ к камере</string>
+    <string name="required_camera_permisseon_body">Это позволит начть стрим.
+        Выбор в любое время можно изменить в настройках устройства.</string>
+    <string name="settings">Настройки</string>
 
     <string name="preparation_edit_photo">Изменить фото</string>
     <string name="preparation_username">Имя пользователя</string>
