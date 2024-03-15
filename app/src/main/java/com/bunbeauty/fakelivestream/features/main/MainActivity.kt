@@ -44,6 +44,7 @@ import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
 import com.bunbeauty.fakelivestream.features.stream.view.toViewState
+import com.bunbeauty.fakelivestream.ui.keepScreenOn
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -124,6 +125,12 @@ class MainActivity : ComponentActivity() {
             }
 
             val navController = rememberNavController()
+            LaunchedEffect(Unit) {
+                navController.addOnDestinationChangedListener { _, destination, _ ->
+                    window.keepScreenOn = (destination.route == STREAM)
+                }
+            }
+
             MainNavigation(
                 navController = navController,
                 modifier = Modifier.padding(padding)
