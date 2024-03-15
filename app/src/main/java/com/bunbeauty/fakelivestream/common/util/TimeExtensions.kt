@@ -5,7 +5,7 @@ import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
 
 fun Long.toTimeString(): String {
-    return ofEpochSecond(this / 1_000)
+    return ofEpochSecond(this)
         .atZone(UTC)
         .toLocalDateTime()
         .format(DateTimeFormatter.ofPattern("HH:mm:ss"))
