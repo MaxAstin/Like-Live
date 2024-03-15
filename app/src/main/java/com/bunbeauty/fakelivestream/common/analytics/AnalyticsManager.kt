@@ -32,27 +32,30 @@ class AnalyticsManager @Inject constructor(
     }
 
     fun trackStreamStop() {
-        val duration = getStreamDuration() ?: return
+        val durationInSeconds = getStreamDurationInSeconds() ?: return
+        startStreamTimeMillis = null
 
         firebaseAnalytics.logEvent(STREAM_STOPPED) {
-            param(STREAM_DURATION_PARAM, duration)
+            param(STREAM_DURATION_PARAM, durationInSeconds.toTimeString())
+            param(FirebaseAnalytics.Param.VALUE, durationInSeconds)
         }
     }
 
     fun trackStreamFinish() {
-        val duration = getStreamDuration() ?: return
+        val durationInSeconds = getStreamDurationInSeconds() ?: return
+        startStreamTimeMillis = null
 
         firebaseAnalytics.logEvent(STREAM_FINISHED) {
-            param(STREAM_DURATION_PARAM, duration)
+            param(STREAM_DURATION_PARAM, durationInSeconds.toTimeString())
+            param(FirebaseAnalytics.Param.VALUE, durationInSeconds)
         }
     }
 
-    private fun getStreamDuration(): String? {
+    private fun getStreamDurationInSeconds(): Long? {
         val start = startStreamTimeMillis ?: return null
-        startStreamTimeMillis = null
         val finish = System.currentTimeMillis()
 
-        return (finish - start).toTimeString()
+        return (finish - start) / 1000
     }
 
 }
