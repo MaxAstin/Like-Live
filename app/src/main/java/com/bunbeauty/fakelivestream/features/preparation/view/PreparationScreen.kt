@@ -225,7 +225,7 @@ private fun PreparationContentPreview() {
     FakeLiveStreamTheme {
         PreparationContent(
             state = Preparation.State(
-                image = ImageSource.Res(R.drawable.img_default_avatar),
+                image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "",
                 viewerCount = ViewerCount.V_100_200
             ),

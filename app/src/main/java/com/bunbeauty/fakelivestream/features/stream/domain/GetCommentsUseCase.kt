@@ -18,14 +18,15 @@ class GetCommentsUseCase @Inject constructor(
         }.awaitAll()
             .mapNotNull { user ->
                 user?.let {
-                    val picture = when (Random.nextInt(10)) {
-                        in 0..4 -> user.picture
-                        in 5..6 -> "https://random.imagecdn.app/100/100"
-                        in 7..8 -> "https://picsum.photos/100"
-                        else -> null
+                    val picture = if (Random.nextInt(10) == 0) {
+                        null
+                    } else {
+                        userRepository.getPictureName()
                     }
                     Comment(
                         picture = picture,
+                        // TODO update username generation
+                        // TODO avoid using api
                         username = getUsername(user),
                         text = getRandomCommentText(),
                     )

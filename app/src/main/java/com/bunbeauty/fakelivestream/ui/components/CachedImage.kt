@@ -1,9 +1,11 @@
 package com.bunbeauty.fakelivestream.ui.components
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -23,12 +25,18 @@ sealed interface ImageSource<T> {
     data class Url(override val data: String) : ImageSource<String>
 
     @Immutable
-    data class Res(
+    data class ResId(
         @DrawableRes
         override val data: Int,
     ) : ImageSource<Int>
+
+    @Immutable
+    data class ResName(
+        override val data: String,
+    ) : ImageSource<String>
 }
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun CachedImage(
     imageSource: ImageSource<*>,
@@ -37,10 +45,25 @@ fun CachedImage(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,
 ) {
+    val context = LocalContext.current
+    val data = when (imageSource) {
+        is ImageSource.ResName -> {
+            remember(imageSource.data) {
+                context.resources.getIdentifier(
+                    imageSource.data,
+                    "drawable",
+                    context.packageName
+                )
+            }
+        }
+        else -> {
+            imageSource.data
+        }
+    }
     AsyncImage(
         modifier = modifier,
         model = ImageRequest.Builder(LocalContext.current)
-            .data(imageSource.data)
+            .data(data)
             .crossfade(true)
             .diskCachePolicy(CachePolicy.DISABLED)
             .memoryCachePolicy(CachePolicy.ENABLED)

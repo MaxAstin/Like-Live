@@ -1,20 +1,14 @@
 package com.bunbeauty.fakelivestream.features.stream.presentation
 
-import android.content.Context
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
-import coil.imageLoader
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
 import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
-import com.bunbeauty.fakelivestream.features.stream.domain.Comment
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,8 +22,7 @@ class StreamViewModel @Inject constructor(
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val getComments: GetCommentsUseCase,
-    private val analyticsManager: AnalyticsManager,
-    @ApplicationContext private val applicationContext: Context
+    private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
     initState = {
         Stream.State(
@@ -188,18 +181,24 @@ class StreamViewModel @Inject constructor(
     }
 
     private fun startGenerateComments() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             while (true) {
-                val commentCount = Random.nextInt(1, 5)
+                val viewersCount = mutableState.value.viewersCount
+                val commentCount = if (viewersCount < 1000) {
+                    1
+                } else {
+                    val maxCommentCount = (viewersCount / 1_000).coerceIn(2, 5)
+                    Random.nextInt(1, maxCommentCount)
+                }
+
                 val newComments = getComments(count = commentCount)
 
-                newComments.forEach { comment ->
-                    preloadUserAvatar(comment)
+                val delayMillis = if (viewersCount < 1000) {
+                    Random.nextLong(1_000, 2_000)
+                } else {
+                    Random.nextLong(500, 1_000)
                 }
-                val needPreload = newComments.any { it.picture != null }
-                if (needPreload) {
-                    delay(2_000)
-                }
+                delay(delayMillis)
 
                 setState {
                     copy(
@@ -209,19 +208,4 @@ class StreamViewModel @Inject constructor(
             }
         }
     }
-
-    private fun preloadUserAvatar(comment: Comment) {
-        if (comment.picture == null) {
-            return
-        }
-
-        val request = ImageRequest.Builder(applicationContext)
-            .data(comment.picture)
-            .diskCachePolicy(CachePolicy.DISABLED)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .memoryCacheKey(comment.username)
-            .build()
-        applicationContext.imageLoader.enqueue(request)
-    }
-
 }

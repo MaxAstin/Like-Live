@@ -1,5 +1,6 @@
 package com.bunbeauty.fakelivestream.features.stream.view
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -59,6 +60,7 @@ import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun StreamScreen(navController: NavHostController) {
     val viewModel: StreamViewModel = hiltViewModel()
@@ -608,7 +610,7 @@ private fun StreamScreenPreview() {
     FakeLiveStreamTheme {
         StreamContent(
             state = ViewState(
-                image = ImageSource.Res(R.drawable.img_default_avatar),
+                image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "long_user_name",
                 viewersCount = ViewersCountUi.Thousands(
                     thousands = "10",
@@ -616,17 +618,17 @@ private fun StreamScreenPreview() {
                 ),
                 comments = listOf(
                     CommentUi(
-                        picture = ImageSource.Res(R.drawable.img_default_avatar),
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
                         username = "username1",
                         text = "Text 1",
                     ),
                     CommentUi(
-                        picture = ImageSource.Res(R.drawable.img_default_avatar),
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
                         username = "username2",
                         text = "Text 2",
                     ),
                     CommentUi(
-                        picture = ImageSource.Res(R.drawable.img_default_avatar),
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
                         username = "username3",
                         text = "Text 3",
                     ),

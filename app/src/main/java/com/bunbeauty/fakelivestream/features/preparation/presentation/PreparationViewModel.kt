@@ -36,7 +36,7 @@ class PreparationViewModel @Inject constructor(
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
         Preparation.State(
-            image = ImageSource.Res(R.drawable.img_default_avatar),
+            image = ImageSource.ResId(R.drawable.img_default_avatar),
             username = "",
             viewerCount = ViewerCount.V_100_200,
         )
@@ -92,7 +92,7 @@ class PreparationViewModel @Inject constructor(
             mutableState.update { state ->
                 state.copy(
                     image = if (imageUri == null) {
-                        ImageSource.Res(data = R.drawable.img_default_avatar)
+                        ImageSource.ResId(data = R.drawable.img_default_avatar)
                     } else {
                         ImageSource.Device(data = imageUri.toUri())
                     },
