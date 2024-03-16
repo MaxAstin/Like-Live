@@ -23,9 +23,11 @@ abstract class BaseViewModel<S : Base.State, A : Base.Action, E : Base.Event>(
 
     abstract fun onAction(action: A)
 
-    protected fun setState(block: S.() -> S) {
-        mutableState.update { state ->
-            state.block()
+    protected fun setState(block: suspend S.() -> S) {
+        viewModelScope.launch {
+            mutableState.update { state ->
+                state.block()
+            }
         }
     }
 

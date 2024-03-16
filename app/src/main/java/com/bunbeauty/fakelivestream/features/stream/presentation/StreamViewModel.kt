@@ -17,7 +17,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
@@ -56,50 +55,50 @@ class StreamViewModel @Inject constructor(
     override fun onAction(action: Stream.Action) {
         when (action) {
             Stream.Action.ShowJoinRequests -> {
-                mutableState.update { state ->
-                    state.copy(showJoinRequests = true)
+                setState {
+                    copy(showJoinRequests = true)
                 }
             }
 
             Stream.Action.HideJoinRequests -> {
-                mutableState.update { state ->
-                    state.copy(showJoinRequests = false)
+                setState {
+                    copy(showJoinRequests = false)
                 }
             }
 
             Stream.Action.ShowInvite -> {
-                mutableState.update { state ->
-                    state.copy(showInvite = true)
+                setState {
+                    copy(showInvite = true)
                 }
             }
 
             Stream.Action.HideInvite -> {
-                mutableState.update { state ->
-                    state.copy(showInvite = false)
+                setState {
+                    copy(showInvite = false)
                 }
             }
 
             Stream.Action.ShowQuestions -> {
-                mutableState.update { state ->
-                    state.copy(showQuestions = true)
+                setState {
+                    copy(showQuestions = true)
                 }
             }
 
             Stream.Action.HideQuestions -> {
-                mutableState.update { state ->
-                    state.copy(showQuestions = false)
+                setState {
+                    copy(showQuestions = false)
                 }
             }
 
             Stream.Action.ShowDirect -> {
-                mutableState.update { state ->
-                    state.copy(showDirect = true)
+                setState {
+                    copy(showDirect = true)
                 }
             }
 
             Stream.Action.HideDirect -> {
-                mutableState.update { state ->
-                    state.copy(showDirect = false)
+                setState {
+                    copy(showDirect = false)
                 }
             }
 
@@ -119,26 +118,22 @@ class StreamViewModel @Inject constructor(
     }
 
     private fun getAvatar() {
-        viewModelScope.launch {
-            mutableState.update { state ->
-                state.copy(imageUri = getImageUriUseCase()?.toUri())
-            }
+        setState {
+            copy(imageUri = getImageUriUseCase()?.toUri())
         }
     }
 
     private fun getUsername() {
-        viewModelScope.launch {
-            mutableState.update { state ->
-                state.copy(username = getUsernameUseCase())
-            }
+        setState {
+            copy(username = getUsernameUseCase())
         }
     }
 
     private fun getViewerCount() {
         viewModelScope.launch {
             val viewerCount = getViewerCountUseCase()
-            mutableState.update { state ->
-                state.copy(viewersCount = viewerCount.min)
+            setState {
+                copy(viewersCount = viewerCount.min)
             }
 
             startGenerateReactions(viewerCount = viewerCount.min)
@@ -153,8 +148,8 @@ class StreamViewModel @Inject constructor(
     private fun startGenerateReactions(viewerCount: Int) {
         viewModelScope.launch {
             delay(5_000)
-            mutableState.update { state ->
-                state.copy(
+            setState {
+                copy(
                     reactionCount = min(10, viewerCount / 100 + 1)
                 )
             }
@@ -185,8 +180,8 @@ class StreamViewModel @Inject constructor(
                 } else {
                     current - change
                 }
-                mutableState.update { state ->
-                    state.copy(viewersCount = newCount)
+                setState {
+                    copy(viewersCount = newCount)
                 }
             }
         }
@@ -206,9 +201,9 @@ class StreamViewModel @Inject constructor(
                     delay(2_000)
                 }
 
-                mutableState.update { state ->
-                    state.copy(
-                        comments = newComments + state.comments.take(100)
+                setState {
+                    copy(
+                        comments = newComments + comments.take(100)
                     )
                 }
             }
