@@ -22,9 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,13 +32,8 @@ import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STR
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
 import com.bunbeauty.fakelivestream.features.main.view.CameraIsRequiredDialog
-import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
-import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
 import com.bunbeauty.fakelivestream.features.preparation.view.PreparationScreen
-import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
-import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
-import com.bunbeauty.fakelivestream.features.stream.view.toViewState
 import com.bunbeauty.fakelivestream.ui.keepScreenOn
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -117,6 +109,7 @@ class MainActivity : ComponentActivity() {
                         Main.Event.OpenSettings -> {
                             openSettings()
                         }
+
                         Main.Event.OpenStream -> {
                             navController.navigate(STREAM)
                         }
@@ -154,60 +147,14 @@ class MainActivity : ComponentActivity() {
             },
         ) {
             composable(route = PREPARATION) {
-                val viewModel: PreparationViewModel = hiltViewModel()
-                val state by viewModel.state.collectAsStateWithLifecycle()
-                val onAction = remember {
-                    { action: Preparation.Action ->
-                        viewModel.onAction(action)
-                    }
-                }
-
-                val scope = rememberCoroutineScope()
-                LaunchedEffect(Unit) {
-                    viewModel.event.onEach { event ->
-                        when (event) {
-                            Preparation.Event.OpenStream -> {
-                                requestCameraPermission()
-                            }
-                        }
-                    }.launchIn(scope)
-                }
-
                 PreparationScreen(
-                    state = state,
-                    onAction = onAction
+                    onStartStreamClick = {
+                        requestCameraPermission()
+                    }
                 )
             }
             composable(route = STREAM) {
-                val viewModel: StreamViewModel = hiltViewModel()
-                val state by viewModel.state.collectAsStateWithLifecycle()
-                val onAction = remember {
-                    { action: Stream.Action ->
-                        viewModel.onAction(action)
-                    }
-                }
-
-                val scope = rememberCoroutineScope()
-                LaunchedEffect(Unit) {
-                    viewModel.event.onEach { event ->
-                        when (event) {
-                            Stream.Event.GoBack -> {
-                                navController.popBackStack()
-                            }
-                        }
-                    }.launchIn(scope)
-                }
-                LifecycleEventEffect(Lifecycle.Event.ON_START) {
-                    onAction(Stream.Action.Start)
-                }
-                LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-                    onAction(Stream.Action.Stop)
-                }
-
-                StreamScreen(
-                    state = state.toViewState(),
-                    onAction = onAction,
-                )
+                StreamScreen(navController = navController)
             }
         }
     }

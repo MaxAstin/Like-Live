@@ -15,9 +15,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,9 +31,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
+import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
 import com.bunbeauty.fakelivestream.ui.LocalePreview
 import com.bunbeauty.fakelivestream.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.ui.components.FakeLiveTextField
@@ -40,9 +45,40 @@ import com.bunbeauty.fakelivestream.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.ui.noEffectClickable
 import com.bunbeauty.fakelivestream.ui.rippleClickable
 import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun PreparationScreen(
+    onStartStreamClick: () -> Unit,
+) {
+    val viewModel: PreparationViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: Preparation.Action ->
+            viewModel.onAction(action)
+        }
+    }
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.event.onEach { event ->
+            when (event) {
+                Preparation.Event.OpenStream -> {
+                    onStartStreamClick()
+                }
+            }
+        }.launchIn(scope)
+    }
+
+    PreparationContent(
+        state = state,
+        onAction = onAction,
+    )
+}
+
+@Composable
+fun PreparationContent(
     state: Preparation.State,
     onAction: (Preparation.Action) -> Unit
 ) {
@@ -185,9 +221,9 @@ fun PreparationScreen(
 
 @LocalePreview
 @Composable
-private fun PreparationStreamPreview() {
+private fun PreparationContentPreview() {
     FakeLiveStreamTheme {
-        PreparationScreen(
+        PreparationContent(
             state = Preparation.State(
                 image = ImageSource.Res(R.drawable.img_default_avatar),
                 username = "",
