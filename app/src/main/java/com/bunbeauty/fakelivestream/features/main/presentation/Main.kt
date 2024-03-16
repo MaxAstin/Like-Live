@@ -8,12 +8,14 @@ interface Main {
 
     sealed interface Action: Base.Action {
         data object CameraPermissionDeny: Action
+        data object CameraPermissionAccept: Action
         data object CloseCameraRequiredDialogClick: Action
         data object SettingsClick: Action
     }
 
     sealed interface Event: Base.Event {
         data object OpenSettings: Event
+        data object OpenStream: Event
     }
 
 }

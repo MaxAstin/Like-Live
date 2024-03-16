@@ -16,6 +16,9 @@ class MainViewModel @Inject constructor(): BaseViewModel<Main.State, Main.Action
                     copy(showNoCameraPermission = true)
                 }
             }
+            Main.Action.CameraPermissionAccept -> {
+                sendEvent(Main.Event.OpenStream)
+            }
             Main.Action.CloseCameraRequiredDialogClick -> {
                 setState {
                     copy(showNoCameraPermission = false)

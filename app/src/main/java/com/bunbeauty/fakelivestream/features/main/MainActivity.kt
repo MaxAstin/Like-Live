@@ -2,7 +2,6 @@ package com.bunbeauty.fakelivestream.features.main
 
 import android.Manifest.permission.CAMERA
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -23,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -58,7 +56,9 @@ class MainActivity : ComponentActivity() {
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (!isGranted) {
+        if (isGranted) {
+            mainViewModel.onAction(Main.Action.CameraPermissionAccept)
+        } else {
             mainViewModel.onAction(Main.Action.CameraPermissionDeny)
         }
     }
@@ -93,10 +93,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun isCameraPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED
-    }
-
     private fun openSettings() {
         startActivity(
             Intent().apply {
@@ -114,17 +110,20 @@ class MainActivity : ComponentActivity() {
                 .navigationBarsPadding()
         ) { padding ->
             val scope = rememberCoroutineScope()
+            val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 mainViewModel.event.onEach { event ->
                     when (event) {
                         Main.Event.OpenSettings -> {
                             openSettings()
                         }
+                        Main.Event.OpenStream -> {
+                            navController.navigate(STREAM)
+                        }
                     }
                 }.launchIn(scope)
             }
 
-            val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 navController.addOnDestinationChangedListener { _, destination, _ ->
                     window.keepScreenOn = (destination.route == STREAM)
@@ -168,11 +167,7 @@ class MainActivity : ComponentActivity() {
                     viewModel.event.onEach { event ->
                         when (event) {
                             Preparation.Event.OpenStream -> {
-                                if (isCameraPermissionGranted()) {
-                                    navController.navigate(STREAM)
-                                } else {
-                                    requestCameraPermission()
-                                }
+                                requestCameraPermission()
                             }
                         }
                     }.launchIn(scope)
