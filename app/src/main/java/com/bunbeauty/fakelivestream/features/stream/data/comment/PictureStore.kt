@@ -1,6 +1,6 @@
 package com.bunbeauty.fakelivestream.features.stream.data.comment
 
-private const val PICTURE_COUNT = 50
+private const val PICTURE_COUNT = 100
 
 class PictureStore {
 
