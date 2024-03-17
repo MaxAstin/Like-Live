@@ -34,7 +34,7 @@ fun CameraComponent(
 
         LaunchedEffect(isFront) {
             val cameraProvider = context.getCameraProvider()
-            val lensFacing = if (isFront) {
+            val lensFacing = if (isFront && cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)) {
                 CameraSelector.LENS_FACING_FRONT
             } else {
                 CameraSelector.LENS_FACING_BACK
