@@ -27,8 +27,8 @@ enum class ViewerCount(
     ),
     V_20K_50K(
         text = "20K–50K",
-        min = 100,
-        max = 200,
+        min = 20_000,
+        max = 50_000,
     ),
     V_100K_200K(
         text = "100K–200K",
