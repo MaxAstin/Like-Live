@@ -2,7 +2,7 @@ package com.bunbeauty.fakelivestream.features.stream.presentation
 
 import android.net.Uri
 import com.bunbeauty.fakelivestream.common.presentation.Base
-import com.bunbeauty.fakelivestream.features.stream.domain.Comment
+import com.bunbeauty.fakelivestream.features.stream.domain.model.Comment
 
 interface Stream {
 

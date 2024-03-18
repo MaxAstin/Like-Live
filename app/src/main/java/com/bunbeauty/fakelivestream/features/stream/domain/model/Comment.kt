@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.features.stream.domain
+package com.bunbeauty.fakelivestream.features.stream.domain.model
 
 data class Comment(
     val picture: String?,
