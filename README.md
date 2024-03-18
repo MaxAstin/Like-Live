@@ -1,4 +1,4 @@
-# ❤️ Like-Live
+# ❤️ Like Live
 
 ## Overview
 
@@ -17,18 +17,17 @@ An [Android](https://www.android.com/) app built using [Kotlin](https://kotlinla
 
 The project is built using the following technologies and libraries:
 - [Kotlin](https://kotlinlang.org/): Programming language
+- [Jetpack compose](https://developer.android.com/jetpack/compose): UI
 - [Hilt](https://dagger.dev/hilt/): Dependency injection
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines): Multithreading
-- [Ktor](https://ktor.io/): HTTP client
 - [SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences): Key-value store
 - [Coil](https://coil-kt.github.io/coil/): Image loading
-- [Jetpack compose](https://developer.android.com/jetpack/compose): UI
 
 ## Download
 
-Google Play: coming soon
+<a align="center" href="https://play.google.com/store/apps/details?id=com.bunbeauty.fakelivestream&gl=us"><img style="margin: 10px" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Git" height="80" /></a>
 
-## Contact
+## Contacts
 
 For any questions or feedback, feel free to contact:
 
