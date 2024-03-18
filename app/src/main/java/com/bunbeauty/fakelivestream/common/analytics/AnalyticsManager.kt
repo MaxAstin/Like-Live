@@ -30,35 +30,18 @@ class AnalyticsManager @Inject constructor(
         }
     }
 
-    fun trackStreamResumption() {
-        startStreamTimeMillis = System.currentTimeMillis()
-    }
-
-    fun trackStreamStop() {
-        val durationInSeconds = getStreamDurationInSeconds() ?: return
-        startStreamTimeMillis = null
-
+    fun trackStreamStop(durationInSeconds: Int) {
         firebaseAnalytics.logEvent(STREAM_STOPPED) {
             param(STREAM_DURATION_PARAM, durationInSeconds.toTimeString())
-            param(FirebaseAnalytics.Param.VALUE, durationInSeconds)
+            param(FirebaseAnalytics.Param.VALUE, durationInSeconds.toLong())
         }
     }
 
-    fun trackStreamFinish() {
-        val durationInSeconds = getStreamDurationInSeconds() ?: return
-        startStreamTimeMillis = null
-
+    fun trackStreamFinish(durationInSeconds: Int) {
         firebaseAnalytics.logEvent(STREAM_FINISHED) {
             param(STREAM_DURATION_PARAM, durationInSeconds.toTimeString())
-            param(FirebaseAnalytics.Param.VALUE, durationInSeconds)
+            param(FirebaseAnalytics.Param.VALUE, durationInSeconds.toLong())
         }
-    }
-
-    private fun getStreamDurationInSeconds(): Long? {
-        val start = startStreamTimeMillis ?: return null
-        val finish = System.currentTimeMillis()
-
-        return (finish - start) / 1000
     }
 
 }

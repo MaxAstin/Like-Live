@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui.components
+package com.bunbeauty.fakelivestream.common.ui.components
 
 import android.annotation.SuppressLint
 import android.net.Uri

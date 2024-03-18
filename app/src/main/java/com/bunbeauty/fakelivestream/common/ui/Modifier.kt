@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui
+package com.bunbeauty.fakelivestream.common.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

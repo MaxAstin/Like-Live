@@ -37,20 +37,23 @@ import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
 import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
-import com.bunbeauty.fakelivestream.ui.LocalePreview
-import com.bunbeauty.fakelivestream.ui.components.CachedImage
-import com.bunbeauty.fakelivestream.ui.components.FakeLiveTextField
-import com.bunbeauty.fakelivestream.ui.components.GradientButton
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.ui.noEffectClickable
-import com.bunbeauty.fakelivestream.ui.rippleClickable
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
+import com.bunbeauty.fakelivestream.common.ui.components.FakeLiveTextField
+import com.bunbeauty.fakelivestream.common.ui.components.GradientButton
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.noEffectClickable
+import com.bunbeauty.fakelivestream.common.ui.rippleClickable
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.features.main.view.FeedbackDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun PreparationScreen(
+    streamDurationInSeconds: Int?,
     onStartStreamClick: () -> Unit,
+    openInAppReview: () -> Unit,
 ) {
     val viewModel: PreparationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -67,14 +70,27 @@ fun PreparationScreen(
                 Preparation.Event.OpenStream -> {
                     onStartStreamClick()
                 }
+                Preparation.Event.OpenInAppReview -> {
+                    openInAppReview()
+                }
             }
         }.launchIn(scope)
+    }
+
+    LaunchedEffect(Unit) {
+        if (streamDurationInSeconds != null) {
+            viewModel.onAction(Preparation.Action.StreamFinished(durationInSeconds = streamDurationInSeconds))
+        }
     }
 
     PreparationContent(
         state = state,
         onAction = onAction,
     )
+
+    if (state.showFeedbackDialog) {
+        FeedbackDialog(onAction = onAction)
+    }
 }
 
 @Composable
@@ -227,7 +243,8 @@ private fun PreparationContentPreview() {
             state = Preparation.State(
                 image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "",
-                viewerCount = ViewerCount.V_100_200
+                viewerCount = ViewerCount.V_100_200,
+                showFeedbackDialog = false,
             ),
             onAction = {}
         )

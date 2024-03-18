@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui.components.bottomsheet
+package com.bunbeauty.fakelivestream.common.ui.components.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

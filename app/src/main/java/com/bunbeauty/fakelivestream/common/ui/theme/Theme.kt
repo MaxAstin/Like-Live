@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui.theme
+package com.bunbeauty.fakelivestream.common.ui.theme
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration

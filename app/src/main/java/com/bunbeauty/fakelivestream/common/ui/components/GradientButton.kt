@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui.components
+package com.bunbeauty.fakelivestream.common.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @Composable
 fun GradientButton(

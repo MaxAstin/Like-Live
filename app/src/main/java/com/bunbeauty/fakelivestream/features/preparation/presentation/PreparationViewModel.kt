@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
 import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
@@ -12,7 +13,8 @@ import com.bunbeauty.fakelivestream.features.domain.SaveImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.features.preparation.domain.SaveFeedbackAskedUseCase
+import com.bunbeauty.fakelivestream.features.preparation.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -32,6 +34,8 @@ class PreparationViewModel @Inject constructor(
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
+    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
+    private val saveFeedbackAskedUseCase: SaveFeedbackAskedUseCase,
     private val analyticsManager: AnalyticsManager,
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
@@ -39,6 +43,7 @@ class PreparationViewModel @Inject constructor(
             image = ImageSource.ResId(R.drawable.img_default_avatar),
             username = "",
             viewerCount = ViewerCount.V_100_200,
+            showFeedbackDialog = false,
         )
     }
 ) {
@@ -85,6 +90,30 @@ class PreparationViewModel @Inject constructor(
                     saveUsernameUseCase(mutableState.value.username)
                     sendEvent(Preparation.Event.OpenStream)
                 }
+            }
+
+            is Preparation.Action.StreamFinished -> {
+                viewModelScope.launch {
+                    if (shouldAskFeedbackUseCase() && (action.durationInSeconds > 30)) {
+                        setState {
+                            copy(showFeedbackDialog = true)
+                        }
+                        saveFeedbackAskedUseCase(feedbackAsked = true)
+                    }
+                }
+            }
+
+            Preparation.Action.CloseFeedbackDialogClick -> {
+                setState {
+                    copy(showFeedbackDialog = false)
+                }
+            }
+
+            Preparation.Action.GiveFeedbackClick -> {
+                setState {
+                    copy(showFeedbackDialog = false)
+                }
+
             }
         }
     }

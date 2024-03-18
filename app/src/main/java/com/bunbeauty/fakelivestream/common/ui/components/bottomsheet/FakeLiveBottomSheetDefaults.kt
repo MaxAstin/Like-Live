@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui.components.bottomsheet
+package com.bunbeauty.fakelivestream.common.ui.components.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 object FakeLiveBottomSheetDefaults {
 

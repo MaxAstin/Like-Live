@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui
+package com.bunbeauty.fakelivestream.common.ui
 
 import androidx.compose.ui.tooling.preview.Preview
 

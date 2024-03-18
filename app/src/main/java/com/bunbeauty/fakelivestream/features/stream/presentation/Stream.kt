@@ -12,6 +12,7 @@ interface Stream {
         val viewersCount: Int,
         val comments: List<Comment>,
         val reactionCount: Int,
+        val startStreamTimeMillis: Long,
         val showJoinRequests: Boolean,
         val showInvite: Boolean,
         val showQuestions: Boolean,
@@ -33,6 +34,6 @@ interface Stream {
     }
 
     sealed interface Event: Base.Event {
-        data object GoBack: Event
+        data class GoBack(val durationInSeconds: Int): Event
     }
 }

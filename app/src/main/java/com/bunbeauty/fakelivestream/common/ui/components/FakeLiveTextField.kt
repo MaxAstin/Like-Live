@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.ui.components
+package com.bunbeauty.fakelivestream.common.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

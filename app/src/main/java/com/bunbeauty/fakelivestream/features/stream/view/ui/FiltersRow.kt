@@ -22,8 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.R
-import com.bunbeauty.fakelivestream.ui.clickableWithoutIndication
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 private val filters = listOf(
     R.drawable.none_filter,

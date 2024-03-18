@@ -29,13 +29,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
+import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
 import com.bunbeauty.fakelivestream.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.fakelivestream.features.preparation.view.PreparationScreen
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
-import com.bunbeauty.fakelivestream.ui.keepScreenOn
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.features.stream.view.DURATION_NAV_PARAM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -146,10 +148,15 @@ class MainActivity : ComponentActivity() {
                 ExitTransition.None
             },
         ) {
-            composable(route = PREPARATION) {
+            composable(route = PREPARATION) { entry ->
+                val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
                 PreparationScreen(
+                    streamDurationInSeconds = streamDurationInSeconds,
                     onStartStreamClick = {
                         requestCameraPermission()
+                    },
+                    openInAppReview = {
+                        launchInAppReview()
                     }
                 )
             }

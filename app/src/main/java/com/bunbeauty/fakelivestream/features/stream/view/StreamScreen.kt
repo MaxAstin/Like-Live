@@ -51,14 +51,16 @@ import com.bunbeauty.fakelivestream.features.stream.view.ui.CameraComponent
 import com.bunbeauty.fakelivestream.features.stream.view.ui.EmptyBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.FiltersRow
 import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
-import com.bunbeauty.fakelivestream.ui.LocalePreview
-import com.bunbeauty.fakelivestream.ui.blurTop
-import com.bunbeauty.fakelivestream.ui.clickableWithoutIndication
-import com.bunbeauty.fakelivestream.ui.components.CachedImage
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.blurTop
+import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
+import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+
+const val DURATION_NAV_PARAM = "duration"
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -75,8 +77,11 @@ fun StreamScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
-                Stream.Event.GoBack -> {
+                is Stream.Event.GoBack -> {
                     navController.popBackStack()
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(DURATION_NAV_PARAM, event.durationInSeconds)
                 }
             }
         }.launchIn(scope)

@@ -31,6 +31,7 @@ class StreamViewModel @Inject constructor(
             viewersCount = 0,
             comments = emptyList(),
             reactionCount = 0,
+            startStreamTimeMillis = System.currentTimeMillis(),
             showJoinRequests = false,
             showInvite = false,
             showQuestions = false,
@@ -96,16 +97,20 @@ class StreamViewModel @Inject constructor(
             }
 
             Stream.Action.Start -> {
-                analyticsManager.trackStreamResumption()
+                setState {
+                    copy(startStreamTimeMillis = System.currentTimeMillis())
+                }
             }
 
             Stream.Action.Stop -> {
-                analyticsManager.trackStreamStop()
+                val durationInSeconds = getStreamDurationInSeconds()
+                analyticsManager.trackStreamStop(durationInSeconds = durationInSeconds)
             }
 
             Stream.Action.FinishStreamClick -> {
-                analyticsManager.trackStreamFinish()
-                sendEvent(Stream.Event.GoBack)
+                val durationInSeconds = getStreamDurationInSeconds()
+                analyticsManager.trackStreamFinish(durationInSeconds = durationInSeconds)
+                sendEvent(Stream.Event.GoBack(durationInSeconds = durationInSeconds))
             }
         }
     }
@@ -207,5 +212,12 @@ class StreamViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getStreamDurationInSeconds(): Int {
+        val start = mutableState.value.startStreamTimeMillis
+        val finish = System.currentTimeMillis()
+
+        return (finish - start).toInt() / 1000
     }
 }

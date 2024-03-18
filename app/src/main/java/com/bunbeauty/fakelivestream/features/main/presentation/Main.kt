@@ -4,7 +4,9 @@ import com.bunbeauty.fakelivestream.common.presentation.Base
 
 interface Main {
 
-    data class State(val showNoCameraPermission: Boolean): Base.State
+    data class State(
+        val showNoCameraPermission: Boolean,
+    ): Base.State
 
     sealed interface Action: Base.Action {
         data object CameraPermissionDeny: Action

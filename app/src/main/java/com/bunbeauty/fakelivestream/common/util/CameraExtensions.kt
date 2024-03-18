@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.utils
+package com.bunbeauty.fakelivestream.common.util
 
 import android.content.Context
 import androidx.camera.lifecycle.ProcessCameraProvider

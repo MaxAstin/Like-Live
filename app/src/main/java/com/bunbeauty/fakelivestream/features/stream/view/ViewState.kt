@@ -1,7 +1,7 @@
 package com.bunbeauty.fakelivestream.features.stream.view
 
 import androidx.compose.runtime.Immutable
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 
 @Immutable
 data class ViewState(

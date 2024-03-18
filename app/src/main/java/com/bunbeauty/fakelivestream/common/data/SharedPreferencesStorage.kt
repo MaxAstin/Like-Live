@@ -9,6 +9,7 @@ import javax.inject.Inject
 private const val IMAGE_URI_KEY = "image uri"
 private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
+private const val FEEDBACK_ASKED_KEY = "feedback asked"
 
 class SharedPreferencesStorage @Inject constructor(
     @ApplicationContext private val context: Context
@@ -34,6 +35,12 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveFeedbackAsked(feedbackAsked: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(FEEDBACK_ASKED_KEY, feedbackAsked)
+        }
+    }
+
     override suspend fun getImageUri(): String? {
         return sharedPreferences.getString(IMAGE_URI_KEY, null)
     }
@@ -44,6 +51,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getViewerCountIndex(defaultValue: Int): Int {
         return sharedPreferences.getInt(VIEWER_COUNT_INDEX_KEY, defaultValue)
+    }
+
+    override suspend fun getFeedbackAsked(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(FEEDBACK_ASKED_KEY, defaultValue)
     }
 
 }

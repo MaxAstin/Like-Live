@@ -3,7 +3,7 @@ package com.bunbeauty.fakelivestream.features.stream.view
 import com.bunbeauty.fakelivestream.BuildConfig
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 
 fun Stream.State.toViewState(): ViewState {
     return ViewState(

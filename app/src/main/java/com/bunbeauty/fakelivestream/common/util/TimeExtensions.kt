@@ -4,8 +4,8 @@ import java.time.Instant.ofEpochSecond
 import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
 
-fun Long.toTimeString(): String {
-    return ofEpochSecond(this)
+fun Int.toTimeString(): String {
+    return ofEpochSecond(this.toLong())
         .atZone(UTC)
         .toLocalDateTime()
         .format(DateTimeFormatter.ofPattern("HH:mm:ss"))

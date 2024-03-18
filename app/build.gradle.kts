@@ -110,6 +110,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
+
+    // In-App Review
+    implementation("com.google.android.play:review:2.0.1")
 }
 
 kapt {
