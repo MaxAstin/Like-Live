@@ -8,6 +8,8 @@ import javax.inject.Singleton
 
 private const val STREAM_STARTED = "stream_started"
 private const val USERNAME_PARAM = "username"
+private const val VIEWER_COUNT_PARAM = "viewer_count"
+
 private const val STREAM_STOPPED = "stream_stopped"
 private const val STREAM_FINISHED = "stream_finished"
 private const val STREAM_DURATION_PARAM = "stream_duration"
@@ -19,11 +21,12 @@ class AnalyticsManager @Inject constructor(
 
     private var startStreamTimeMillis: Long? = null
 
-    fun trackStreamStart(username: String) {
+    fun trackStreamStart(username: String, viewerCount: Int) {
         startStreamTimeMillis = System.currentTimeMillis()
 
         firebaseAnalytics.logEvent(STREAM_STARTED) {
             param(USERNAME_PARAM, username)
+            param(VIEWER_COUNT_PARAM, viewerCount.toLong())
         }
     }
 

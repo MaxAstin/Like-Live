@@ -78,7 +78,10 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.StartStreamClick -> {
                 viewModelScope.launch {
-                    analyticsManager.trackStreamStart(mutableState.value.username)
+                    analyticsManager.trackStreamStart(
+                        username = mutableState.value.username,
+                        viewerCount = mutableState.value.viewerCount.min
+                    )
                     saveUsernameUseCase(mutableState.value.username)
                     sendEvent(Preparation.Event.OpenStream)
                 }
