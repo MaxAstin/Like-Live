@@ -8,8 +8,6 @@ class ShouldAskFeedbackUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): Boolean {
-        val feedbackAsked = keyValueStorage.getFeedbackAsked(false)
-
-        return !feedbackAsked
+        return keyValueStorage.getFeedbackShouldBeAsked(true)
     }
 }

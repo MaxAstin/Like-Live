@@ -22,6 +22,7 @@ interface Preparation {
         data class StreamFinished(val durationInSeconds: Int): Action
         data object CloseFeedbackDialogClick: Action
         data object GiveFeedbackClick: Action
+        data class NotShowFeedbackChecked(val checked: Boolean): Action
     }
 
     sealed interface Event: Base.Event {

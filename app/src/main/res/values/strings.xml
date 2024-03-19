@@ -11,7 +11,9 @@
 
     <string name="feedback">Feedback</string>
     <string name="help_up_improve">Help us improve %s! Please share your feedback and rate us.</string>
+    <string name="do_not_ask">Please don\'t ask anymore</string>
     <string name="give_feedback">Give feedback</string>
+    <string name="not_now">Not now</string>
 
     <string name="preparation_edit_photo">Edit photo</string>
     <string name="preparation_username">Username</string>
