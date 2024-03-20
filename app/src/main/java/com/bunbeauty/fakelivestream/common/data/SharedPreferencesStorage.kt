@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.core.content.edit
 import com.bunbeauty.fakelivestream.common.domain.KeyValueStorage
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 private const val IMAGE_URI_KEY = "image uri"
@@ -16,8 +19,10 @@ class SharedPreferencesStorage @Inject constructor(
 ) : KeyValueStorage {
 
     private val sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
+    private val mutableImageUriFlow = MutableStateFlow(getImageUri())
 
     override suspend fun saveImageUri(uri: String) {
+        mutableImageUriFlow.value = uri
         sharedPreferences.edit {
             putString(IMAGE_URI_KEY, uri)
         }
@@ -41,8 +46,8 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
-    override suspend fun getImageUri(): String? {
-        return sharedPreferences.getString(IMAGE_URI_KEY, null)
+    override fun getImageUriFlow(): Flow<String?> {
+        return mutableImageUriFlow.asStateFlow()
     }
 
     override suspend fun getUsername(): String? {
@@ -55,6 +60,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getFeedbackShouldBeAsked(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(FEEDBACK_SHOULD_BE_ASKED_KEY, defaultValue)
+    }
+
+    private fun getImageUri(): String? {
+        return sharedPreferences.getString(IMAGE_URI_KEY, null)
     }
 
 }

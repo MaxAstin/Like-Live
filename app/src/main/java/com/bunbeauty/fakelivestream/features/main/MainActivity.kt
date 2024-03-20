@@ -2,6 +2,7 @@ package com.bunbeauty.fakelivestream.features.main
 
 import android.Manifest.permission.CAMERA
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -29,15 +30,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
+import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
 import com.bunbeauty.fakelivestream.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.fakelivestream.features.preparation.view.PreparationScreen
-import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
-import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
-import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.features.stream.view.DURATION_NAV_PARAM
+import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -46,6 +51,14 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            mainViewModel.onAction(Main.Action.AvatarSelected(uri = result.uriContent))
+        } else {
+            // TODO show error
+        }
+    }
 
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -93,6 +106,25 @@ class MainActivity : ComponentActivity() {
                 action = ACTION_APPLICATION_DETAILS_SETTINGS
                 data = Uri.fromParts("package", packageName, null)
             }
+        )
+    }
+
+    private fun launchAvatarSetting() {
+        cropImage.launch(
+            CropImageContractOptions(
+                uri = null,
+                cropImageOptions = CropImageOptions(
+                    imageSourceIncludeCamera = false,
+                    cropShape = CropImageView.CropShape.OVAL,
+                    autoZoomEnabled = false,
+                    fixAspectRatio = true,
+                    toolbarColor = Color.WHITE,
+                    activityBackgroundColor = Color.WHITE,
+                    activityMenuIconColor = Color.BLACK,
+                    activityMenuTextColor = Color.BLACK,
+                    toolbarBackButtonColor = Color.BLACK,
+                )
+            )
         )
     }
 
@@ -152,6 +184,9 @@ class MainActivity : ComponentActivity() {
                 val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
                 PreparationScreen(
                     streamDurationInSeconds = streamDurationInSeconds,
+                    onAvatarClick = {
+                        launchAvatarSetting()
+                    },
                     onStartStreamClick = {
                         requestCameraPermission()
                     },

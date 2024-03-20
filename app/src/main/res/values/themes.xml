@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.FakeLiveStream" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.FakeLiveStream" parent="Theme.AppCompat.Light">
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>

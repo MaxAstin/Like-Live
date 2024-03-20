@@ -113,6 +113,9 @@ dependencies {
 
     // In-App Review
     implementation("com.google.android.play:review:2.0.1")
+
+    // Image Cropping
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 }
 
 kapt {

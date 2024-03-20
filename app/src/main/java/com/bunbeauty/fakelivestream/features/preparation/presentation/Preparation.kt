@@ -17,6 +17,7 @@ interface Preparation {
     sealed interface Action: Base.Action {
         data class ViewerCountSelect(val viewerCount: ViewerCount): Action
         data class UsernameUpdate(val username: String): Action
+        data object AvatarClick: Action
         data class ImageSelect(val uri: Uri?): Action
         data object StartStreamClick: Action
         data class StreamFinished(val durationInSeconds: Int): Action
@@ -28,6 +29,7 @@ interface Preparation {
     sealed interface Event: Base.Event {
         data object OpenStream: Event
         data object OpenInAppReview: Event
+        data object HandleAvatarClick: Event
     }
 
 }

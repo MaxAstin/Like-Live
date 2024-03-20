@@ -6,7 +6,7 @@ import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
 import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
+import com.bunbeauty.fakelivestream.features.domain.GetImageUriFlowUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveImageUriUseCase
@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
-    private val getImageUriUseCase: GetImageUriUseCase,
+    private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val saveImageUriUseCase: SaveImageUriUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
@@ -64,6 +64,10 @@ class PreparationViewModel @Inject constructor(
                         state.copy(image = ImageSource.Device(imageUri))
                     }
                 }
+            }
+
+            Preparation.Action.AvatarClick -> {
+                sendEvent(Preparation.Event.HandleAvatarClick)
             }
 
             is Preparation.Action.UsernameUpdate -> {
@@ -127,19 +131,24 @@ class PreparationViewModel @Inject constructor(
 
     private fun initState() {
         viewModelScope.launch {
-            val imageUri = getImageUriUseCase()
             mutableState.update { state ->
                 state.copy(
-                    image = if (imageUri == null) {
-                        ImageSource.ResId(data = R.drawable.img_default_avatar)
-                    } else {
-                        ImageSource.Device(data = imageUri.toUri())
-                    },
                     username = getUsernameUseCase(),
                     viewerCount = getViewerCountUseCase()
                 )
             }
         }
+        getImageUriFlowUseCase().onEach { imageUri ->
+            setState {
+                copy(
+                    image = if (imageUri == null) {
+                        ImageSource.ResId(data = R.drawable.img_default_avatar)
+                    } else {
+                        ImageSource.Device(data = imageUri.toUri())
+                    }
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 
     @OptIn(FlowPreview::class)

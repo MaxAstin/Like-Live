@@ -4,13 +4,14 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
 import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
-import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
+import com.bunbeauty.fakelivestream.features.domain.GetImageUriFlowUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.min
@@ -18,7 +19,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class StreamViewModel @Inject constructor(
-    private val getImageUriUseCase: GetImageUriUseCase,
+    private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val getComments: GetCommentsUseCase,
@@ -117,7 +118,7 @@ class StreamViewModel @Inject constructor(
 
     private fun getAvatar() {
         setState {
-            copy(imageUri = getImageUriUseCase()?.toUri())
+            copy(imageUri = getImageUriFlowUseCase().firstOrNull()?.toUri())
         }
     }
 
