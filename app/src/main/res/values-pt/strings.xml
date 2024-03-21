@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="stream_live">AO VIVO</string>
+    <string name="stream_thousands_viewers_count">%s.%sK</string>
+    <string name="stream_add_comment">Adicione um comentário…</string>
+    <string name="required_camera_permisseon_title">Permitir que %s acesse sua câmera</string>
+    <string name="required_camera_permisseon_body">Isso permite iniciar o Ao Vivo.
+        Você pode alterar isso a qualquer momento nas configurações do seu dispositivo.</string>
+    <string name="settings">Configurações</string>
+
+    <string name="feedback">Opinião</string>
+    <string name="help_up_improve">Ajude-nos a melhorar %s! Por favor, compartilhe sua opinião e avalie-nos.</string>
+    <string name="do_not_ask">Por favor, não pergunte mais</string>
+    <string name="give_feedback">Dê retorno</string>
+    <string name="not_now">Agora não</string>
+
+    <string name="preparation_edit_photo">Editar foto</string>
+    <string name="preparation_username">Nome de usuário</string>
+    <string name="preparation_username_hint">user_name</string>
+    <string name="preparation_viewer_count">Contagem de espectadores</string>
+    <string name="preparation_start_live">Iniciar Ao Vivo</string>
+
+    <string name="stream_join_requests_title">Solicitações para participar</string>
+    <string name="stream_join_requests_body">Sem solicitações ainda</string>
+    <string name="stream_join_requests_description">Os pedidos para co-anfitrião aparecem aqui.</string>
+
+    <string name="stream_invite_title">Convidar para participar</string>
+    <string name="stream_invite_body">Convite não disponível</string>
+    <string name="stream_invite_description">Quando alguém se junta, qualquer pessoa que possa ver seus vídeos ao vivo também pode assistir a este.</string>
+
+    <string name="stream_questions_title">Perguntas</string>
+    <string name="stream_questions_body">Sem perguntas ainda</string>
+    <string name="stream_questions_description">Qualquer pessoa assistindo pode enviar e ver perguntas aqui.</string>
+
+    <string name="stream_direct_title">Direto</string>
+    <string name="stream_direct_body">Direto não disponível</string>
+    <string name="stream_direct_description">Não há maneira de enviar esta transmissão ao vivo.</string>
+
+    <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
+        <item>A</item>
+        <item>E</item>
+        <item>O</item>
+        <item>U</item>
+        <item>É</item>
+        <item>À</item>
+        <item>Ó</item>
+        <item>F</item>
+        <item>J</item>
+        <item>+</item>
+        <item>)</item>
+        <item>-</item>
+        <item>(</item>
+        <item>!</item>
+    </string-array>
+
+    <string-array name="two_letter_comments" tools:ignore="InconsistentArrays">
+        <item>Eu</item>
+        <item>És</item>
+        <item>Nó</item>
+        <item>Já</item>
+        <item>Tu</item>
+        <item>Na</item>
+        <item>No</item>
+        <item>Jô</item>
+        <item>Fã</item>
+        <item>Mã</item>
+        <item>Pa</item>
+        <item>Pô</item>
+        <item>Má</item>
+    </string-array>
+
+    <string-array name="three_letter_comments" tools:ignore="InconsistentArrays">
+        <item>Vem</item>
+        <item>Sol</item>
+        <item>Lua</item>
+        <item>Rio</item>
+        <item>Dia</item>
+        <item>Pão</item>
+        <item>Mão</item>
+        <item>Ver</item>
+        <item>Luz</item>
+        <item>Mar</item>
+        <item>Voz</item>
+        <item>Vai</item>
+        <item>Fim</item>
+        <item>Lol</item>
+        <item>Uau</item>
+        <item>Bom</item>
+    </string-array>
+
+    <string-array name="one_word_comment" tools:ignore="InconsistentArrays">
+        <item>Legal</item>
+        <item>Ótimo</item>
+        <item>Incrível</item>
+        <item>Perfeito</item>
+        <item>Fantástico</item>
+        <item>Super</item>
+        <item>Excelente</item>
+        <item>Amor</item>
+        <item>Lindo</item>
+        <item>Impressionante</item>
+        <item>Bravo</item>
+        <item>Épico</item>
+        <item>Doce</item>
+        <item>Excepcional</item>
+        <item>Fabuloso</item>
+        <item>Maravilhoso</item>
+        <item>Esplêndido</item>
+        <item>Majestoso</item>
+        <item>Deslumbrante</item>
+        <item>Encantador</item>
+        <item>Vibrante</item>
+        <item>Deslumbrante</item>
+        <item>Estonteante</item>
+        <item>Surpreendente</item>
+        <item>Delicioso</item>
+        <item>Exquisito</item>
+        <item>Espectacular</item>
+        <item>Cativante</item>
+        <item>Estelar</item>
+        <item>Arrebatador</item>
+    </string-array>
+
+    <string-array name="long_comments" tools:ignore="InconsistentArrays">
+        <item>Isso é incrível</item>
+        <item>Você fez um trabalho incrível</item>
+        <item>Tão divertido de assistir</item>
+        <item>Conteúdo absolutamente fantástico</item>
+        <item>Estou adorando cada momento</item>
+        <item>Você é verdadeiramente talentoso</item>
+        <item>Isso é entretenimento puro</item>
+        <item>Obrigado por alegrar o meu dia</item>
+        <item>Você nunca decepciona, sempre ótimo</item>
+        <item>Sua energia é contagiante</item>
+        <item>Estou viciado, não consigo parar de assistir</item>
+        <item>Habilidades incríveis em exibição</item>
+        <item>Você sempre traz alegria</item>
+        <item>Você está fazendo a diferença</item>
+        <item>Que surpresa encantadora</item>
+        <item>Você é uma verdadeira inspiração</item>
+        <item>Tanta vibe positiva aqui</item>
+        <item>Continue com o bom trabalho</item>
+        <item>Você tem um fã para a vida toda</item>
+        <item>Sua criatividade é excepcional</item>
+        <item>Isso é tão divertido</item>
+        <item>Estou impressionado, continue assim</item>
+        <item>Você é uma fonte de inspiração</item>
+        <item>Não consigo ter o suficiente disso</item>
+        <item>Obrigado por alegrar o meu dia</item>
+        <item>Seu conteúdo é sempre de primeira qualidade</item>
+        <item>Você traz tanta alegria para nós</item>
+        <item>Amo completamente o seu estilo</item>
+        <item>Tanta atmosfera boa aqui</item>
+        <item>Você torna tudo mais divertido</item>
+        <item>Isso é absolutamente cativante</item>
+        <item>Você tem um charme único</item>
+        <item>Sua dedicação é admirável</item>
+        <item>Isso é uma obra-prima</item>
+        <item>Sua paixão transparece</item>
+        <item>Você criou algo especial</item>
+        <item>Obrigado pelas vibrações positivas</item>
+        <item>Seus esforços são realmente apreciados</item>
+        <item>Isso é um destaque do meu dia</item>
+        <item>Você tem um talento especial</item>
+        <item>Conteúdo consistentemente envolvente, sua criatividade traz alegria para cada espectador</item>
+        <item>Sua narrativa cativante, cada vídeo é uma aventura memorável e encantadora</item>
+        <item>Qualidade de alto nível, sua dedicação brilha em cada vídeo que você produz</item>
+        <item>Você é uma fonte de inspiração, transformando criatividade em uma obra-prima</item>
+        <item>Autêntico, divertido e impactante positivamente - seu conteúdo é excepcional</item>
+        <item>Narrativas intrigantes, seus vídeos são uma lufada de criatividade fresca</item>
+        <item>Carisma cativante, sua presença torna cada momento muito agradável</item>
+        <item>Narrativa habilidosa, seus vídeos deixam uma impressão duradoura e positiva</item>
+        <item>Excelência consistente, seu conteúdo eleva a experiência online para todos</item>
+        <item>Brilhantismo criativo, sua abordagem única o destaca em todos os aspectos</item>
+        <item>Aventuras divertidas, seus vídeos são uma jornada encantadora de descoberta</item>
+        <item>Entusiasta e envolvente, seu conteúdo ilumina até os dias mais sombrios</item>
+        <item>Seu trabalho irradia paixão, tornando cada peça verdadeiramente extraordinária e memorável</item>
+        <item>Flair artístico, seus vídeos são um testemunho de sua habilidade criativa</item>
+        <item>Relatável e autêntico, seu conteúdo parece uma conexão genuína</item>
+    </string-array>
+
+</resources>
