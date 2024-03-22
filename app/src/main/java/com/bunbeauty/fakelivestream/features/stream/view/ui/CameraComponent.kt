@@ -16,9 +16,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
-import com.bunbeauty.fakelivestream.utils.getCameraProvider
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.util.getCameraProvider
 
 @Composable
 fun CameraComponent(
@@ -34,7 +34,7 @@ fun CameraComponent(
 
         LaunchedEffect(isFront) {
             val cameraProvider = context.getCameraProvider()
-            val lensFacing = if (isFront) {
+            val lensFacing = if (isFront && cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)) {
                 CameraSelector.LENS_FACING_FRONT
             } else {
                 CameraSelector.LENS_FACING_BACK

@@ -1,5 +1,6 @@
 package com.bunbeauty.fakelivestream.features.stream.view
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -22,9 +23,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,23 +37,70 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
+import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.view.ui.AnimatedReaction
 import com.bunbeauty.fakelivestream.features.stream.view.ui.AvatarImage
 import com.bunbeauty.fakelivestream.features.stream.view.ui.CameraComponent
 import com.bunbeauty.fakelivestream.features.stream.view.ui.EmptyBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.FiltersRow
 import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
-import com.bunbeauty.fakelivestream.ui.LocalePreview
-import com.bunbeauty.fakelivestream.ui.blurTop
-import com.bunbeauty.fakelivestream.ui.clickableWithoutIndication
-import com.bunbeauty.fakelivestream.ui.components.CachedImage
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.blurTop
+import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
+import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+
+const val DURATION_NAV_PARAM = "duration"
+
+@SuppressLint("DiscouragedApi")
+@Composable
+fun StreamScreen(navController: NavHostController) {
+    val viewModel: StreamViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: Stream.Action ->
+            viewModel.onAction(action)
+        }
+    }
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.event.onEach { event ->
+            when (event) {
+                is Stream.Event.GoBack -> {
+                    navController.popBackStack()
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(DURATION_NAV_PARAM, event.durationInSeconds)
+                }
+            }
+        }.launchIn(scope)
+    }
+    LifecycleEventEffect(Lifecycle.Event.ON_START) {
+        onAction(Stream.Action.Start)
+    }
+    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+        onAction(Stream.Action.Stop)
+    }
+
+    StreamContent(
+        state = state.toViewState(),
+        onAction = onAction,
+    )
+}
 
 @Composable
-fun StreamScreen(
+fun StreamContent(
     state: ViewState,
     onAction: (Stream.Action) -> Unit,
 ) {
@@ -563,9 +613,9 @@ private fun DirectBottomSheet(
 @Composable
 private fun StreamScreenPreview() {
     FakeLiveStreamTheme {
-        StreamScreen(
+        StreamContent(
             state = ViewState(
-                image = ImageSource.Res(R.drawable.img_default_avatar),
+                image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "long_user_name",
                 viewersCount = ViewersCountUi.Thousands(
                     thousands = "10",
@@ -573,17 +623,17 @@ private fun StreamScreenPreview() {
                 ),
                 comments = listOf(
                     CommentUi(
-                        picture = ImageSource.Res(R.drawable.img_default_avatar),
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
                         username = "username1",
                         text = "Text 1",
                     ),
                     CommentUi(
-                        picture = ImageSource.Res(R.drawable.img_default_avatar),
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
                         username = "username2",
                         text = "Text 2",
                     ),
                     CommentUi(
-                        picture = ImageSource.Res(R.drawable.img_default_avatar),
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
                         username = "username3",
                         text = "Text 3",
                     ),

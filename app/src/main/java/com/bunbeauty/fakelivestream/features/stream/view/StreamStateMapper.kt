@@ -3,12 +3,12 @@ package com.bunbeauty.fakelivestream.features.stream.view
 import com.bunbeauty.fakelivestream.BuildConfig
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 
 fun Stream.State.toViewState(): ViewState {
     return ViewState(
         image = if (imageUri == null) {
-            ImageSource.Res(R.drawable.img_default_avatar)
+            ImageSource.ResId(R.drawable.img_default_avatar)
         } else {
             ImageSource.Device(data = imageUri)
         },
@@ -26,9 +26,9 @@ fun Stream.State.toViewState(): ViewState {
         comments = comments.map { comment ->
             CommentUi(
                 picture = if (comment.picture == null) {
-                    ImageSource.Res(R.drawable.img_default_avatar)
+                    ImageSource.ResId(R.drawable.img_default_avatar)
                 } else {
-                    ImageSource.Url(data = comment.picture)
+                    ImageSource.ResName(comment.picture)
                 },
                 username = comment.username,
                 text = comment.text,

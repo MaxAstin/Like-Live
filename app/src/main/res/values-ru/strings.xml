@@ -8,6 +8,12 @@
         Выбор в любое время можно изменить в настройках устройства.</string>
     <string name="settings">Настройки</string>
 
+    <string name="feedback">Отзыв</string>
+    <string name="help_up_improve">Помогите нам улучшить %s! Пожалуйста, поделитесь своим мнением и оцените нас.</string>
+    <string name="do_not_ask">Больше не спрашивать</string>
+    <string name="give_feedback">Оставить отзыв</string>
+    <string name="not_now">Позже</string>
+
     <string name="preparation_edit_photo">Изменить фото</string>
     <string name="preparation_username">Имя пользователя</string>
     <string name="preparation_username_hint">user_name</string>

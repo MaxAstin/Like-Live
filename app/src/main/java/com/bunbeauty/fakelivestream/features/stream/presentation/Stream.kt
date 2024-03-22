@@ -2,7 +2,7 @@ package com.bunbeauty.fakelivestream.features.stream.presentation
 
 import android.net.Uri
 import com.bunbeauty.fakelivestream.common.presentation.Base
-import com.bunbeauty.fakelivestream.features.stream.domain.Comment
+import com.bunbeauty.fakelivestream.features.stream.domain.model.Comment
 
 interface Stream {
 
@@ -12,6 +12,7 @@ interface Stream {
         val viewersCount: Int,
         val comments: List<Comment>,
         val reactionCount: Int,
+        val startStreamTimeMillis: Long,
         val showJoinRequests: Boolean,
         val showInvite: Boolean,
         val showQuestions: Boolean,
@@ -33,6 +34,6 @@ interface Stream {
     }
 
     sealed interface Event: Base.Event {
-        data object GoBack: Event
+        data class GoBack(val durationInSeconds: Int): Event
     }
 }

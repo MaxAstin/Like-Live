@@ -2,7 +2,7 @@ package com.bunbeauty.fakelivestream.features.main
 
 import android.Manifest.permission.CAMERA
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -23,10 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -34,18 +30,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
+import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
 import com.bunbeauty.fakelivestream.features.main.view.CameraIsRequiredDialog
-import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
-import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
 import com.bunbeauty.fakelivestream.features.preparation.view.PreparationScreen
-import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
-import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
+import com.bunbeauty.fakelivestream.features.stream.view.DURATION_NAV_PARAM
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
-import com.bunbeauty.fakelivestream.features.stream.view.toViewState
-import com.bunbeauty.fakelivestream.ui.keepScreenOn
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -55,10 +52,20 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
 
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            mainViewModel.onAction(Main.Action.AvatarSelected(uri = result.uriContent))
+        } else {
+            // TODO show error
+        }
+    }
+
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (!isGranted) {
+        if (isGranted) {
+            mainViewModel.onAction(Main.Action.CameraPermissionAccept)
+        } else {
             mainViewModel.onAction(Main.Action.CameraPermissionDeny)
         }
     }
@@ -93,16 +100,31 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun isCameraPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED
-    }
-
     private fun openSettings() {
         startActivity(
             Intent().apply {
                 action = ACTION_APPLICATION_DETAILS_SETTINGS
                 data = Uri.fromParts("package", packageName, null)
             }
+        )
+    }
+
+    private fun launchAvatarSetting() {
+        cropImage.launch(
+            CropImageContractOptions(
+                uri = null,
+                cropImageOptions = CropImageOptions(
+                    imageSourceIncludeCamera = false,
+                    cropShape = CropImageView.CropShape.OVAL,
+                    autoZoomEnabled = false,
+                    fixAspectRatio = true,
+                    toolbarColor = Color.WHITE,
+                    activityBackgroundColor = Color.WHITE,
+                    activityMenuIconColor = Color.BLACK,
+                    activityMenuTextColor = Color.BLACK,
+                    toolbarBackButtonColor = Color.BLACK,
+                )
+            )
         )
     }
 
@@ -114,17 +136,21 @@ class MainActivity : ComponentActivity() {
                 .navigationBarsPadding()
         ) { padding ->
             val scope = rememberCoroutineScope()
+            val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 mainViewModel.event.onEach { event ->
                     when (event) {
                         Main.Event.OpenSettings -> {
                             openSettings()
                         }
+
+                        Main.Event.OpenStream -> {
+                            navController.navigate(STREAM)
+                        }
                     }
                 }.launchIn(scope)
             }
 
-            val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 navController.addOnDestinationChangedListener { _, destination, _ ->
                     window.keepScreenOn = (destination.route == STREAM)
@@ -154,65 +180,23 @@ class MainActivity : ComponentActivity() {
                 ExitTransition.None
             },
         ) {
-            composable(route = PREPARATION) {
-                val viewModel: PreparationViewModel = hiltViewModel()
-                val state by viewModel.state.collectAsStateWithLifecycle()
-                val onAction = remember {
-                    { action: Preparation.Action ->
-                        viewModel.onAction(action)
-                    }
-                }
-
-                val scope = rememberCoroutineScope()
-                LaunchedEffect(Unit) {
-                    viewModel.event.onEach { event ->
-                        when (event) {
-                            Preparation.Event.OpenStream -> {
-                                if (isCameraPermissionGranted()) {
-                                    navController.navigate(STREAM)
-                                } else {
-                                    requestCameraPermission()
-                                }
-                            }
-                        }
-                    }.launchIn(scope)
-                }
-
+            composable(route = PREPARATION) { entry ->
+                val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
                 PreparationScreen(
-                    state = state,
-                    onAction = onAction
+                    streamDurationInSeconds = streamDurationInSeconds,
+                    onAvatarClick = {
+                        launchAvatarSetting()
+                    },
+                    onStartStreamClick = {
+                        requestCameraPermission()
+                    },
+                    openInAppReview = {
+                        launchInAppReview()
+                    }
                 )
             }
             composable(route = STREAM) {
-                val viewModel: StreamViewModel = hiltViewModel()
-                val state by viewModel.state.collectAsStateWithLifecycle()
-                val onAction = remember {
-                    { action: Stream.Action ->
-                        viewModel.onAction(action)
-                    }
-                }
-
-                val scope = rememberCoroutineScope()
-                LaunchedEffect(Unit) {
-                    viewModel.event.onEach { event ->
-                        when (event) {
-                            Stream.Event.GoBack -> {
-                                navController.popBackStack()
-                            }
-                        }
-                    }.launchIn(scope)
-                }
-                LifecycleEventEffect(Lifecycle.Event.ON_START) {
-                    onAction(Stream.Action.Start)
-                }
-                LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-                    onAction(Stream.Action.Stop)
-                }
-
-                StreamScreen(
-                    state = state.toViewState(),
-                    onAction = onAction,
-                )
+                StreamScreen(navController = navController)
             }
         }
     }

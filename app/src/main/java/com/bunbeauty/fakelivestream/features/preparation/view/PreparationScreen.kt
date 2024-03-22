@@ -1,8 +1,5 @@
 package com.bunbeauty.fakelivestream.features.preparation.view
 
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,12 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,44 +24,82 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
+import com.bunbeauty.fakelivestream.common.ui.components.FakeLiveTextField
+import com.bunbeauty.fakelivestream.common.ui.components.GradientButton
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.noEffectClickable
+import com.bunbeauty.fakelivestream.common.ui.rippleClickable
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
+import com.bunbeauty.fakelivestream.features.main.view.FeedbackDialog
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
-import com.bunbeauty.fakelivestream.ui.LocalePreview
-import com.bunbeauty.fakelivestream.ui.components.CachedImage
-import com.bunbeauty.fakelivestream.ui.components.FakeLiveTextField
-import com.bunbeauty.fakelivestream.ui.components.GradientButton
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.ui.noEffectClickable
-import com.bunbeauty.fakelivestream.ui.rippleClickable
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.features.preparation.presentation.PreparationViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun PreparationScreen(
+    streamDurationInSeconds: Int?,
+    onAvatarClick: () -> Unit,
+    onStartStreamClick: () -> Unit,
+    openInAppReview: () -> Unit,
+) {
+    val viewModel: PreparationViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = remember {
+        { action: Preparation.Action ->
+            viewModel.onAction(action)
+        }
+    }
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.event.onEach { event ->
+            when (event) {
+                Preparation.Event.OpenStream -> {
+                    onStartStreamClick()
+                }
+
+                Preparation.Event.OpenInAppReview -> {
+                    openInAppReview()
+                }
+
+                Preparation.Event.HandleAvatarClick -> {
+                    onAvatarClick()
+                }
+            }
+        }.launchIn(scope)
+    }
+
+    LaunchedEffect(Unit) {
+        if (streamDurationInSeconds != null) {
+            viewModel.onAction(Preparation.Action.StreamFinished(durationInSeconds = streamDurationInSeconds))
+        }
+    }
+
+    PreparationContent(
+        state = state,
+        onAction = onAction,
+    )
+
+    if (state.showFeedbackDialog) {
+        FeedbackDialog(onAction = onAction)
+    }
+}
+
+@Composable
+fun PreparationContent(
     state: Preparation.State,
     onAction: (Preparation.Action) -> Unit
 ) {
-    val contentResolver = LocalContext.current.contentResolver
-    val pickImageLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = { uri ->
-            if (uri != null) {
-                val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                contentResolver.takePersistableUriPermission(uri, takeFlags)
-
-                onAction(Preparation.Action.ImageSelect(uri = uri))
-            }
-        }
-    )
-
-    fun launchImagePicker() {
-        pickImageLauncher.launch(arrayOf("image/*"))
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +113,7 @@ fun PreparationScreen(
                     .size(80.dp)
                     .clip(CircleShape)
                     .noEffectClickable {
-                        launchImagePicker()
+                        onAction(Preparation.Action.AvatarClick)
                     },
                 imageSource = state.image,
                 cacheKey = state.image.data.toString(),
@@ -86,7 +123,7 @@ fun PreparationScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .noEffectClickable {
-                        launchImagePicker()
+                        onAction(Preparation.Action.AvatarClick)
                     }
             ) {
                 Text(
@@ -185,13 +222,14 @@ fun PreparationScreen(
 
 @LocalePreview
 @Composable
-private fun PreparationStreamPreview() {
+private fun PreparationContentPreview() {
     FakeLiveStreamTheme {
-        PreparationScreen(
+        PreparationContent(
             state = Preparation.State(
-                image = ImageSource.Res(R.drawable.img_default_avatar),
+                image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "",
-                viewerCount = ViewerCount.V_100_200
+                viewerCount = ViewerCount.V_100_200,
+                showFeedbackDialog = false,
             ),
             onAction = {}
         )

@@ -5,14 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
 import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
-import com.bunbeauty.fakelivestream.features.domain.GetImageUriUseCase
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.features.domain.GetImageUriFlowUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
-import com.bunbeauty.fakelivestream.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.features.preparation.domain.SaveFeedbackShouldBeAskedUseCase
+import com.bunbeauty.fakelivestream.features.preparation.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -26,19 +28,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PreparationViewModel @Inject constructor(
-    private val getImageUriUseCase: GetImageUriUseCase,
+    private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val saveImageUriUseCase: SaveImageUriUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val saveUsernameUseCase: SaveUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
+    private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
+    private val saveFeedbackShouldBeAskedUseCase: SaveFeedbackShouldBeAskedUseCase,
     private val analyticsManager: AnalyticsManager,
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
         Preparation.State(
-            image = ImageSource.Res(R.drawable.img_default_avatar),
+            image = ImageSource.ResId(R.drawable.img_default_avatar),
             username = "",
             viewerCount = ViewerCount.V_100_200,
+            showFeedbackDialog = false,
         )
     }
 ) {
@@ -61,6 +66,10 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
+            Preparation.Action.AvatarClick -> {
+                sendEvent(Preparation.Event.HandleAvatarClick)
+            }
+
             is Preparation.Action.UsernameUpdate -> {
                 mutableState.update { state ->
                     state.copy(username = action.username)
@@ -78,9 +87,43 @@ class PreparationViewModel @Inject constructor(
 
             Preparation.Action.StartStreamClick -> {
                 viewModelScope.launch {
-                    analyticsManager.trackStreamStart(mutableState.value.username)
+                    analyticsManager.trackStreamStart(
+                        username = mutableState.value.username,
+                        viewerCount = mutableState.value.viewerCount.min
+                    )
                     saveUsernameUseCase(mutableState.value.username)
                     sendEvent(Preparation.Event.OpenStream)
+                }
+            }
+
+            is Preparation.Action.StreamFinished -> {
+                viewModelScope.launch {
+                    if (shouldAskFeedbackUseCase() && (action.durationInSeconds > 3)) {
+                        setState {
+                            copy(showFeedbackDialog = true)
+                        }
+                    }
+                }
+            }
+
+            Preparation.Action.CloseFeedbackDialogClick -> {
+                setState {
+                    copy(showFeedbackDialog = false)
+                }
+            }
+
+            Preparation.Action.GiveFeedbackClick -> {
+                setState {
+                    copy(showFeedbackDialog = false)
+                }
+                viewModelScope.launch {
+                    saveFeedbackShouldBeAskedUseCase(shouldBeAsked = false)
+                }
+            }
+
+            is Preparation.Action.NotShowFeedbackChecked -> {
+                viewModelScope.launch {
+                    saveFeedbackShouldBeAskedUseCase(shouldBeAsked = !action.checked)
                 }
             }
         }
@@ -88,19 +131,24 @@ class PreparationViewModel @Inject constructor(
 
     private fun initState() {
         viewModelScope.launch {
-            val imageUri = getImageUriUseCase()
             mutableState.update { state ->
                 state.copy(
-                    image = if (imageUri == null) {
-                        ImageSource.Res(data = R.drawable.img_default_avatar)
-                    } else {
-                        ImageSource.Device(data = imageUri.toUri())
-                    },
                     username = getUsernameUseCase(),
                     viewerCount = getViewerCountUseCase()
                 )
             }
         }
+        getImageUriFlowUseCase().onEach { imageUri ->
+            setState {
+                copy(
+                    image = if (imageUri == null) {
+                        ImageSource.ResId(data = R.drawable.img_default_avatar)
+                    } else {
+                        ImageSource.Device(data = imageUri.toUri())
+                    }
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 
     @OptIn(FlowPreview::class)

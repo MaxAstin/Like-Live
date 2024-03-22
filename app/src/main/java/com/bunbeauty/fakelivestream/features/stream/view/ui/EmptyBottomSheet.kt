@@ -14,9 +14,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.R
-import com.bunbeauty.fakelivestream.ui.LocalePreview
-import com.bunbeauty.fakelivestream.ui.components.bottomsheet.FakeLiveBottomSheet
-import com.bunbeauty.fakelivestream.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheet
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
