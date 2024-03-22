@@ -98,7 +98,7 @@ class PreparationViewModel @Inject constructor(
 
             is Preparation.Action.StreamFinished -> {
                 viewModelScope.launch {
-                    if (shouldAskFeedbackUseCase() && (action.durationInSeconds > 3)) {
+                    if (shouldAskFeedbackUseCase() && (action.durationInSeconds > 30)) {
                         setState {
                             copy(showFeedbackDialog = true)
                         }
@@ -119,6 +119,7 @@ class PreparationViewModel @Inject constructor(
                 viewModelScope.launch {
                     saveFeedbackShouldBeAskedUseCase(shouldBeAsked = false)
                 }
+                sendEvent(Preparation.Event.OpenInAppReview)
             }
 
             is Preparation.Action.NotShowFeedbackChecked -> {
