@@ -15,8 +15,8 @@ android {
         applicationId = "com.bunbeauty.fakelivestream"
         minSdk = 27
         targetSdk = 34
-        versionCode = 130
-        versionName = "1.3.0"
+        versionCode = 131
+        versionName = "1.3.1"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
