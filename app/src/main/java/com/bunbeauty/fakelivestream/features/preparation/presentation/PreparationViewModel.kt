@@ -119,6 +119,7 @@ class PreparationViewModel @Inject constructor(
                 viewModelScope.launch {
                     saveFeedbackShouldBeAskedUseCase(shouldBeAsked = false)
                 }
+                analyticsManager.trackFeedback()
                 sendEvent(Preparation.Event.OpenInAppReview)
             }
 
