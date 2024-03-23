@@ -13,6 +13,8 @@ interface Stream {
         val comments: List<Comment>,
         val reactionCount: Int,
         val startStreamTimeMillis: Long,
+        val isCameraEnabled: Boolean,
+        val isCameraFront: Boolean,
         val showJoinRequests: Boolean,
         val showInvite: Boolean,
         val showQuestions: Boolean,
@@ -20,6 +22,8 @@ interface Stream {
     ): Base.State
 
     sealed interface Action: Base.Action {
+        data object CameraClick: Action
+        data object SwitchCameraClick: Action
         data object ShowJoinRequests: Action
         data object HideJoinRequests: Action
         data object ShowInvite: Action

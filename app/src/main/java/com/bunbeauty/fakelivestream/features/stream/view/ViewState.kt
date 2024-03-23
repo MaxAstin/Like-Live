@@ -10,12 +10,19 @@ data class ViewState(
     val viewersCount: ViewersCountUi,
     val comments: List<CommentUi>,
     val reactionCount: Int,
-    val showCamera: Boolean,
+    val mode: Mode,
+    val isCameraEnabled: Boolean,
+    val isCameraFront: Boolean,
     val showJoinRequests: Boolean,
     val showInvite: Boolean,
     val showQuestions: Boolean,
     val showDirect: Boolean,
 )
+
+enum class Mode {
+    CAMERA,
+    VIDEO
+}
 
 @Immutable
 sealed interface ViewersCountUi {

@@ -7,6 +7,7 @@ import com.bunbeauty.fakelivestream.common.presentation.BaseViewModel
 import com.bunbeauty.fakelivestream.features.domain.GetImageUriFlowUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
+import com.bunbeauty.fakelivestream.features.stream.CameraUtil
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,8 @@ class StreamViewModel @Inject constructor(
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val getComments: GetCommentsUseCase,
-    private val analyticsManager: AnalyticsManager
+    private val analyticsManager: AnalyticsManager,
+    private val cameraUtil: CameraUtil,
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
     initState = {
         Stream.State(
@@ -33,6 +35,8 @@ class StreamViewModel @Inject constructor(
             comments = emptyList(),
             reactionCount = 0,
             startStreamTimeMillis = System.currentTimeMillis(),
+            isCameraEnabled = cameraUtil.hasCamera(),
+            isCameraFront = cameraUtil.hasFrontCamera(),
             showJoinRequests = false,
             showInvite = false,
             showQuestions = false,
@@ -49,6 +53,28 @@ class StreamViewModel @Inject constructor(
 
     override fun onAction(action: Stream.Action) {
         when (action) {
+            Stream.Action.SwitchCameraClick -> {
+                if (mutableState.value.isCameraFront) {
+                    if (cameraUtil.hasBackCamera()) {
+                        setState {
+                            copy(isCameraFront = false)
+                        }
+                    }
+                } else {
+                    if (cameraUtil.hasFrontCamera()) {
+                        setState {
+                            copy(isCameraFront = true)
+                        }
+                    }
+                }
+            }
+            Stream.Action.CameraClick -> {
+                if (cameraUtil.hasCamera()) {
+                    setState {
+                        copy(isCameraEnabled = !isCameraEnabled)
+                    }
+                }
+            }
             Stream.Action.ShowJoinRequests -> {
                 setState {
                     copy(showJoinRequests = true)
