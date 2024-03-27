@@ -126,25 +126,22 @@ fun StreamContent(
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                var isFrontCamera by remember {
-                    mutableStateOf(true)
-                }
-                var isCameraEnabled by remember {
-                    mutableStateOf(true)
-                }
-
                 val modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(8.dp))
-                if (state.showCamera) {
-                    CameraComponent(
-                        modifier = modifier,
-                        isFront = isFrontCamera,
-                        isEnabled = isCameraEnabled,
-                        image = state.image
-                    )
-                } else {
-                    VideoComponent(modifier = modifier)
+                when (state.mode) {
+                    Mode.CAMERA -> {
+                        CameraComponent(
+                            modifier = modifier,
+                            isFront = state.isCameraFront,
+                            isEnabled = state.isCameraEnabled,
+                            image = state.image
+                        )
+                    }
+
+                    Mode.VIDEO -> {
+                        VideoComponent(modifier = modifier)
+                    }
                 }
 
                 Column {
@@ -193,10 +190,10 @@ fun StreamContent(
                             Actions(
                                 modifier = Modifier.padding(top = 16.dp),
                                 onSwitchClick = {
-                                    isFrontCamera = !isFrontCamera
+                                    onAction(Stream.Action.SwitchCameraClick)
                                 },
-                                onCameraClick = { isEnabled ->
-                                    isCameraEnabled = isEnabled
+                                onCameraClick = {
+                                    onAction(Stream.Action.CameraClick)
                                 },
                                 onFiltersClick = {
                                     showFilters = !showFilters
@@ -639,7 +636,9 @@ private fun StreamScreenPreview() {
                     ),
                 ),
                 reactionCount = 10,
-                showCamera = true,
+                mode = Mode.CAMERA,
+                isCameraEnabled = true,
+                isCameraFront = true,
                 showJoinRequests = false,
                 showInvite = false,
                 showQuestions = false,

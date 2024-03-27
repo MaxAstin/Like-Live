@@ -34,10 +34,18 @@ fun CameraComponent(
 
         LaunchedEffect(isFront) {
             val cameraProvider = context.getCameraProvider()
-            val lensFacing = if (isFront && cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)) {
-                CameraSelector.LENS_FACING_FRONT
+            val lensFacing = if (isFront) {
+                if (cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)) {
+                    CameraSelector.LENS_FACING_FRONT
+                } else {
+                    return@LaunchedEffect
+                }
             } else {
-                CameraSelector.LENS_FACING_BACK
+                if (cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)) {
+                    CameraSelector.LENS_FACING_BACK
+                } else {
+                    return@LaunchedEffect
+                }
             }
             val cameraSelector = CameraSelector.Builder()
                 .requireLensFacing(lensFacing)

@@ -14,7 +14,8 @@ private const val STREAM_STOPPED_EVENT = "stream_stopped"
 private const val STREAM_FINISHED_EVENT = "stream_finished"
 private const val STREAM_DURATION_PARAM = "stream_duration"
 
-private const val FEEDBACK_EVENT = "feedback"
+private const val FEEDBACK_POSITIVE_EVENT = "feedback_positive"
+private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
 
 @Singleton
 class AnalyticsManager @Inject constructor(
@@ -46,8 +47,12 @@ class AnalyticsManager @Inject constructor(
         }
     }
 
-    fun trackFeedback() {
-        firebaseAnalytics.logEvent(FEEDBACK_EVENT) {}
+    fun trackFeedback(isPositive: Boolean) {
+        if (isPositive) {
+            firebaseAnalytics.logEvent(FEEDBACK_POSITIVE_EVENT) {}
+        } else {
+            firebaseAnalytics.logEvent(FEEDBACK_NEGATIVE_EVENT) {}
+        }
     }
 
 }

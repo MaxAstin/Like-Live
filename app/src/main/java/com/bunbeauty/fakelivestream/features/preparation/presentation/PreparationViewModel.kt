@@ -13,7 +13,7 @@ import com.bunbeauty.fakelivestream.features.domain.SaveImageUriUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
-import com.bunbeauty.fakelivestream.features.preparation.domain.SaveFeedbackShouldBeAskedUseCase
+import com.bunbeauty.fakelivestream.features.preparation.domain.SaveShouldAskFeedbackUseCase
 import com.bunbeauty.fakelivestream.features.preparation.domain.ShouldAskFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -35,7 +35,7 @@ class PreparationViewModel @Inject constructor(
     private val getViewerCountUseCase: GetViewerCountUseCase,
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
     private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
-    private val saveFeedbackShouldBeAskedUseCase: SaveFeedbackShouldBeAskedUseCase,
+    private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
     private val analyticsManager: AnalyticsManager,
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
@@ -112,20 +112,22 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
-            Preparation.Action.GiveFeedbackClick -> {
+            is Preparation.Action.FeedbackClick -> {
                 setState {
                     copy(showFeedbackDialog = false)
                 }
                 viewModelScope.launch {
-                    saveFeedbackShouldBeAskedUseCase(shouldBeAsked = false)
+                    saveShouldAskFeedbackUseCase(shouldAsk = false)
                 }
-                analyticsManager.trackFeedback()
-                sendEvent(Preparation.Event.OpenInAppReview)
+                analyticsManager.trackFeedback(action.isPositive)
+                if (action.isPositive) {
+                    sendEvent(Preparation.Event.OpenInAppReview)
+                }
             }
 
             is Preparation.Action.NotShowFeedbackChecked -> {
                 viewModelScope.launch {
-                    saveFeedbackShouldBeAskedUseCase(shouldBeAsked = !action.checked)
+                    saveShouldAskFeedbackUseCase(shouldAsk = !action.checked)
                 }
             }
         }

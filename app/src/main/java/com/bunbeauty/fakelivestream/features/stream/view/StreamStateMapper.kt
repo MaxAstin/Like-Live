@@ -35,7 +35,9 @@ fun Stream.State.toViewState(): ViewState {
             )
         },
         reactionCount = reactionCount,
-        showCamera = BuildConfig.SHOW_CAMERA,
+        mode = if (BuildConfig.SHOW_CAMERA) Mode.CAMERA else Mode.VIDEO,
+        isCameraEnabled = isCameraEnabled,
+        isCameraFront = isCameraFront,
         showJoinRequests = showJoinRequests,
         showInvite = showInvite,
         showQuestions = showQuestions,
