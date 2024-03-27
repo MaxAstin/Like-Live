@@ -7,13 +7,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @Composable
 fun SecondaryButton(
-    onClick: () -> Unit,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Button(
@@ -26,6 +27,17 @@ fun SecondaryButton(
             text = text,
             color = FakeLiveStreamTheme.colors.onSurfaceVariant,
             style = FakeLiveStreamTheme.typography.titleSmall,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SecondaryButtonPreview() {
+    FakeLiveStreamTheme {
+        SecondaryButton(
+            text = "Button",
+            onClick = {},
         )
     }
 }
