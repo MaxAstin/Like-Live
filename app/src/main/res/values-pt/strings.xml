@@ -8,11 +8,11 @@
         Você pode alterar isso a qualquer momento nas configurações do seu dispositivo.</string>
     <string name="settings">Configurações</string>
 
-    <string name="feedback">Opinião</string>
-    <string name="help_up_improve">Ajude-nos a melhorar %s! Por favor, compartilhe sua opinião e avalie-nos.</string>
+    <string name="do_you_like">Você gosta do aplicativo %s?</string>
+    <string name="help_us_improve">Por favor, ajude-nos a melhorar %s compartilhando seus comentários</string>
     <string name="do_not_ask">Por favor, não pergunte mais</string>
-    <string name="give_feedback">Dê retorno</string>
-    <string name="not_now">Agora não</string>
+    <string name="feedback_no">Não</string>
+    <string name="feedback_yes">Sim</string>
 
     <string name="preparation_edit_photo">Editar foto</string>
     <string name="preparation_username">Nome de usuário</string>

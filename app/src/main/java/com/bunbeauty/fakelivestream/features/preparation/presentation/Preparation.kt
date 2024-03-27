@@ -22,7 +22,7 @@ interface Preparation {
         data object StartStreamClick: Action
         data class StreamFinished(val durationInSeconds: Int): Action
         data object CloseFeedbackDialogClick: Action
-        data object GiveFeedbackClick: Action
+        data class FeedbackClick(val isPositive: Boolean): Action
         data class NotShowFeedbackChecked(val checked: Boolean): Action
     }
 

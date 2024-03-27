@@ -112,15 +112,17 @@ class PreparationViewModel @Inject constructor(
                 }
             }
 
-            Preparation.Action.GiveFeedbackClick -> {
+            is Preparation.Action.FeedbackClick -> {
                 setState {
                     copy(showFeedbackDialog = false)
                 }
                 viewModelScope.launch {
                     saveFeedbackShouldBeAskedUseCase(shouldBeAsked = false)
                 }
-                analyticsManager.trackFeedback()
-                sendEvent(Preparation.Event.OpenInAppReview)
+                analyticsManager.trackFeedback(action.isPositive)
+                if (action.isPositive) {
+                    sendEvent(Preparation.Event.OpenInAppReview)
+                }
             }
 
             is Preparation.Action.NotShowFeedbackChecked -> {
