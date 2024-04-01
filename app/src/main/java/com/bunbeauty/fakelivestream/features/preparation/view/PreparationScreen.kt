@@ -96,7 +96,7 @@ fun PreparationScreen(
 }
 
 @Composable
-fun PreparationContent(
+private fun PreparationContent(
     state: Preparation.State,
     onAction: (Preparation.Action) -> Unit
 ) {

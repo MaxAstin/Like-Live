@@ -13,6 +13,7 @@ private const val IMAGE_URI_KEY = "image uri"
 private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
 private const val SHOULD_ASK_FEEDBACK_KEY = "should ask feedback"
+private const val IS_INTRO_VIEWED = "is intro viewed"
 
 class SharedPreferencesStorage @Inject constructor(
     @ApplicationContext private val context: Context
@@ -46,6 +47,12 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveIsIntroViewed(isIntroViewed: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(IS_INTRO_VIEWED, isIntroViewed)
+        }
+    }
+
     override fun getImageUriFlow(): Flow<String?> {
         return mutableImageUriFlow.asStateFlow()
     }
@@ -60,6 +67,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getShouldAskFeedback(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(SHOULD_ASK_FEEDBACK_KEY, defaultValue)
+    }
+
+    override suspend fun getIsIntroViewed(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(IS_INTRO_VIEWED, defaultValue)
     }
 
     private fun getImageUri(): String? {

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="intro_next">Сontinuar</string>
+    <string name="intro_welcome">Bem-vindo ao %s</string>
+    <string name="intro_description">Colocamos a sua privacidade acima de tudo. Seus dados são sagrados para nós, por isso permanecem confidenciais e seguros. Quando se trata de transmissões falsas, só você tem acesso a elas. Então relaxe, divirta-se e nós cuidaremos do resto!</string>
+
     <string name="stream_live">AO VIVO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Adicione um comentário…</string>

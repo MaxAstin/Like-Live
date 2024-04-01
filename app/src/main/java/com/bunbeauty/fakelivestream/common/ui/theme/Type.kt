@@ -43,10 +43,15 @@ data class FakeLiveStreamTypography(
         fontSize = 14.sp,
         lineHeight = 20.sp
     ),
-//    val action: TextStyle = TextStyle(
-//        fontFamily = FontFamily(Font(R.font.roboto_medium)),
-//        fontWeight = FontWeight.W500,
-//        fontSize = 14.sp,
-//        lineHeight = 20.sp
-//    ),
+    val bodyLarge: TextStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+    ),
 )
+
+val TextStyle.bold: TextStyle
+    get() {
+        return copy(fontWeight = FontWeight.Bold)
+    }
