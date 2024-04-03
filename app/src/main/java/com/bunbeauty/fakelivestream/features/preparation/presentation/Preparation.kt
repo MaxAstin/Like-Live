@@ -24,12 +24,14 @@ interface Preparation {
         data object CloseFeedbackDialogClick: Action
         data class FeedbackClick(val isPositive: Boolean): Action
         data class NotShowFeedbackChecked(val checked: Boolean): Action
+        data object ShareClick: Action
     }
 
     sealed interface Event: Base.Event {
         data object OpenStream: Event
-        data object OpenInAppReview: Event
+        data object HandlePositiveFeedbackClick: Event
         data object HandleAvatarClick: Event
+        data object HandleShareClick: Event
     }
 
 }

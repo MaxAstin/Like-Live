@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,8 @@ fun PreparationScreen(
     streamDurationInSeconds: Int?,
     onAvatarClick: () -> Unit,
     onStartStreamClick: () -> Unit,
-    openInAppReview: () -> Unit,
+    onPositiveFeedbackClick: () -> Unit,
+    onShareClick: () -> Unit,
 ) {
     val viewModel: PreparationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -68,12 +71,16 @@ fun PreparationScreen(
                     onStartStreamClick()
                 }
 
-                Preparation.Event.OpenInAppReview -> {
-                    openInAppReview()
+                Preparation.Event.HandlePositiveFeedbackClick -> {
+                    onPositiveFeedbackClick()
                 }
 
                 Preparation.Event.HandleAvatarClick -> {
                     onAvatarClick()
+                }
+
+                Preparation.Event.HandleShareClick -> {
+                    onShareClick()
                 }
             }
         }.launchIn(scope)
@@ -106,6 +113,23 @@ private fun PreparationContent(
             .background(FakeLiveStreamTheme.colors.background)
             .padding(16.dp)
     ) {
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .clip(RoundedCornerShape(6.dp))
+                .background(FakeLiveStreamTheme.colors.interactive)
+                .size(48.dp),
+            onClick = {
+                onAction(Preparation.Action.ShareClick)
+            }
+        ) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(R.drawable.ic_share),
+                tint = FakeLiveStreamTheme.colors.onSurface,
+                contentDescription = "share"
+            )
+        }
         Column(modifier = Modifier.align(Alignment.Center)) {
             CachedImage(
                 modifier = Modifier

@@ -121,7 +121,7 @@ class PreparationViewModel @Inject constructor(
                 }
                 analyticsManager.trackFeedback(action.isPositive)
                 if (action.isPositive) {
-                    sendEvent(Preparation.Event.OpenInAppReview)
+                    sendEvent(Preparation.Event.HandlePositiveFeedbackClick)
                 }
             }
 
@@ -129,6 +129,10 @@ class PreparationViewModel @Inject constructor(
                 viewModelScope.launch {
                     saveShouldAskFeedbackUseCase(shouldAsk = !action.checked)
                 }
+            }
+            Preparation.Action.ShareClick -> {
+                analyticsManager.trackShare()
+                sendEvent(Preparation.Event.HandleShareClick)
             }
         }
     }
