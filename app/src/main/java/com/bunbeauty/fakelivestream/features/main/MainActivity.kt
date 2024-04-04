@@ -1,11 +1,7 @@
 package com.bunbeauty.fakelivestream.features.main
 
 import android.Manifest.permission.CAMERA
-import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,11 +24,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
 import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.common.util.launchInAppReview
+import com.bunbeauty.fakelivestream.common.util.openSettings
+import com.bunbeauty.fakelivestream.common.util.openSharing
+import com.bunbeauty.fakelivestream.features.intro.view.IntroScreen
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
 import com.bunbeauty.fakelivestream.features.main.view.CameraIsRequiredDialog
@@ -41,11 +42,11 @@ import com.bunbeauty.fakelivestream.features.stream.view.DURATION_NAV_PARAM
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+
+private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.fakelivestream"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -85,7 +86,12 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 if (state.showNoCameraPermission) {
-                    CameraIsRequiredDialog(onAction = onAction)
+                    CameraIsRequiredDialog(
+                        onAction = onAction,
+                        onSettingsClick = {
+                            openSettings()
+                        }
+                    )
                 }
             }
         }
@@ -100,30 +106,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun openSettings() {
-        startActivity(
-            Intent().apply {
-                action = ACTION_APPLICATION_DETAILS_SETTINGS
-                data = Uri.fromParts("package", packageName, null)
-            }
-        )
-    }
-
     private fun launchAvatarSetting() {
         cropImage.launch(
             CropImageContractOptions(
                 uri = null,
-                cropImageOptions = CropImageOptions(
-                    imageSourceIncludeCamera = false,
-                    cropShape = CropImageView.CropShape.OVAL,
-                    autoZoomEnabled = false,
-                    fixAspectRatio = true,
-                    toolbarColor = Color.WHITE,
-                    activityBackgroundColor = Color.WHITE,
-                    activityMenuIconColor = Color.BLACK,
-                    activityMenuTextColor = Color.BLACK,
-                    toolbarBackButtonColor = Color.BLACK,
-                )
+                cropImageOptions = CropImageDefaults.options()
             )
         )
     }
@@ -140,10 +127,6 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 mainViewModel.event.onEach { event ->
                     when (event) {
-                        Main.Event.OpenSettings -> {
-                            openSettings()
-                        }
-
                         Main.Event.OpenStream -> {
                             navController.navigate(STREAM)
                         }
@@ -171,7 +154,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = PREPARATION,
+            startDestination = INTRO,
             modifier = modifier,
             enterTransition = {
                 EnterTransition.None
@@ -180,6 +163,9 @@ class MainActivity : ComponentActivity() {
                 ExitTransition.None
             },
         ) {
+            composable(route = INTRO) {
+                IntroScreen(navController = navController)
+            }
             composable(route = PREPARATION) { entry ->
                 val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
                 PreparationScreen(
@@ -190,8 +176,20 @@ class MainActivity : ComponentActivity() {
                     onStartStreamClick = {
                         requestCameraPermission()
                     },
-                    openInAppReview = {
+                    onPositiveFeedbackClick = {
                         launchInAppReview()
+                    },
+                    onShareClick = {
+                        val isSuccessful = openSharing(
+                            text = getString(
+                                R.string.sharing_text,
+                                getString(R.string.app_name),
+                                GOOGLE_PLAY_LINK
+                            ),
+                        )
+                        if (!isSuccessful) {
+                            // TODO show error
+                        }
                     }
                 )
             }

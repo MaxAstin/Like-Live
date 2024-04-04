@@ -34,10 +34,6 @@ class MainViewModel @Inject constructor(
                 }
             }
 
-            Main.Action.SettingsClick -> {
-                sendEvent(Main.Event.OpenSettings)
-            }
-
             is Main.Action.AvatarSelected -> {
                 viewModelScope.launch {
                     action.uri?.let { uri ->

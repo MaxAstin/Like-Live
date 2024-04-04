@@ -17,6 +17,8 @@ private const val STREAM_DURATION_PARAM = "stream_duration"
 private const val FEEDBACK_POSITIVE_EVENT = "feedback_positive"
 private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
 
+private const val SHARE_EVENT = "share"
+
 @Singleton
 class AnalyticsManager @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
@@ -53,6 +55,10 @@ class AnalyticsManager @Inject constructor(
         } else {
             firebaseAnalytics.logEvent(FEEDBACK_NEGATIVE_EVENT) {}
         }
+    }
+
+    fun trackShare() {
+        firebaseAnalytics.logEvent(SHARE_EVENT) {}
     }
 
 }

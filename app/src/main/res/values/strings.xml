@@ -1,6 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Like Live</string>
 
+    <string name="intro_next">Next</string>
+    <string name="intro_welcome">Welcome to %s</string>
+    <string name="intro_description">We prioritize your privacy above all else. Your data is sacred to us, so it stays strictly private and secure. When it comes to fake Lives, only you have access to your own. So, relax, have fun, and let us take care of the rest!</string>
+
+    <string name="sharing_text">Hey! Check out %s app on Google Play: %s</string>
+
     <string name="stream_live">LIVE</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Add comment…</string>

@@ -23,7 +23,8 @@ import com.bunbeauty.fakelivestream.features.main.presentation.Main
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraIsRequiredDialog(
-    onAction: (Main.Action) -> Unit
+    onAction: (Main.Action) -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = {
@@ -57,9 +58,7 @@ fun CameraIsRequiredDialog(
                     .padding(top = 16.dp)
                     .align(Alignment.End),
                 text = stringResource(R.string.settings),
-                onClick = {
-                    onAction(Main.Action.SettingsClick)
-                },
+                onClick = onSettingsClick,
             )
         }
     }
@@ -68,5 +67,10 @@ fun CameraIsRequiredDialog(
 @LocalePreview
 @Composable
 private fun CameraIsRequiredDialogPreview() {
-    CameraIsRequiredDialog(onAction = {})
+    FakeLiveStreamTheme {
+        CameraIsRequiredDialog(
+            onAction = {},
+            onSettingsClick = {}
+        )
+    }
 }

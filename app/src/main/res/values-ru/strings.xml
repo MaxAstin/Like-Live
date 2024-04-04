@@ -1,5 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="intro_next">Продолжить</string>
+    <string name="intro_welcome">Добро пожаловать в %s</string>
+    <string name="intro_description">Мы ставим вашу конфиденциальность превыше всего. Ваши данные для нас священны, поэтому они остаются конфиденциальными и безопасными. Когда дело доходит до фейковых трансляций, доступ к ним есть только у вас. Так что расслабьтесь, получайте удовольствие, а обо всем остальном позаботимся мы!</string>
+
+    <string name="sharing_text">Привет! Зацени приложение %s в Google Play: %s</string>
+
     <string name="stream_live">ПРЯМОЙ ЭФИР</string>
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
     <string name="stream_add_comment">Добавьте комментарий…</string>

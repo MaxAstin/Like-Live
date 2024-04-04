@@ -11,13 +11,13 @@ import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @Composable
 fun PrimaryButton(
-    onClick: () -> Unit,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Button(
         modifier = modifier,
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(containerColor = FakeLiveStreamTheme.colors.interactive),
         onClick = onClick,
     ) {

@@ -15,8 +15,8 @@ android {
         applicationId = "com.bunbeauty.fakelivestream"
         minSdk = 27
         targetSdk = 34
-        versionCode = 140
-        versionName = "1.4.0"
+        versionCode = 152
+        versionName = "1.5.2"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -27,7 +27,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
