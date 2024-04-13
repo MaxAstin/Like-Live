@@ -116,6 +116,9 @@ dependencies {
 
     // Image Cropping
     implementation("com.vanniktech:android-image-cropper:4.5.0")
+
+    // Immutable collections
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 }
 
 kapt {

@@ -57,6 +57,8 @@ import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionsBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -239,8 +241,9 @@ fun StreamContent(
         )
 
         QuestionsBottomSheet(
-            show = state.showQuestions,
-            onDismiss = {
+            show = state.questionState != QuestionState.Hidden,
+            questionState = state.questionState,
+            onDismissRequest = {
                 onAction(Stream.Action.HideQuestions)
             }
         )
@@ -577,21 +580,6 @@ private fun InviteBottomSheet(
 }
 
 @Composable
-private fun QuestionsBottomSheet(
-    show: Boolean,
-    onDismiss: () -> Unit,
-) {
-    if (show) {
-        EmptyBottomSheet(
-            onDismissRequest = onDismiss,
-            titleResId = R.string.stream_questions_title,
-            bodyResId = R.string.stream_questions_body,
-            descriptionResId = R.string.stream_questions_description,
-        )
-    }
-}
-
-@Composable
 private fun DirectBottomSheet(
     show: Boolean,
     onDismiss: () -> Unit,
@@ -641,7 +629,8 @@ private fun StreamScreenPreview() {
                 isCameraFront = true,
                 showJoinRequests = false,
                 showInvite = false,
-                showQuestions = false,
+                questionState = QuestionState.Hidden,
+                unreadQuestionCount = 1,
                 showDirect = false,
             ),
             onAction = {},

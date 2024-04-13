@@ -40,6 +40,8 @@ class StreamViewModel @Inject constructor(
             showJoinRequests = false,
             showInvite = false,
             showQuestions = false,
+            questions = emptyList(),
+            unreadQuestionCount = null,
             showDirect = false,
         )
     }

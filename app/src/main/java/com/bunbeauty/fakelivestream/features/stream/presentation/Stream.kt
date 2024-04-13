@@ -3,6 +3,7 @@ package com.bunbeauty.fakelivestream.features.stream.presentation
 import android.net.Uri
 import com.bunbeauty.fakelivestream.common.presentation.Base
 import com.bunbeauty.fakelivestream.features.stream.domain.model.Comment
+import com.bunbeauty.fakelivestream.features.stream.domain.model.Question
 
 interface Stream {
 
@@ -12,6 +13,8 @@ interface Stream {
         val viewersCount: Int,
         val comments: List<Comment>,
         val reactionCount: Int,
+        val questions: List<Question>,
+        val unreadQuestionCount: Int?,
         val startStreamTimeMillis: Long,
         val isCameraEnabled: Boolean,
         val isCameraFront: Boolean,

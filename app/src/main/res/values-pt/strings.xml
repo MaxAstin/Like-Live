@@ -38,6 +38,10 @@
     <string name="stream_questions_title">Perguntas</string>
     <string name="stream_questions_body">Sem perguntas ainda</string>
     <string name="stream_questions_description">Qualquer pessoa assistindo pode enviar e ver perguntas aqui.</string>
+    <string name="stream_questions_tap_to_answer">Toque em uma pergunta para responder</string>
+    <string name="stream_questions_everyone_watching">Todos que assistem verão na tela.</string>
+    <string name="stream_questions_delete">Eliminar</string>
+    <string name="stream_questions_report">Denunciar</string>
 
     <string name="stream_direct_title">Direto</string>
     <string name="stream_direct_body">Direto não disponível</string>
