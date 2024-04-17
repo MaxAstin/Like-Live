@@ -103,8 +103,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 
     // Media3
-    implementation("androidx.media3:media3-ui:1.3.0")
-    implementation("androidx.media3:media3-exoplayer:1.3.0")
+    implementation("androidx.media3:media3-ui:1.3.1")
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
