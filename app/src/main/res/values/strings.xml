@@ -218,57 +218,100 @@
         <item>Relatable and authentic, your content feels like a genuine connection</item>
     </string-array>
 
-    <string-array name="question_comments" tools:ignore="InconsistentArrays">
-        <item>What inspired your latest video?</item>
-        <item>How do you stay creative and motivated?</item>
-        <item>Any exciting projects or collaborations?</item>
-        <item>Favorite part about creating content?</item>
-        <item>Behind-the-scenes moment from your latest video?</item>
-        <item>How do you handle creative challenges?</item>
-        <item>Future content topic or theme you\'re eager about?</item>
-        <item>Tips for aspiring content creators?</item>
-        <item>How do you engage with your audience?</item>
-        <item>Most rewarding aspect of being a content creator?</item>
-        <item>Any favorite tools or apps for content creation?</item>
-        <item>What\'s your go-to source of inspiration?</item>
-        <item>How do you balance creativity with consistency?</item>
-        <item>What\'s the most memorable comment you\'ve received?</item>
-        <item>Any upcoming events or milestones to celebrate?</item>
-        <item>How has your content evolved over time?</item>
-        <item>Do you have a specific routine before filming?</item>
-        <item>Any advice for overcoming creative blocks?</item>
-        <item>What platforms do you find most engaging for your content?</item>
-        <item>How do you decide on the topics for your videos?</item>
-        <item>Can you share a funny or unexpected moment during filming?</item>
-        <item>What\'s your favorite aspect of interacting with your audience?</item>
-        <item>How do you approach balancing work and personal life?</item>
-        <item>Do you have a dream project you\'d love to work on?</item>
-        <item>What\'s the most challenging part of content creation for you?</item>
-        <item>How do you choose music for your videos?</item>
-        <item>Is there a specific goal you\'re working towards currently?</item>
-        <item>Do you prefer scripted or spontaneous content?</item>
-        <item>How do you stay updated on trends in your content niche?</item>
-        <item>What impact do you hope your content has on viewers?</item>
-        <item>Your favorite video you\'ve ever made?</item>
-        <item>Preferred editing software?</item>
-        <item>How often do you post content?</item>
-        <item>Top tip for new creators?</item>
-        <item>Ideal collaboration partner?</item>
-        <item>Favorite camera for filming?</item>
-        <item>Biggest lesson in content creation?</item>
-        <item>Best moment with your audience?</item>
-        <item>Current favorite content trend?</item>
-        <item>Next big goal for your channel?</item>
-        <item>Your quick fix for creative blocks?</item>
-        <item>Top source for content ideas?</item>
-        <item>Preferred filming location?</item>
-        <item>Your favorite video genre to create?</item>
-        <item>How do you unwind after filming?</item>
-        <item>Most used social media platform?</item>
-        <item>Preferred video length?</item>
-        <item>Biggest challenge you\'ve overcome?</item>
-        <item>Any content creation rituals?</item>
-        <item>Favorite part of the editing process?</item>
+    <string-array name="question_comments">
+        <item>How\'s your day?</item>
+        <item>How are you doing?</item>
+        <item>How are you feeling?</item>
+        <item>What inspires you?</item>
+        <item>What do you like to do in your free time?</item>
+        <item>What hobbies do you have?</item>
+        <item>What was the last series you watched?</item>
+        <item>What was the last event or occasion you remember?</item>
+        <item>What do you like most about your work/studies?</item>
+        <item>How was your weekend?</item>
+        <item>What\'s your superpower?</item>
+        <item>What skill would you like to learn in the near future?</item>
+        <item>What\'s your favorite series or movie right now?</item>
+        <item>Have you listened to anything cool recently?</item>
+        <item>What music do you listen to?</item>
+        <item>What do you do in the evenings?</item>
+        <item>What games do you like to play?</item>
+        <item>What will you do after the stream?</item>
+        <item>Cinema or couch at home?</item>
+        <item>What\'s the last interesting fact you learned?</item>
+        <item>Is there something you dream about?</item>
+        <item>Have you ever been to a concert?</item>
+        <item>What do you dream about?</item>
+        <item>Are you waiting for any releases?</item>
+        <item>In which movie would you like to act?</item>
+        <item>Recommend a book</item>
+        <item>Recommend a series</item>
+        <item>Recommend a fun movie</item>
+        <item>Recommend a kind movie</item>
+        <item>Where would you go on a trip?</item>
+        <item>What book do you think everyone should read?</item>
+        <item>Where would you like to live?</item>
+        <item>How do you relax?</item>
+        <item>What motivates you?</item>
+        <item>Which movie or book had the greatest impact on you?</item>
+        <item>If you could choose any profession without worrying about money, what would it be?</item>
+        <item>Is there something you\'ve always wanted to try?</item>
+        <item>Favorite season?</item>
+        <item>What event left the biggest mark on your life?</item>
+        <item>What three things would you take with you to a deserted island?</item>
+        <item>Would you like to visit the past?</item>
+        <item>Do you like to cook?</item>
+        <item>Do you prefer giving or receiving gifts?</item>
+        <item>What to do on a rainy day?</item>
+        <item>If you could change one event in your life, what would it be?</item>
+        <item>Describe the perfect day</item>
+        <item>What is your happiest childhood memory?</item>
+        <item>What motivates you the most every day?</item>
+        <item>What motivates you to get up in the morning?</item>
+        <item>If you could get an answer to any question, what would you ask?</item>
+        <item>What\'s the most important thing in life?</item>
+        <item>What did you want to be when you grew up?</item>
+        <item>What\'s your favorite holiday?</item>
+        <item>What\'s the most unusual dish you\'ve ever tried?</item>
+        <item>Which country or culture do you find most interesting and why?</item>
+        <item>Do you have a favorite place?</item>
+        <item>Do you have goals for the year?</item>
+        <item>If you could choose any talent, what would you want?</item>
+        <item>Do you have a talisman?</item>
+        <item>What genre of music or movies do you think is most underrated?</item>
+        <item>What\'s your favorite app?</item>
+        <item>What\'s your favorite website?</item>
+        <item>Do you like to take risks?</item>
+        <item>Do you have pets?</item>
+        <item>Describe yourself in three words</item>
+        <item>Do you prefer summer or winter?</item>
+        <item>What language would you like to know? Why?</item>
+        <item>What is your favorite place?</item>
+        <item>Do you have house plants?</item>
+        <item>What do you like most about the place where you live now?</item>
+        <item>Tell about your hobbies</item>
+        <item>If you could meet any character from a book/movie, who would it be?</item>
+        <item>What advice would you give to every person on Earth?</item>
+        <item>Do you prefer adventure or relaxation?</item>
+        <item>Are you a morning person or a night owl?</item>
+        <item>What\'s the best gift you\'ve ever received?</item>
+        <item>What do you think about space travel?</item>
+        <item>Coffee or tea?</item>
+        <item>Books or movies?</item>
+        <item>Dogs or cats?</item>
+        <item>Pizza or sushi?</item>
+        <item>Movies at home or in the cinema?</item>
+        <item>Do you like parties?</item>
+        <item>Do you prefer movies or series?</item>
+        <item>What movie genres do you like?</item>
+        <item>What music genres do you like?</item>
+        <item>Do you prefer hot or cold weather?</item>
+        <item>Do you prefer active leisure or relaxation?</item>
+        <item>Do you prefer sweet or salty?</item>
+        <item>Do you prefer to plan in advance or live spontaneously?</item>
+        <item>Board games or video games?</item>
+        <item>Do you prefer to spend time in company or alone?</item>
+        <item>Do you like coffee?</item>
     </string-array>
 
 </resources>
