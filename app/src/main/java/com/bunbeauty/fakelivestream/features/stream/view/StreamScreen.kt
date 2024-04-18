@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,6 +45,12 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.blurTop
+import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
+import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.view.ui.AnimatedReaction
@@ -50,15 +58,9 @@ import com.bunbeauty.fakelivestream.features.stream.view.ui.AvatarImage
 import com.bunbeauty.fakelivestream.features.stream.view.ui.CameraComponent
 import com.bunbeauty.fakelivestream.features.stream.view.ui.EmptyBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.FiltersRow
-import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
-import com.bunbeauty.fakelivestream.common.ui.LocalePreview
-import com.bunbeauty.fakelivestream.common.ui.blurTop
-import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
-import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
-import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionsBottomSheet
+import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -219,7 +221,10 @@ fun StreamContent(
                 }
             }
             Column {
-                BottomPanel(onAction = onAction)
+                BottomPanel(
+                    unreadQuestionCount = state.unreadQuestionCount,
+                    onAction = onAction
+                )
                 if (showFilters) {
                     FiltersRow()
                 }
@@ -454,8 +459,10 @@ private fun CommentItem(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomPanel(
+    unreadQuestionCount: Int?,
     onAction: (Stream.Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -514,15 +521,33 @@ private fun BottomPanel(
             iconResId = R.drawable.ic_invite,
             contentDescription = "Invite",
         )
-        ActionIcon(
-            modifier = Modifier.clickableWithoutIndication(
-                onClick = {
-                    onAction(Stream.Action.ShowQuestions)
+        Box {
+            ActionIcon(
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .clickableWithoutIndication(
+                        onClick = {
+                            onAction(Stream.Action.ShowQuestions)
+                        }
+                    ),
+                iconResId = R.drawable.ic_question,
+                contentDescription = "Question",
+            )
+            unreadQuestionCount?.let {
+                Badge(
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    containerColor = FakeLiveStreamTheme.colors.interactive,
+                    contentColor = FakeLiveStreamTheme.colors.onSurface
+                ) {
+                    Text(
+                        modifier = Modifier,//.aspectRatio(1f),
+                        text = unreadQuestionCount.toString(),
+                        color = FakeLiveStreamTheme.colors.onSurface,
+                        style = FakeLiveStreamTheme.typography.bodySmall
+                    )
                 }
-            ),
-            iconResId = R.drawable.ic_question,
-            contentDescription = "Question",
-        )
+            }
+        }
         ActionIcon(
             modifier = Modifier.clickableWithoutIndication(
                 onClick = {

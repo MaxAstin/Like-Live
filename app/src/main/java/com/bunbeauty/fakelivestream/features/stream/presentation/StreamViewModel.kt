@@ -8,9 +8,10 @@ import com.bunbeauty.fakelivestream.features.domain.GetImageUriFlowUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.GetViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.stream.CameraUtil
+import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsDelayUseCase
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsUseCase
+import com.bunbeauty.fakelivestream.features.stream.domain.GetQuestionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -23,7 +24,9 @@ class StreamViewModel @Inject constructor(
     private val getImageUriFlowUseCase: GetImageUriFlowUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getViewerCountUseCase: GetViewerCountUseCase,
-    private val getComments: GetCommentsUseCase,
+    private val getCommentsUseCase: GetCommentsUseCase,
+    private val getCommentsDelayUseCase: GetCommentsDelayUseCase,
+    private val getQuestionUseCase: GetQuestionUseCase,
     private val analyticsManager: AnalyticsManager,
     private val cameraUtil: CameraUtil,
 ) : BaseViewModel<Stream.State, Stream.Action, Stream.Event>(
@@ -48,9 +51,14 @@ class StreamViewModel @Inject constructor(
 ) {
 
     init {
-        getAvatar()
-        getUsername()
-        getViewerCount()
+        setupAvatar()
+        setupUsername()
+        setupViewerCount()
+
+        startGenerateReactions()
+        startGenerateViewersCount()
+        startGenerateComments()
+        startGenerateQuestions()
     }
 
     override fun onAction(action: Stream.Action) {
@@ -70,6 +78,7 @@ class StreamViewModel @Inject constructor(
                     }
                 }
             }
+
             Stream.Action.CameraClick -> {
                 if (cameraUtil.hasCamera()) {
                     setState {
@@ -77,6 +86,7 @@ class StreamViewModel @Inject constructor(
                     }
                 }
             }
+
             Stream.Action.ShowJoinRequests -> {
                 setState {
                     copy(showJoinRequests = true)
@@ -103,7 +113,10 @@ class StreamViewModel @Inject constructor(
 
             Stream.Action.ShowQuestions -> {
                 setState {
-                    copy(showQuestions = true)
+                    copy(
+                        showQuestions = true,
+                        unreadQuestionCount = null
+                    )
                 }
             }
 
@@ -144,52 +157,46 @@ class StreamViewModel @Inject constructor(
         }
     }
 
-    private fun getAvatar() {
+    private fun setupAvatar() {
         setState {
             copy(imageUri = getImageUriFlowUseCase().firstOrNull()?.toUri())
         }
     }
 
-    private fun getUsername() {
+    private fun setupUsername() {
         setState {
             copy(username = getUsernameUseCase())
         }
     }
 
-    private fun getViewerCount() {
+    private fun setupViewerCount() {
         viewModelScope.launch {
-            val viewerCount = getViewerCountUseCase()
             setState {
-                copy(viewersCount = viewerCount.min)
+                copy(viewersCount = getViewerCountUseCase().min)
             }
-
-            startGenerateReactions(viewerCount = viewerCount.min)
-            startGenerateViewersCount(
-                min = viewerCount.min,
-                max = viewerCount.max
-            )
-            startGenerateComments()
         }
     }
 
-    private fun startGenerateReactions(viewerCount: Int) {
+    private fun startGenerateReactions() {
         viewModelScope.launch {
             delay(5_000)
+            val viewerCount = getViewerCountUseCase()
             setState {
                 copy(
-                    reactionCount = min(10, viewerCount / 100 + 1)
+                    reactionCount = min(10, viewerCount.min / 100 + 1)
                 )
             }
         }
     }
 
-    private fun startGenerateViewersCount(min: Int, max: Int) {
-        viewModelScope.launch(Dispatchers.Default) {
+    private fun startGenerateViewersCount() {
+        viewModelScope.launch {
             delay(1_000)
 
-            val onePercent = (max - min) / 100
+            val viewerCount = getViewerCountUseCase()
+            val onePercent = (viewerCount.max - viewerCount.min) / 100
             val step = min(onePercent, Random.nextInt(200, 800))
-            val median = min + (max - min) / 2
+            val median = viewerCount.min + (viewerCount.max - viewerCount.min) / 2
             while (true) {
                 val delayMillis = Random.nextLong(2_000, 4_000)
                 delay(delayMillis)
@@ -217,21 +224,8 @@ class StreamViewModel @Inject constructor(
     private fun startGenerateComments() {
         viewModelScope.launch {
             while (true) {
-                val viewersCount = mutableState.value.viewersCount
-                val commentCount = if (viewersCount < 1000) {
-                    1
-                } else {
-                    val maxCommentCount = (viewersCount / 1_000).coerceIn(2, 5)
-                    Random.nextInt(1, maxCommentCount)
-                }
-
-                val newComments = getComments(count = commentCount)
-
-                val delayMillis = if (viewersCount < 1000) {
-                    Random.nextLong(1_000, 2_000)
-                } else {
-                    Random.nextLong(500, 1_000)
-                }
+                val newComments = getCommentsUseCase(viewersCount = currentState.viewersCount)
+                val delayMillis = getCommentsDelayUseCase(viewersCount = currentState.viewersCount)
                 delay(delayMillis)
 
                 setState {
@@ -239,6 +233,21 @@ class StreamViewModel @Inject constructor(
                         comments = newComments + comments.take(100)
                     )
                 }
+            }
+        }
+    }
+
+    private fun startGenerateQuestions() {
+        viewModelScope.launch {
+            delay(Random.nextLong(5_000, 15_000))
+            while (true) {
+                setState {
+                    copy(
+                        questions = questions + getQuestionUseCase(),
+                        unreadQuestionCount = (unreadQuestionCount ?: 0) + 1
+                    )
+                }
+                delay(Random.nextLong(20_000, 50_000))
             }
         }
     }
