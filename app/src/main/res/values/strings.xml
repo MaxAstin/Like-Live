@@ -10,6 +10,8 @@
     <string name="stream_live">LIVE</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Add comment…</string>
+    <string name="stream_question_title">Question</string>
+
     <string name="required_camera_permisseon_title">Allow %s to access your camera</string>
     <string name="required_camera_permisseon_body">This lets you start the Live.
         You can change this anytime in your device settings.</string>

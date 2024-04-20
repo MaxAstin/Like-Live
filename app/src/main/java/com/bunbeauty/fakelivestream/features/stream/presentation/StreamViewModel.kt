@@ -37,14 +37,17 @@ class StreamViewModel @Inject constructor(
             viewersCount = 0,
             comments = emptyList(),
             reactionCount = 0,
+            questionState = Stream.QuestionState(
+                show = false,
+                newQuestions = emptyList(),
+                answeredQuestions = emptyList(),
+                unreadQuestionCount = null
+            ),
             startStreamTimeMillis = System.currentTimeMillis(),
             isCameraEnabled = cameraUtil.hasCamera(),
             isCameraFront = cameraUtil.hasFrontCamera(),
             showJoinRequests = false,
             showInvite = false,
-            showQuestions = false,
-            questions = emptyList(),
-            unreadQuestionCount = null,
             showDirect = false,
         )
     }
@@ -114,15 +117,62 @@ class StreamViewModel @Inject constructor(
             Stream.Action.ShowQuestions -> {
                 setState {
                     copy(
-                        showQuestions = true,
-                        unreadQuestionCount = null
+                        questionState = questionState.copy(
+                            show = true,
+                            unreadQuestionCount = null
+                        )
                     )
                 }
             }
 
             Stream.Action.HideQuestions -> {
                 setState {
-                    copy(showQuestions = false)
+                    copy(
+                        questionState = questionState.copy(
+                            show = false
+                        )
+                    )
+                }
+            }
+
+            is Stream.Action.ClickQuestion -> {
+
+                fun updateQuestion(question: Stream.SelectableQuestion): Stream.SelectableQuestion {
+                   return question.copy(
+                        isSelected = if (question.question.uuid == action.uuid) {
+                            !question.isSelected
+                        } else {
+                            false
+                        }
+                    )
+                }
+
+                setState {
+                    copy(
+                        questionState = questionState.copy(
+                            newQuestions = questionState.newQuestions.map { question ->
+                                updateQuestion(question = question)
+                            },
+                            answeredQuestions = questionState.answeredQuestions.map { question ->
+                                updateQuestion(question = question)
+                            }
+                        )
+                    )
+                }
+            }
+
+            Stream.Action.CloseCurrentQuestion -> {
+                setState {
+                    copy(
+                        questionState = questionState.copy(
+                            newQuestions = questionState.newQuestions.map { question ->
+                                question.copy(isSelected = false)
+                            },
+                            answeredQuestions = questionState.answeredQuestions.map { question ->
+                                question.copy(isSelected = false)
+                            }
+                        )
+                    )
                 }
             }
 
@@ -241,10 +291,16 @@ class StreamViewModel @Inject constructor(
         viewModelScope.launch {
             delay(Random.nextLong(5_000, 15_000))
             while (true) {
+                val newQuestion = Stream.SelectableQuestion(
+                    question = getQuestionUseCase(),
+                    isSelected = false,
+                )
                 setState {
                     copy(
-                        questions = questions + getQuestionUseCase(),
-                        unreadQuestionCount = (unreadQuestionCount ?: 0) + 1
+                        questionState = questionState.copy(
+                            newQuestions = questionState.newQuestions + newQuestion,
+                            unreadQuestionCount = (questionState.unreadQuestionCount ?: 0) + 1
+                        ),
                     )
                 }
                 delay(Random.nextLong(20_000, 50_000))

@@ -3,6 +3,7 @@ package com.bunbeauty.fakelivestream.features.stream.view
 import androidx.compose.runtime.Immutable
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
 
 @Immutable
 data class ViewState(
@@ -18,6 +19,7 @@ data class ViewState(
     val showInvite: Boolean,
     val questionState: QuestionState,
     val unreadQuestionCount: Int?,
+    val selectedQuestion: QuestionUi?,
     val showDirect: Boolean,
 )
 

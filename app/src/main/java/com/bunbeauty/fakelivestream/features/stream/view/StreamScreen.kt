@@ -34,10 +34,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -59,6 +62,7 @@ import com.bunbeauty.fakelivestream.features.stream.view.ui.CameraComponent
 import com.bunbeauty.fakelivestream.features.stream.view.ui.EmptyBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.FiltersRow
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionsBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
 import kotlinx.coroutines.flow.launchIn
@@ -204,10 +208,16 @@ fun StreamContent(
                                 }
                             )
                         }
-                        Comments(
+                        Column(
                             modifier = Modifier.align(Alignment.BottomStart),
-                            comments = state.comments,
-                        )
+                        ) {
+                            Comments(comments = state.comments)
+                            CurrentQuestion(
+                                modifier = Modifier.padding(top = 16.dp),
+                                question = state.selectedQuestion,
+                                onAction = onAction
+                            )
+                        }
                     }
                 }
 
@@ -248,9 +258,7 @@ fun StreamContent(
         QuestionsBottomSheet(
             show = state.questionState != QuestionState.Hidden,
             questionState = state.questionState,
-            onDismissRequest = {
-                onAction(Stream.Action.HideQuestions)
-            }
+            onAction = onAction,
         )
 
         DirectBottomSheet(
@@ -424,6 +432,64 @@ private fun Comments(
         items(comments) { comment ->
             CommentItem(comment)
         }
+    }
+}
+
+@Composable
+private fun CurrentQuestion(
+    question: QuestionUi?,
+    onAction: (Stream.Action) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    question ?: return
+
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(FakeLiveStreamTheme.colors.surface.copy(alpha = 0.8f))
+            .padding(16.dp),
+        horizontalArrangement = spacedBy(16.dp),
+    ) {
+        CachedImage(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape),
+            imageSource = question.picture,
+            cacheKey = question.username,
+            contentDescription = "Question avatar",
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = stringResource(R.string.stream_question_title),
+                color = FakeLiveStreamTheme.colors.onSurface,
+                style = FakeLiveStreamTheme.typography.titleSmall,
+            )
+
+            val usernameStyle = FakeLiveStreamTheme.typography.titleSmall
+            val annotatedString = remember(question) {
+                buildAnnotatedString {
+                    withStyle(style = usernameStyle.toSpanStyle()) {
+                        append("${question.username}  ")
+                    }
+                    append(question.text)
+                }
+            }
+            Text(
+                modifier = Modifier.padding(top = 4.dp),
+                text = annotatedString,
+                color = FakeLiveStreamTheme.colors.onSurface,
+                style = FakeLiveStreamTheme.typography.bodySmall,
+            )
+        }
+        Icon(
+            modifier = Modifier.size(12.dp)
+                .clickableWithoutIndication {
+                    onAction(Stream.Action.CloseCurrentQuestion)
+                },
+            imageVector = ImageVector.vectorResource(R.drawable.ic_close),
+            contentDescription = "Close",
+            tint = FakeLiveStreamTheme.colors.icon,
+        )
     }
 }
 
@@ -623,42 +689,51 @@ private fun DirectBottomSheet(
 @Composable
 private fun StreamScreenPreview() {
     FakeLiveStreamTheme {
-        StreamContent(
-            state = ViewState(
-                image = ImageSource.ResId(R.drawable.img_default_avatar),
-                username = "long_user_name",
-                viewersCount = ViewersCountUi.Thousands(
-                    thousands = "10",
-                    hundreds = "4",
+        Box(modifier = Modifier.background(Color.White)) {
+            StreamContent(
+                state = ViewState(
+                    image = ImageSource.ResId(R.drawable.img_default_avatar),
+                    username = "long_user_name",
+                    viewersCount = ViewersCountUi.Thousands(
+                        thousands = "10",
+                        hundreds = "4",
+                    ),
+                    comments = listOf(
+                        CommentUi(
+                            picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                            username = "username1",
+                            text = "Text 1",
+                        ),
+                        CommentUi(
+                            picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                            username = "username2",
+                            text = "Text 2",
+                        ),
+                        CommentUi(
+                            picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                            username = "username3",
+                            text = "Text 3",
+                        ),
+                    ),
+                    reactionCount = 10,
+                    mode = Mode.CAMERA,
+                    isCameraEnabled = true,
+                    isCameraFront = true,
+                    showJoinRequests = false,
+                    showInvite = false,
+                    questionState = QuestionState.Hidden,
+                    unreadQuestionCount = 1,
+                    selectedQuestion = QuestionUi(
+                        uuid = "",
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                        username = "username",
+                        text = "Question?",
+                        isSelected = true,
+                    ),
+                    showDirect = false,
                 ),
-                comments = listOf(
-                    CommentUi(
-                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
-                        username = "username1",
-                        text = "Text 1",
-                    ),
-                    CommentUi(
-                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
-                        username = "username2",
-                        text = "Text 2",
-                    ),
-                    CommentUi(
-                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
-                        username = "username3",
-                        text = "Text 3",
-                    ),
-                ),
-                reactionCount = 10,
-                mode = Mode.CAMERA,
-                isCameraEnabled = true,
-                isCameraFront = true,
-                showJoinRequests = false,
-                showInvite = false,
-                questionState = QuestionState.Hidden,
-                unreadQuestionCount = 1,
-                showDirect = false,
-            ),
-            onAction = {},
-        )
+                onAction = {},
+            )
+        }
     }
 }

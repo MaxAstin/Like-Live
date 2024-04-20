@@ -13,34 +13,59 @@ interface Stream {
         val viewersCount: Int,
         val comments: List<Comment>,
         val reactionCount: Int,
-        val questions: List<Question>,
-        val unreadQuestionCount: Int?,
+        val questionState: QuestionState,
         val startStreamTimeMillis: Long,
         val isCameraEnabled: Boolean,
         val isCameraFront: Boolean,
         val showJoinRequests: Boolean,
         val showInvite: Boolean,
-        val showQuestions: Boolean,
         val showDirect: Boolean,
-    ): Base.State
+    ) : Base.State
 
-    sealed interface Action: Base.Action {
-        data object CameraClick: Action
-        data object SwitchCameraClick: Action
-        data object ShowJoinRequests: Action
-        data object HideJoinRequests: Action
-        data object ShowInvite: Action
-        data object HideInvite: Action
-        data object ShowQuestions: Action
-        data object HideQuestions: Action
-        data object ShowDirect: Action
-        data object HideDirect: Action
-        data object Start: Action
-        data object Stop: Action
-        data object FinishStreamClick: Action
+    data class QuestionState(
+        val show: Boolean,
+        val newQuestions: List<SelectableQuestion>,
+        val answeredQuestions: List<SelectableQuestion>,
+        val unreadQuestionCount: Int?,
+    ) {
+        val isEmpty: Boolean = newQuestions.isEmpty() && answeredQuestions.isEmpty()
+
+        val selectedQuestion: SelectableQuestion? = run {
+            val newSelectedQuestion = newQuestions.find { question ->
+                question.isSelected
+            }
+            val answeredSelectedQuestion = answeredQuestions.find { question ->
+                question.isSelected
+            }
+
+            newSelectedQuestion ?: answeredSelectedQuestion
+        }
     }
 
-    sealed interface Event: Base.Event {
-        data class GoBack(val durationInSeconds: Int): Event
+    data class SelectableQuestion(
+        val question: Question,
+        val isSelected: Boolean,
+    )
+
+    sealed interface Action : Base.Action {
+        data object CameraClick : Action
+        data object SwitchCameraClick : Action
+        data object ShowJoinRequests : Action
+        data object HideJoinRequests : Action
+        data object ShowInvite : Action
+        data object HideInvite : Action
+        data object ShowQuestions : Action
+        data object HideQuestions : Action
+        data class ClickQuestion(val uuid: String) : Action
+        data object CloseCurrentQuestion : Action
+        data object ShowDirect : Action
+        data object HideDirect : Action
+        data object Start : Action
+        data object Stop : Action
+        data object FinishStreamClick : Action
+    }
+
+    sealed interface Event : Base.Event {
+        data class GoBack(val durationInSeconds: Int) : Event
     }
 }

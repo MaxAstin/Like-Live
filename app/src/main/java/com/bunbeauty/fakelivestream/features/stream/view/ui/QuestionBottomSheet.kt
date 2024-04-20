@@ -1,5 +1,6 @@
 package com.bunbeauty.fakelivestream.features.stream.view.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
@@ -17,19 +18,25 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheet
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheetContent
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.common.ui.theme.bold
+import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -43,7 +50,8 @@ sealed interface QuestionState {
 
     @Immutable
     data class NotEmpty(
-        val questions: ImmutableList<QuestionUi>,
+        val newQuestions: ImmutableList<QuestionUi>,
+        val answeredQuestions: ImmutableList<QuestionUi>,
     ) : QuestionState
 }
 
@@ -53,28 +61,37 @@ data class QuestionUi(
     val picture: ImageSource<*>,
     val username: String,
     val text: String,
+    val isSelected: Boolean,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestionsBottomSheet(
     show: Boolean,
-    onDismissRequest: () -> Unit,
     questionState: QuestionState,
+    onAction: (Stream.Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (show) {
         FakeLiveBottomSheet(
             modifier = modifier,
-            onDismissRequest = onDismissRequest
+            onDismissRequest = {
+                onAction(Stream.Action.HideQuestions)
+            }
         ) {
-            QuestionsContent(questionState = questionState)
+            QuestionsContent(
+                questionState = questionState,
+                onAction = onAction,
+            )
         }
     }
 }
 
 @Composable
-private fun ColumnScope.QuestionsContent(questionState: QuestionState) {
+private fun ColumnScope.QuestionsContent(
+    questionState: QuestionState,
+    onAction: (Stream.Action) -> Unit
+) {
     FakeLiveBottomSheetContent(titleResId = R.string.stream_questions_title) {
         when (questionState) {
             QuestionState.Empty -> {
@@ -106,8 +123,11 @@ private fun ColumnScope.QuestionsContent(questionState: QuestionState) {
                         .height(320.dp),
                     verticalArrangement = spacedBy(8.dp),
                 ) {
-                    items(questionState.questions) { question ->
-                        QuestionItem(question = question)
+                    items(questionState.newQuestions) { question ->
+                        QuestionItem(
+                            question = question,
+                            onAction = onAction,
+                        )
                     }
                 }
             }
@@ -120,14 +140,40 @@ private fun ColumnScope.QuestionsContent(questionState: QuestionState) {
 @Composable
 private fun QuestionItem(
     question: QuestionUi,
+    onAction: (Stream.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val borderColor = if (question.isSelected) {
+        FakeLiveStreamTheme.colors.interactive
+    } else {
+        FakeLiveStreamTheme.colors.border
+    }
+    val backgroundColor = if (question.isSelected) {
+        FakeLiveStreamTheme.colors.selectedSurface
+    } else {
+        Color.Transparent
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, FakeLiveStreamTheme.colors.border, RoundedCornerShape(2.dp))
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(2.dp)
+            )
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(2.dp)
+            )
             .padding(horizontal = 8.dp)
-            .padding(top = 12.dp, bottom = 16.dp),
+            .padding(top = 12.dp, bottom = 16.dp)
+            .clickableWithoutIndication {
+                onAction(
+                    Stream.Action.ClickQuestion(
+                        uuid = question.uuid
+                    )
+                )
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         CachedImage(
@@ -142,20 +188,21 @@ private fun QuestionItem(
             modifier = Modifier.padding(start = 12.dp),
             verticalArrangement = spacedBy(4.dp)
         ) {
-            Row(horizontalArrangement = spacedBy(12.dp)) {
-                Text(
-                    modifier = Modifier.alignByBaseline(),
-                    text = question.username,
-                    color = FakeLiveStreamTheme.colors.onSurface,
-                    style = FakeLiveStreamTheme.typography.titleSmall,
-                )
-                Text(
-                    modifier = Modifier.alignByBaseline(),
-                    text = question.text,
-                    color = FakeLiveStreamTheme.colors.onSurface,
-                    style = FakeLiveStreamTheme.typography.bodySmall,
-                )
+            val usernameStyle = FakeLiveStreamTheme.typography.titleSmall
+            val annotatedString = remember(question) {
+                buildAnnotatedString {
+                    withStyle(style = usernameStyle.toSpanStyle()) {
+                        append("${question.username}  ")
+                    }
+                    append(question.text)
+                }
             }
+            Text(
+                modifier = Modifier.padding(top = 4.dp),
+                text = annotatedString,
+                color = FakeLiveStreamTheme.colors.onSurface,
+                style = FakeLiveStreamTheme.typography.bodySmall,
+            )
             Row(horizontalArrangement = spacedBy(16.dp)) {
                 Text(
                     text = stringResource(R.string.stream_questions_delete),
@@ -179,6 +226,7 @@ private fun EmptyQuestionsBottomSheetPreview() {
         Column {
             QuestionsContent(
                 questionState = QuestionState.Empty,
+                onAction = {}
             )
         }
     }
@@ -191,21 +239,34 @@ private fun NotEmptyQuestionsBottomSheetPreview() {
         Column {
             QuestionsContent(
                 questionState = QuestionState.NotEmpty(
-                    questions = persistentListOf(
+                    newQuestions = persistentListOf(
                         QuestionUi(
                             uuid = "1",
                             picture = ImageSource.ResId(R.drawable.a1),
                             username = "user.name",
                             text = "short question",
+                            isSelected = true,
                         ),
                         QuestionUi(
                             uuid = "2",
                             picture = ImageSource.ResId(R.drawable.a2),
                             username = "user.name2",
                             text = "Looooooooooooooooooooooooooooooooooooo ooooo ooo ooong question",
+
+                            isSelected = false,
+                        ),
+                    ),
+                    answeredQuestions = persistentListOf(
+                        QuestionUi(
+                            uuid = "1",
+                            picture = ImageSource.ResId(R.drawable.a3),
+                            username = "user.name3",
+                            text = "short question",
+                            isSelected = false,
                         ),
                     )
                 ),
+                onAction = {},
             )
         }
     }

@@ -7,7 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
 val White = Color(0xFFFFFFFF)
-val Black = Color(0xFF000000)
+val Black200 = Color(0xFF000000)
+val Black100 = Color(0xFF1A1A1A)
 val Gray400 = Color(0xFF262626)
 val Gray300 = Color(0xFF6D6D6D)
 val Gray200 = Color(0xFF888888)
@@ -25,6 +26,7 @@ class ColorScheme(
     iconVariant: Color,
     surface: Color,
     surfaceVariant: Color,
+    selectedSurface: Color,
     onSurface: Color,
     onSurfaceVariant: Color,
     background: Color,
@@ -47,6 +49,9 @@ class ColorScheme(
         internal set
 
     var surfaceVariant by mutableStateOf(surfaceVariant)
+        internal set
+
+    var selectedSurface by mutableStateOf(selectedSurface)
         internal set
 
     var onSurface by mutableStateOf(onSurface)
@@ -77,6 +82,7 @@ class ColorScheme(
         iconVariant: Color = this.iconVariant,
         surface: Color = this.surface,
         surfaceVariant: Color = this.surfaceVariant,
+        selectedSurface: Color = this.selectedSurface,
         onSurface: Color = this.onSurface,
         onSurfaceVariant: Color = this.onSurfaceVariant,
         background: Color = this.background,
@@ -90,6 +96,7 @@ class ColorScheme(
         iconVariant = iconVariant,
         surface = surface,
         surfaceVariant = surfaceVariant,
+        selectedSurface = selectedSurface,
         onSurface = onSurface,
         onSurfaceVariant = onSurfaceVariant,
         background = background,

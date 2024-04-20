@@ -9,6 +9,8 @@
     <string name="stream_live">ПРЯМОЙ ЭФИР</string>
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
     <string name="stream_add_comment">Добавьте комментарий…</string>
+    <string name="stream_question_title">Вопрос</string>
+
     <string name="required_camera_permisseon_title">Разрешите %s to доступ к камере</string>
     <string name="required_camera_permisseon_body">Это позволит начть стрим.
         Выбор в любое время можно изменить в настройках устройства.</string>

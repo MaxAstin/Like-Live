@@ -20,8 +20,13 @@ class GetCommentsUseCase @Inject constructor(
         }
 
         return List(count) {
+            val picture = if (Random.nextInt(10) == 0) {
+                null
+            } else {
+                userRepository.getCommentPictureName()
+            }
             Comment(
-                picture = userRepository.getPictureName(),
+                picture = picture,
                 username = getRandomUsernameUseCase(),
                 text = getRandomCommentText(),
             )

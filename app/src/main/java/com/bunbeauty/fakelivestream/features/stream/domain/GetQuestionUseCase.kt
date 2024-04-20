@@ -14,7 +14,7 @@ class GetQuestionUseCase @Inject constructor(
     operator fun invoke(): Question {
         return  Question(
             uuid = UUID.randomUUID().toString(),
-            picture = userRepository.getPictureName(),
+            picture = userRepository.getQuestionPictureName(),
             username = getRandomUsernameUseCase(),
             text = getRandomCommentText(type = CommentType.QUESTION),
         )

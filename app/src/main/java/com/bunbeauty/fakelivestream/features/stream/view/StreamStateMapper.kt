@@ -2,10 +2,9 @@ package com.bunbeauty.fakelivestream.features.stream.view
 
 import com.bunbeauty.fakelivestream.BuildConfig
 import com.bunbeauty.fakelivestream.R
-import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.features.stream.domain.model.Comment
-import com.bunbeauty.fakelivestream.features.stream.domain.model.Question
+import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
 import kotlinx.collections.immutable.toImmutableList
@@ -37,20 +36,24 @@ fun Stream.State.toViewState(): ViewState {
         isCameraFront = isCameraFront,
         showJoinRequests = showJoinRequests,
         showInvite = showInvite,
-        questionState = if (showQuestions) {
-            if (questions.isEmpty()) {
+        questionState = if (questionState.show) {
+            if (questionState.isEmpty) {
                 QuestionState.Empty
             } else {
                 QuestionState.NotEmpty(
-                    questions = questions.map { question ->
+                    newQuestions = questionState.newQuestions.map { question ->
                         question.toQuestionUi()
-                    }.toImmutableList()
+                    }.toImmutableList(),
+                    answeredQuestions = questionState.newQuestions.map { question ->
+                        question.toQuestionUi()
+                    }.toImmutableList(),
                 )
             }
         } else {
             QuestionState.Hidden
         },
-        unreadQuestionCount = unreadQuestionCount,
+        unreadQuestionCount = questionState.unreadQuestionCount,
+        selectedQuestion = questionState.selectedQuestion?.toQuestionUi(),
         showDirect = showDirect,
     )
 }
@@ -67,15 +70,16 @@ private fun Comment.toCommentUi(): CommentUi {
     )
 }
 
-private fun Question.toQuestionUi(): QuestionUi {
+private fun Stream.SelectableQuestion.toQuestionUi(): QuestionUi {
     return QuestionUi(
-        uuid = uuid,
-        picture = if (picture == null) {
+        uuid = question.uuid,
+        picture = if (question.picture == null) {
             ImageSource.ResId(R.drawable.img_default_avatar)
         } else {
-            ImageSource.ResName(picture)
+            ImageSource.ResName(question.picture)
         },
-        username = username,
-        text = text,
+        username = question.username,
+        text = question.text,
+        isSelected = isSelected,
     )
 }
