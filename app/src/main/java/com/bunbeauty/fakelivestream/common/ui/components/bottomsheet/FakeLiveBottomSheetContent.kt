@@ -36,7 +36,7 @@ fun ColumnScope.FakeLiveBottomSheetContent(
         thickness = 0.5.dp,
         color = FakeLiveStreamTheme.colors.border
     )
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         content()
     }
 }

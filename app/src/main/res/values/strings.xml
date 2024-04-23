@@ -41,6 +41,7 @@
     <string name="stream_questions_body">No Questions Yet</string>
     <string name="stream_questions_description">Anyone watching can send and see questions here.</string>
     <string name="stream_questions_tap_to_answer">Tap a Question to Answer</string>
+    <string name="stream_questions_answered">Answered questions</string>
     <string name="stream_questions_everyone_watching">Everyone watching will see it on screen.</string>
     <string name="stream_questions_delete">Delete</string>
     <string name="stream_questions_report">Report</string>

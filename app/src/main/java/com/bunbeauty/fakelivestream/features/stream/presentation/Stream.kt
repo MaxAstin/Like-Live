@@ -24,26 +24,25 @@ interface Stream {
 
     data class QuestionState(
         val show: Boolean,
-        val newQuestions: List<SelectableQuestion>,
-        val answeredQuestions: List<SelectableQuestion>,
+        val questions: List<SelectableQuestion>,
         val unreadQuestionCount: Int?,
+        val currentQuestionToAnswer: SelectableQuestion?,
     ) {
-        val isEmpty: Boolean = newQuestions.isEmpty() && answeredQuestions.isEmpty()
-
-        val selectedQuestion: SelectableQuestion? = run {
-            val newSelectedQuestion = newQuestions.find { question ->
-                question.isSelected
-            }
-            val answeredSelectedQuestion = answeredQuestions.find { question ->
-                question.isSelected
-            }
-
-            newSelectedQuestion ?: answeredSelectedQuestion
+        val isEmpty: Boolean = questions.isEmpty()
+        val notAnsweredQuestions = questions.filterNot { question ->
+            question.isAnswered
+        }
+        val answeredQuestions = questions.filter { question ->
+            question.isAnswered
+        }
+        val selectedQuestion: SelectableQuestion? = questions.find { question ->
+            question.isSelected
         }
     }
 
     data class SelectableQuestion(
         val question: Question,
+        val isAnswered: Boolean,
         val isSelected: Boolean,
     )
 

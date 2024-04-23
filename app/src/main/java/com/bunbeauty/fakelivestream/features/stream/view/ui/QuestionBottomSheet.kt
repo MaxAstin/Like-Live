@@ -50,7 +50,7 @@ sealed interface QuestionState {
 
     @Immutable
     data class NotEmpty(
-        val newQuestions: ImmutableList<QuestionUi>,
+        val notAnsweredQuestions: ImmutableList<QuestionUi>,
         val answeredQuestions: ImmutableList<QuestionUi>,
     ) : QuestionState
 }
@@ -102,32 +102,57 @@ private fun ColumnScope.QuestionsContent(
             }
 
             is QuestionState.NotEmpty -> {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.stream_questions_tap_to_answer),
-                    color = FakeLiveStreamTheme.colors.onSurface,
-                    style = FakeLiveStreamTheme.typography.titleMedium,
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .fillMaxWidth(),
-                    text = stringResource(R.string.stream_questions_everyone_watching),
-                    color = FakeLiveStreamTheme.colors.onSurfaceVariant,
-                    style = FakeLiveStreamTheme.typography.bodyMedium,
-                )
                 LazyColumn(
                     modifier = Modifier
-                        .padding(top = 12.dp)
                         .fillMaxWidth()
                         .height(320.dp),
                     verticalArrangement = spacedBy(8.dp),
                 ) {
-                    items(questionState.newQuestions) { question ->
+                    item(key = "tapToAnswerText") {
+                        Text(
+                            modifier = Modifier
+                                .padding(top = 16.dp)
+                                .fillMaxWidth(),
+                            text = stringResource(R.string.stream_questions_tap_to_answer),
+                            color = FakeLiveStreamTheme.colors.onSurface,
+                            style = FakeLiveStreamTheme.typography.titleMedium,
+                        )
+                    }
+                    item(key = "everyoneWatchingText") {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.stream_questions_everyone_watching),
+                            color = FakeLiveStreamTheme.colors.onSurfaceVariant,
+                            style = FakeLiveStreamTheme.typography.bodyMedium,
+                        )
+                    }
+                    items(
+                        items = questionState.notAnsweredQuestions,
+                        key = { question -> question.uuid }
+                    ) { question ->
                         QuestionItem(
                             question = question,
                             onAction = onAction,
                         )
+                    }
+                    if (questionState.answeredQuestions.isNotEmpty()) {
+                        item(key = "answeredQuestionsText") {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.stream_questions_answered),
+                                color = FakeLiveStreamTheme.colors.onSurface,
+                                style = FakeLiveStreamTheme.typography.titleMedium,
+                            )
+                        }
+                        items(
+                            items = questionState.answeredQuestions,
+                            key = { question -> question.uuid }
+                        ) { question ->
+                            QuestionItem(
+                                question = question,
+                                onAction = onAction,
+                            )
+                        }
                     }
                 }
             }
@@ -239,7 +264,7 @@ private fun NotEmptyQuestionsBottomSheetPreview() {
         Column {
             QuestionsContent(
                 questionState = QuestionState.NotEmpty(
-                    newQuestions = persistentListOf(
+                    notAnsweredQuestions = persistentListOf(
                         QuestionUi(
                             uuid = "1",
                             picture = ImageSource.ResId(R.drawable.a1),
@@ -258,7 +283,7 @@ private fun NotEmptyQuestionsBottomSheetPreview() {
                     ),
                     answeredQuestions = persistentListOf(
                         QuestionUi(
-                            uuid = "1",
+                            uuid = "3",
                             picture = ImageSource.ResId(R.drawable.a3),
                             username = "user.name3",
                             text = "short question",

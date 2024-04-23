@@ -11,6 +11,7 @@ import com.bunbeauty.fakelivestream.features.stream.CameraUtil
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsDelayUseCase
 import com.bunbeauty.fakelivestream.features.stream.domain.GetCommentsUseCase
 import com.bunbeauty.fakelivestream.features.stream.domain.GetQuestionUseCase
+import com.bunbeauty.fakelivestream.features.stream.domain.model.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
@@ -39,9 +40,9 @@ class StreamViewModel @Inject constructor(
             reactionCount = 0,
             questionState = Stream.QuestionState(
                 show = false,
-                newQuestions = emptyList(),
-                answeredQuestions = emptyList(),
-                unreadQuestionCount = null
+                questions = emptyList(),
+                unreadQuestionCount = null,
+                currentQuestionToAnswer = null,
             ),
             startStreamTimeMillis = System.currentTimeMillis(),
             isCameraEnabled = cameraUtil.hasCamera(),
@@ -129,33 +130,29 @@ class StreamViewModel @Inject constructor(
                 setState {
                     copy(
                         questionState = questionState.copy(
-                            show = false
+                            show = false,
+                            currentQuestionToAnswer = questionState.selectedQuestion
                         )
                     )
                 }
             }
 
             is Stream.Action.ClickQuestion -> {
-
-                fun updateQuestion(question: Stream.SelectableQuestion): Stream.SelectableQuestion {
-                   return question.copy(
-                        isSelected = if (question.question.uuid == action.uuid) {
-                            !question.isSelected
-                        } else {
-                            false
-                        }
-                    )
-                }
-
                 setState {
                     copy(
                         questionState = questionState.copy(
-                            newQuestions = questionState.newQuestions.map { question ->
-                                updateQuestion(question = question)
+                            questions = questionState.questions.map { question ->
+                                question.copy(
+                                    isSelected = if (question.question.uuid == action.uuid) {
+                                        !question.isSelected
+                                    } else {
+                                        false
+                                    },
+                                    isAnswered = question.isAnswered ||
+                                        (question.question.uuid == questionState.currentQuestionToAnswer?.question?.uuid)
+                                )
                             },
-                            answeredQuestions = questionState.answeredQuestions.map { question ->
-                                updateQuestion(question = question)
-                            }
+                            currentQuestionToAnswer = null,
                         )
                     )
                 }
@@ -165,11 +162,11 @@ class StreamViewModel @Inject constructor(
                 setState {
                     copy(
                         questionState = questionState.copy(
-                            newQuestions = questionState.newQuestions.map { question ->
-                                question.copy(isSelected = false)
-                            },
-                            answeredQuestions = questionState.answeredQuestions.map { question ->
-                                question.copy(isSelected = false)
+                            questions = questionState.questions.map { question ->
+                                question.copy(
+                                    isSelected = false,
+                                    isAnswered = question.isAnswered || question.isSelected
+                                )
                             }
                         )
                     )
@@ -291,20 +288,30 @@ class StreamViewModel @Inject constructor(
         viewModelScope.launch {
             delay(Random.nextLong(5_000, 15_000))
             while (true) {
-                val newQuestion = Stream.SelectableQuestion(
-                    question = getQuestionUseCase(),
-                    isSelected = false,
-                )
-                setState {
-                    copy(
-                        questionState = questionState.copy(
-                            newQuestions = questionState.newQuestions + newQuestion,
-                            unreadQuestionCount = (questionState.unreadQuestionCount ?: 0) + 1
-                        ),
-                    )
+                val questionCount = currentState.questionState.notAnsweredQuestions.size
+                val newQuestion = getQuestionUseCase(questionCount = questionCount)
+                if (newQuestion != null) {
+                    handleNewQuestion(question = newQuestion)
                 }
+
                 delay(Random.nextLong(20_000, 50_000))
             }
+        }
+    }
+
+    private fun handleNewQuestion(question: Question) {
+        val newQuestion = Stream.SelectableQuestion(
+            question = question,
+            isSelected = false,
+            isAnswered = false,
+        )
+        setState {
+            copy(
+                questionState = questionState.copy(
+                    questions = questionState.questions + newQuestion,
+                    unreadQuestionCount = (questionState.unreadQuestionCount ?: 0) + 1
+                ),
+            )
         }
     }
 

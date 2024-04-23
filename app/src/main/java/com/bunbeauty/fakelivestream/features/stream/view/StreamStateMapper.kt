@@ -41,10 +41,10 @@ fun Stream.State.toViewState(): ViewState {
                 QuestionState.Empty
             } else {
                 QuestionState.NotEmpty(
-                    newQuestions = questionState.newQuestions.map { question ->
+                    notAnsweredQuestions = questionState.notAnsweredQuestions.map { question ->
                         question.toQuestionUi()
                     }.toImmutableList(),
-                    answeredQuestions = questionState.newQuestions.map { question ->
+                    answeredQuestions = questionState.answeredQuestions.map { question ->
                         question.toQuestionUi()
                     }.toImmutableList(),
                 )
