@@ -158,6 +158,18 @@ class StreamViewModel @Inject constructor(
                 }
             }
 
+            is Stream.Action.DeleteQuestion -> {
+                setState {
+                    copy(
+                        questionState = questionState.copy(
+                            questions = questionState.questions.filter { question ->
+                                question.question.uuid != action.uuid
+                            }
+                        )
+                    )
+                }
+            }
+
             Stream.Action.CloseCurrentQuestion -> {
                 setState {
                     copy(
@@ -309,7 +321,11 @@ class StreamViewModel @Inject constructor(
             copy(
                 questionState = questionState.copy(
                     questions = questionState.questions + newQuestion,
-                    unreadQuestionCount = (questionState.unreadQuestionCount ?: 0) + 1
+                    unreadQuestionCount = if (questionState.show) {
+                        null
+                    } else {
+                        (questionState.unreadQuestionCount ?: 0) + 1
+                    }
                 ),
             )
         }

@@ -22,6 +22,7 @@ val Amber = Color(0xFFFFBF00)
 @Stable
 class ColorScheme(
     interactive: Color,
+    important: Color,
     icon: Color,
     iconVariant: Color,
     surface: Color,
@@ -37,6 +38,9 @@ class ColorScheme(
 ) {
 
     var interactive by mutableStateOf(interactive)
+        internal set
+
+    var important by mutableStateOf(important)
         internal set
 
     var icon by mutableStateOf(icon)
@@ -78,6 +82,7 @@ class ColorScheme(
 
     fun copy(
         interactive: Color = this.interactive,
+        important: Color = this.important,
         icon: Color = this.icon,
         iconVariant: Color = this.iconVariant,
         surface: Color = this.surface,
@@ -92,6 +97,7 @@ class ColorScheme(
         instagram: InstagramColors = this.instagram,
     ): ColorScheme = ColorScheme(
         interactive = interactive,
+        important = important,
         icon = icon,
         iconVariant = iconVariant,
         surface = surface,

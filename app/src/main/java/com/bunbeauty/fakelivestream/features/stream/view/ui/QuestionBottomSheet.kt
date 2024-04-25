@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -107,33 +108,34 @@ private fun ColumnScope.QuestionsContent(
                         .fillMaxWidth()
                         .height(320.dp),
                     verticalArrangement = spacedBy(8.dp),
+                    contentPadding = PaddingValues(vertical = 16.dp)
                 ) {
-                    item(key = "tapToAnswerText") {
-                        Text(
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                                .fillMaxWidth(),
-                            text = stringResource(R.string.stream_questions_tap_to_answer),
-                            color = FakeLiveStreamTheme.colors.onSurface,
-                            style = FakeLiveStreamTheme.typography.titleMedium,
-                        )
-                    }
-                    item(key = "everyoneWatchingText") {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(R.string.stream_questions_everyone_watching),
-                            color = FakeLiveStreamTheme.colors.onSurfaceVariant,
-                            style = FakeLiveStreamTheme.typography.bodyMedium,
-                        )
-                    }
-                    items(
-                        items = questionState.notAnsweredQuestions,
-                        key = { question -> question.uuid }
-                    ) { question ->
-                        QuestionItem(
-                            question = question,
-                            onAction = onAction,
-                        )
+                    if (questionState.notAnsweredQuestions.isNotEmpty()) {
+                        item(key = "tapToAnswerText") {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.stream_questions_tap_to_answer),
+                                color = FakeLiveStreamTheme.colors.onSurface,
+                                style = FakeLiveStreamTheme.typography.titleMedium,
+                            )
+                        }
+                        item(key = "everyoneWatchingText") {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.stream_questions_everyone_watching),
+                                color = FakeLiveStreamTheme.colors.onSurfaceVariant,
+                                style = FakeLiveStreamTheme.typography.bodyMedium,
+                            )
+                        }
+                        items(
+                            items = questionState.notAnsweredQuestions,
+                            key = { question -> question.uuid }
+                        ) { question ->
+                            QuestionItem(
+                                question = question,
+                                onAction = onAction,
+                            )
+                        }
                     }
                     if (questionState.answeredQuestions.isNotEmpty()) {
                         item(key = "answeredQuestionsText") {
@@ -230,11 +232,17 @@ private fun QuestionItem(
             )
             Row(horizontalArrangement = spacedBy(16.dp)) {
                 Text(
+                    modifier = Modifier.clickableWithoutIndication {
+                        onAction(Stream.Action.DeleteQuestion(question.uuid))
+                    },
                     text = stringResource(R.string.stream_questions_delete),
                     color = FakeLiveStreamTheme.colors.onSurfaceVariant,
                     style = FakeLiveStreamTheme.typography.bodySmall.bold,
                 )
                 Text(
+                    modifier = Modifier.clickableWithoutIndication {
+                        onAction(Stream.Action.DeleteQuestion(question.uuid))
+                    },
                     text = stringResource(R.string.stream_questions_report),
                     color = FakeLiveStreamTheme.colors.onSurfaceVariant,
                     style = FakeLiveStreamTheme.typography.bodySmall.bold,

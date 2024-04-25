@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 
 private val DarkColorScheme = ColorScheme(
+    important = Scarlet,
     interactive = Blue,
     icon = White,
     iconVariant = Gray200,
@@ -32,6 +33,7 @@ private val DarkColorScheme = ColorScheme(
 
 private val LightColorScheme = ColorScheme(
     interactive = Blue,
+    important = Scarlet,
     icon = White,
     iconVariant = Gray200,
     surface = Black200,

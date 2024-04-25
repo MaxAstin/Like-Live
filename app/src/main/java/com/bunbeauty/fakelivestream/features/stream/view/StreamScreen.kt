@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Badge
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -54,6 +53,7 @@ import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.view.ui.AnimatedReaction
@@ -443,46 +443,52 @@ private fun CurrentQuestion(
 ) {
     question ?: return
 
-    Row(
+    Box(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(8.dp))
             .background(FakeLiveStreamTheme.colors.surface.copy(alpha = 0.8f))
-            .padding(16.dp),
-        horizontalArrangement = spacedBy(16.dp),
     ) {
-        CachedImage(
-            modifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape),
-            imageSource = question.picture,
-            cacheKey = question.username,
-            contentDescription = "Question avatar",
-        )
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = stringResource(R.string.stream_question_title),
-                color = FakeLiveStreamTheme.colors.onSurface,
-                style = FakeLiveStreamTheme.typography.titleSmall,
+        Row(
+            modifier = Modifier.padding(12.dp),
+            horizontalArrangement = spacedBy(12.dp),
+        ) {
+            CachedImage(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape),
+                imageSource = question.picture,
+                cacheKey = question.username,
+                contentDescription = "Question avatar",
             )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.stream_question_title),
+                    color = FakeLiveStreamTheme.colors.onSurface,
+                    style = FakeLiveStreamTheme.typography.titleSmall,
+                )
 
-            val usernameStyle = FakeLiveStreamTheme.typography.titleSmall
-            val annotatedString = remember(question) {
-                buildAnnotatedString {
-                    withStyle(style = usernameStyle.toSpanStyle()) {
-                        append("${question.username}  ")
+                val usernameStyle = FakeLiveStreamTheme.typography.titleSmall
+                val annotatedString = remember(question) {
+                    buildAnnotatedString {
+                        withStyle(style = usernameStyle.toSpanStyle()) {
+                            append("${question.username}  ")
+                        }
+                        append(question.text)
                     }
-                    append(question.text)
                 }
+                Text(
+                    modifier = Modifier.padding(top = 2.dp),
+                    text = annotatedString,
+                    color = FakeLiveStreamTheme.colors.onSurface,
+                    style = FakeLiveStreamTheme.typography.bodySmall,
+                )
             }
-            Text(
-                modifier = Modifier.padding(top = 4.dp),
-                text = annotatedString,
-                color = FakeLiveStreamTheme.colors.onSurface,
-                style = FakeLiveStreamTheme.typography.bodySmall,
-            )
         }
         Icon(
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .size(12.dp)
                 .clickableWithoutIndication {
                     onAction(Stream.Action.CloseCurrentQuestion)
                 },
@@ -525,7 +531,6 @@ private fun CommentItem(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomPanel(
     unreadQuestionCount: Int?,
@@ -602,14 +607,13 @@ private fun BottomPanel(
             unreadQuestionCount?.let {
                 Badge(
                     modifier = Modifier.align(Alignment.TopEnd),
-                    containerColor = FakeLiveStreamTheme.colors.interactive,
+                    containerColor = FakeLiveStreamTheme.colors.important,
                     contentColor = FakeLiveStreamTheme.colors.onSurface
                 ) {
                     Text(
-                        modifier = Modifier,//.aspectRatio(1f),
                         text = unreadQuestionCount.toString(),
                         color = FakeLiveStreamTheme.colors.onSurface,
-                        style = FakeLiveStreamTheme.typography.bodySmall
+                        style = FakeLiveStreamTheme.typography.bodySmall.bold
                     )
                 }
             }

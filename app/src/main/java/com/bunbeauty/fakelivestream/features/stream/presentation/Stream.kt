@@ -56,6 +56,7 @@ interface Stream {
         data object ShowQuestions : Action
         data object HideQuestions : Action
         data class ClickQuestion(val uuid: String) : Action
+        data class DeleteQuestion(val uuid: String) : Action
         data object CloseCurrentQuestion : Action
         data object ShowDirect : Action
         data object HideDirect : Action
