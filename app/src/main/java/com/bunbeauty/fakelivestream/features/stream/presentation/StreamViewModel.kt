@@ -298,7 +298,7 @@ class StreamViewModel @Inject constructor(
 
     private fun startGenerateQuestions() {
         viewModelScope.launch {
-            delay(Random.nextLong(5_000, 15_000))
+            delay(5_000)
             while (true) {
                 val questionCount = currentState.questionState.notAnsweredQuestions.size
                 val newQuestion = getQuestionUseCase(questionCount = questionCount)
