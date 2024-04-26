@@ -7,7 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
 val White = Color(0xFFFFFFFF)
-val Black = Color(0xFF000000)
+val Black200 = Color(0xFF000000)
+val Black100 = Color(0xFF1A1A1A)
 val Gray400 = Color(0xFF262626)
 val Gray300 = Color(0xFF6D6D6D)
 val Gray200 = Color(0xFF888888)
@@ -21,10 +22,12 @@ val Amber = Color(0xFFFFBF00)
 @Stable
 class ColorScheme(
     interactive: Color,
+    important: Color,
     icon: Color,
     iconVariant: Color,
     surface: Color,
     surfaceVariant: Color,
+    selectedSurface: Color,
     onSurface: Color,
     onSurfaceVariant: Color,
     background: Color,
@@ -37,6 +40,9 @@ class ColorScheme(
     var interactive by mutableStateOf(interactive)
         internal set
 
+    var important by mutableStateOf(important)
+        internal set
+
     var icon by mutableStateOf(icon)
         internal set
 
@@ -47,6 +53,9 @@ class ColorScheme(
         internal set
 
     var surfaceVariant by mutableStateOf(surfaceVariant)
+        internal set
+
+    var selectedSurface by mutableStateOf(selectedSurface)
         internal set
 
     var onSurface by mutableStateOf(onSurface)
@@ -73,10 +82,12 @@ class ColorScheme(
 
     fun copy(
         interactive: Color = this.interactive,
+        important: Color = this.important,
         icon: Color = this.icon,
         iconVariant: Color = this.iconVariant,
         surface: Color = this.surface,
         surfaceVariant: Color = this.surfaceVariant,
+        selectedSurface: Color = this.selectedSurface,
         onSurface: Color = this.onSurface,
         onSurfaceVariant: Color = this.onSurfaceVariant,
         background: Color = this.background,
@@ -86,10 +97,12 @@ class ColorScheme(
         instagram: InstagramColors = this.instagram,
     ): ColorScheme = ColorScheme(
         interactive = interactive,
+        important = important,
         icon = icon,
         iconVariant = iconVariant,
         surface = surface,
         surfaceVariant = surfaceVariant,
+        selectedSurface = selectedSurface,
         onSurface = onSurface,
         onSurfaceVariant = onSurfaceVariant,
         background = background,

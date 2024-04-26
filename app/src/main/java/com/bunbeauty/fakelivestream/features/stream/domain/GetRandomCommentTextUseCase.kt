@@ -9,11 +9,18 @@ class GetRandomCommentTextUseCase @Inject constructor(
     private val commentRepository: CommentRepository,
 ) {
 
+    operator fun invoke(type: CommentType): String {
+        return buildTextComment(
+            type = type,
+            withEmoji = false
+        )
+    }
+
     operator fun invoke(): String {
         return when (Random.nextInt(CommentType.entries.size + 2)) {
             0 -> buildEmojiString(maxCount = 5)
             1 -> buildSymbolString()
-            else -> buildTextComment()
+            else -> buildTextComment(type = randomType())
         }
     }
 
@@ -30,8 +37,10 @@ class GetRandomCommentTextUseCase @Inject constructor(
         }
     }
 
-    private fun buildTextComment(): String {
-        val type = randomType()
+    private fun buildTextComment(
+        type: CommentType,
+        withEmoji: Boolean = true,
+    ): String {
         var comment = commentRepository.getNextComment(type)
         comment = when (type) {
             CommentType.ONE_LETTER,
@@ -57,7 +66,7 @@ class GetRandomCommentTextUseCase @Inject constructor(
             }
         }
 
-        return if (Random.nextBoolean()) {
+        return if (withEmoji && Random.nextBoolean()) {
             comment.addRandomEmoji()
         } else {
             comment

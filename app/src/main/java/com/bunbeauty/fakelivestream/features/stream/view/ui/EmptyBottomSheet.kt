@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -16,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.ui.LocalePreview
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheet
+import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheetContent
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +31,7 @@ fun EmptyBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismissRequest
     ) {
-        Content(
+        EmptyBottomSheetContent(
             titleResId = titleResId,
             bodyResId = bodyResId,
             descriptionResId = descriptionResId,
@@ -40,59 +40,53 @@ fun EmptyBottomSheet(
 }
 
 @Composable
-private fun ColumnScope.Content(
+private fun ColumnScope.EmptyBottomSheetContent(
     @StringRes titleResId: Int,
+    @StringRes bodyResId: Int,
+    @StringRes descriptionResId: Int,
+) {
+    FakeLiveBottomSheetContent(titleResId = titleResId) {
+        EmptyBottomSheetContent(
+            bodyResId = bodyResId,
+            descriptionResId = descriptionResId,
+        )
+    }
+}
+
+@Composable
+fun ColumnScope.EmptyBottomSheetContent(
     @StringRes bodyResId: Int,
     @StringRes descriptionResId: Int,
 ) {
     Text(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 16.dp,
-                bottom = 12.dp
-            ),
-        text = stringResource(titleResId),
+            .padding(top = 100.dp)
+            .fillMaxWidth(),
+        text = stringResource(bodyResId),
         color = FakeLiveStreamTheme.colors.onSurface,
-        style = FakeLiveStreamTheme.typography.titleMedium,
+        style = FakeLiveStreamTheme.typography.titleLarge,
         textAlign = TextAlign.Center
     )
-    Divider(
-        modifier = Modifier.fillMaxWidth(),
-        thickness = 0.5.dp,
-        color = FakeLiveStreamTheme.colors.border
+    Text(
+        modifier = Modifier
+            .padding(
+                top = 16.dp,
+                bottom = 100.dp
+            )
+            .fillMaxWidth(),
+        text = stringResource(descriptionResId),
+        color = FakeLiveStreamTheme.colors.onSurfaceVariant,
+        style = FakeLiveStreamTheme.typography.bodyMedium,
+        textAlign = TextAlign.Center
     )
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            modifier = Modifier
-                .padding(top = 100.dp)
-                .fillMaxWidth(),
-            text = stringResource(bodyResId),
-            color = FakeLiveStreamTheme.colors.onSurface,
-            style = FakeLiveStreamTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            modifier = Modifier
-                .padding(
-                    top = 16.dp,
-                    bottom = 100.dp
-                )
-                .fillMaxWidth(),
-            text = stringResource(descriptionResId),
-            color = FakeLiveStreamTheme.colors.onSurfaceVariant,
-            style = FakeLiveStreamTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-    }
 }
 
 @LocalePreview
 @Composable
-fun EmptyBottomSheetPreview() {
+private fun EmptyBottomSheetPreview() {
     FakeLiveStreamTheme {
         Column {
-            Content(
+            EmptyBottomSheetContent(
                 titleResId = R.string.stream_questions_title,
                 bodyResId = R.string.stream_questions_body,
                 descriptionResId = R.string.stream_questions_description,

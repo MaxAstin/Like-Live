@@ -48,7 +48,11 @@ fun FakeLiveBottomSheet(
         windowInsets = windowInsets,
         modifier = modifier
     ) {
-        Column(modifier = Modifier.navigationBarsPadding()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+        ) {
             content()
         }
     }

@@ -3,6 +3,7 @@ package com.bunbeauty.fakelivestream.features.stream.presentation
 import android.net.Uri
 import com.bunbeauty.fakelivestream.common.presentation.Base
 import com.bunbeauty.fakelivestream.features.stream.domain.model.Comment
+import com.bunbeauty.fakelivestream.features.stream.domain.model.Question
 
 interface Stream {
 
@@ -12,32 +13,59 @@ interface Stream {
         val viewersCount: Int,
         val comments: List<Comment>,
         val reactionCount: Int,
+        val questionState: QuestionState,
         val startStreamTimeMillis: Long,
         val isCameraEnabled: Boolean,
         val isCameraFront: Boolean,
         val showJoinRequests: Boolean,
         val showInvite: Boolean,
-        val showQuestions: Boolean,
         val showDirect: Boolean,
-    ): Base.State
+    ) : Base.State
 
-    sealed interface Action: Base.Action {
-        data object CameraClick: Action
-        data object SwitchCameraClick: Action
-        data object ShowJoinRequests: Action
-        data object HideJoinRequests: Action
-        data object ShowInvite: Action
-        data object HideInvite: Action
-        data object ShowQuestions: Action
-        data object HideQuestions: Action
-        data object ShowDirect: Action
-        data object HideDirect: Action
-        data object Start: Action
-        data object Stop: Action
-        data object FinishStreamClick: Action
+    data class QuestionState(
+        val show: Boolean,
+        val questions: List<SelectableQuestion>,
+        val unreadQuestionCount: Int?,
+        val currentQuestionToAnswer: SelectableQuestion?,
+    ) {
+        val isEmpty: Boolean = questions.isEmpty()
+        val notAnsweredQuestions = questions.filterNot { question ->
+            question.isAnswered
+        }
+        val answeredQuestions = questions.filter { question ->
+            question.isAnswered
+        }
+        val selectedQuestion: SelectableQuestion? = questions.find { question ->
+            question.isSelected
+        }
     }
 
-    sealed interface Event: Base.Event {
-        data class GoBack(val durationInSeconds: Int): Event
+    data class SelectableQuestion(
+        val question: Question,
+        val isAnswered: Boolean,
+        val isSelected: Boolean,
+    )
+
+    sealed interface Action : Base.Action {
+        data object CameraClick : Action
+        data object SwitchCameraClick : Action
+        data object ShowJoinRequests : Action
+        data object HideJoinRequests : Action
+        data object ShowInvite : Action
+        data object HideInvite : Action
+        data object ShowQuestions : Action
+        data object HideQuestions : Action
+        data class ClickQuestion(val uuid: String) : Action
+        data class DeleteQuestion(val uuid: String) : Action
+        data object CloseCurrentQuestion : Action
+        data object ShowDirect : Action
+        data object HideDirect : Action
+        data object Start : Action
+        data object Stop : Action
+        data object FinishStreamClick : Action
+    }
+
+    sealed interface Event : Base.Event {
+        data class GoBack(val durationInSeconds: Int) : Event
     }
 }

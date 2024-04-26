@@ -10,6 +10,8 @@
     <string name="stream_live">AO VIVO</string>
     <string name="stream_thousands_viewers_count">%s.%sK</string>
     <string name="stream_add_comment">Adicione um comentário…</string>
+    <string name="stream_question_title">Pergunta</string>
+
     <string name="required_camera_permisseon_title">Permitir que %s acesse sua câmera</string>
     <string name="required_camera_permisseon_body">Isso permite iniciar o Ao Vivo.
         Você pode alterar isso a qualquer momento nas configurações do seu dispositivo.</string>
@@ -38,6 +40,11 @@
     <string name="stream_questions_title">Perguntas</string>
     <string name="stream_questions_body">Sem perguntas ainda</string>
     <string name="stream_questions_description">Qualquer pessoa assistindo pode enviar e ver perguntas aqui.</string>
+    <string name="stream_questions_tap_to_answer">Toque em uma pergunta para responder</string>
+    <string name="stream_questions_answered">Perguntas respondidas</string>
+    <string name="stream_questions_everyone_watching">Todos que assistem verão na tela.</string>
+    <string name="stream_questions_delete">Eliminar</string>
+    <string name="stream_questions_report">Denunciar</string>
 
     <string name="stream_direct_title">Direto</string>
     <string name="stream_direct_body">Direto não disponível</string>
@@ -184,6 +191,102 @@
         <item>Seu trabalho irradia paixão, tornando cada peça verdadeiramente extraordinária e memorável</item>
         <item>Flair artístico, seus vídeos são um testemunho de sua habilidade criativa</item>
         <item>Relatável e autêntico, seu conteúdo parece uma conexão genuína</item>
+    </string-array>
+
+    <string-array name="question_comments">
+        <item>Como foi seu dia?</item>
+        <item>Como você está?</item>
+        <item>Como está seu humor?</item>
+        <item>O que te inspira?</item>
+        <item>O que você gosta de fazer no seu tempo livre?</item>
+        <item>Quais são seus hobbies?</item>
+        <item>Qual foi a última série que você assistiu?</item>
+        <item>Qual foi o último evento ou ocasião que você se lembra?</item>
+        <item>O que você mais gosta no seu trabalho/estudos?</item>
+        <item>Como foi seu fim de semana?</item>
+        <item>Qual é o seu superpoder?</item>
+        <item>Que habilidade você gostaria de aprender em breve?</item>
+        <item>Qual é sua série ou filme favorito no momento?</item>
+        <item>Você ouviu algo legal recentemente?</item>
+        <item>Que tipo de música você ouve?</item>
+        <item>O que você faz à noite?</item>
+        <item>Em que jogos você gosta de jogar?</item>
+        <item>O que você vai fazer depois da transmissão?</item>
+        <item>Cinema ou sofá em casa?</item>
+        <item>Qual foi o último fato interessante que você aprendeu?</item>
+        <item>Há algo sobre o qual você sonha?</item>
+        <item>Você já foi a um concerto?</item>
+        <item>Sobre o que você sonha?</item>
+        <item>Você está esperando algum lançamento?</item>
+        <item>Em qual filme você gostaria de atuar?</item>
+        <item>Recomende um livro</item>
+        <item>Recomende uma série</item>
+        <item>Recomende um filme divertido</item>
+        <item>Recomende um filme gentil</item>
+        <item>Para onde você gostaria de viajar?</item>
+        <item>Que livro você acha que todos deveriam ler?</item>
+        <item>Onde você gostaria de morar?</item>
+        <item>Como você relaxa?</item>
+        <item>O que te motiva?</item>
+        <item>Qual filme ou livro teve o maior impacto em você?</item>
+        <item>Se você pudesse escolher qualquer profissão sem se preocupar com dinheiro, o que seria?</item>
+        <item>Há algo que você sempre quis tentar?</item>
+        <item>Qual é a sua estação do ano favorita?</item>
+        <item>Que evento deixou a maior marca em sua vida?</item>
+        <item>Quais três coisas você levaria para uma ilha deserta?</item>
+        <item>Você gostaria de visitar o passado?</item>
+        <item>Você gosta de cozinhar?</item>
+        <item>Você prefere dar ou receber presentes?</item>
+        <item>O que fazer em um dia chuvoso?</item>
+        <item>Se você pudesse mudar um evento em sua vida, qual seria?</item>
+        <item>Descreva o dia perfeito</item>
+        <item>Qual é a sua memória mais feliz da infância?</item>
+        <item>O que mais te motiva todos os dias?</item>
+        <item>O que te motiva a acordar pela manhã?</item>
+        <item>Se você pudesse obter a resposta para qualquer pergunta, qual seria?</item>
+        <item>O que é mais importante na vida?</item>
+        <item>O que você queria ser quando crescesse?</item>
+        <item>Qual é o seu feriado favorito?</item>
+        <item>Qual é o prato mais incomum que você já experimentou?</item>
+        <item>Qual país ou cultura você acha mais interessante e por quê?</item>
+        <item>Você tem um lugar favorito?</item>
+        <item>Você tem metas para o ano?</item>
+        <item>Se você pudesse escolher qualquer talento, qual você gostaria de ter?</item>
+        <item>Você tem um talismã?</item>
+        <item>Qual gênero de música ou filmes você considera mais subestimado?</item>
+        <item>Qual é o seu aplicativo favorito?</item>
+        <item>Qual é o seu site favorito?</item>
+        <item>Você gosta de correr riscos?</item>
+        <item>Você tem animais de estimação?</item>
+        <item>Descreva-se em três palavras</item>
+        <item>Você prefere o verão ou o inverno?</item>
+        <item>Que língua você gostaria de saber? Por quê?</item>
+        <item>Qual é o seu lugar favorito?</item>
+        <item>Você tem plantas em casa?</item>
+        <item>O que você mais gosta no lugar onde mora agora?</item>
+        <item>Fale sobre seus hobbies</item>
+        <item>Se você pudesse conhecer qualquer personagem de um livro/filme, quem seria?</item>
+        <item>Que conselho você gostaria de dar a todas as pessoas na Terra?</item>
+        <item>Você prefere aventura ou relaxamento?</item>
+        <item>Você é uma pessoa matutina ou noturna?</item>
+        <item>Qual foi o melhor presente que você já recebeu?</item>
+        <item>O que você pensa sobre viagens espaciais?</item>
+        <item>Café ou chá?</item>
+        <item>Livros ou filmes?</item>
+        <item>Cães ou gatos?</item>
+        <item>Pizza ou sushi?</item>
+        <item>Filmes em casa ou no cinema?</item>
+        <item>Você gosta de festas?</item>
+        <item>Você prefere filmes ou séries?</item>
+        <item>Quais gêneros de filmes você gosta?</item>
+        <item>Quais gêneros musicais você gosta?</item>
+        <item>Você prefere clima quente ou frio?</item>
+        <item>Você prefere lazer ativo ou relaxamento?</item>
+        <item>Você prefere doce ou salgado?</item>
+        <item>Você prefere planejar com antecedência ou viver espontaneamente?</item>
+        <item>Jogos de tabuleiro ou videogames?</item>
+        <item>Você prefere passar tempo em companhia ou sozinho?</item>
+        <item>Você gosta de café?</item>
     </string-array>
 
 </resources>

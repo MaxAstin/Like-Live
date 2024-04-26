@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,10 +33,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -43,6 +47,13 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.ui.LocalePreview
+import com.bunbeauty.fakelivestream.common.ui.blurTop
+import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
+import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
+import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
 import com.bunbeauty.fakelivestream.features.stream.view.ui.AnimatedReaction
@@ -50,13 +61,10 @@ import com.bunbeauty.fakelivestream.features.stream.view.ui.AvatarImage
 import com.bunbeauty.fakelivestream.features.stream.view.ui.CameraComponent
 import com.bunbeauty.fakelivestream.features.stream.view.ui.EmptyBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.FiltersRow
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
+import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionsBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
-import com.bunbeauty.fakelivestream.common.ui.LocalePreview
-import com.bunbeauty.fakelivestream.common.ui.blurTop
-import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
-import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
-import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
-import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -200,10 +208,16 @@ fun StreamContent(
                                 }
                             )
                         }
-                        Comments(
+                        Column(
                             modifier = Modifier.align(Alignment.BottomStart),
-                            comments = state.comments,
-                        )
+                        ) {
+                            Comments(comments = state.comments)
+                            CurrentQuestion(
+                                modifier = Modifier.padding(top = 16.dp),
+                                question = state.selectedQuestion,
+                                onAction = onAction
+                            )
+                        }
                     }
                 }
 
@@ -217,7 +231,10 @@ fun StreamContent(
                 }
             }
             Column {
-                BottomPanel(onAction = onAction)
+                BottomPanel(
+                    unreadQuestionCount = state.unreadQuestionCount,
+                    onAction = onAction
+                )
                 if (showFilters) {
                     FiltersRow()
                 }
@@ -239,10 +256,9 @@ fun StreamContent(
         )
 
         QuestionsBottomSheet(
-            show = state.showQuestions,
-            onDismiss = {
-                onAction(Stream.Action.HideQuestions)
-            }
+            show = state.questionState != QuestionState.Hidden,
+            questionState = state.questionState,
+            onAction = onAction,
         )
 
         DirectBottomSheet(
@@ -420,6 +436,70 @@ private fun Comments(
 }
 
 @Composable
+private fun CurrentQuestion(
+    question: QuestionUi?,
+    onAction: (Stream.Action) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    question ?: return
+
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(FakeLiveStreamTheme.colors.surface.copy(alpha = 0.8f))
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            horizontalArrangement = spacedBy(12.dp),
+        ) {
+            CachedImage(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape),
+                imageSource = question.picture,
+                cacheKey = question.username,
+                contentDescription = "Question avatar",
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.stream_question_title),
+                    color = FakeLiveStreamTheme.colors.onSurface,
+                    style = FakeLiveStreamTheme.typography.titleSmall,
+                )
+
+                val usernameStyle = FakeLiveStreamTheme.typography.titleSmall
+                val annotatedString = remember(question) {
+                    buildAnnotatedString {
+                        withStyle(style = usernameStyle.toSpanStyle()) {
+                            append("${question.username}  ")
+                        }
+                        append(question.text)
+                    }
+                }
+                Text(
+                    modifier = Modifier.padding(top = 2.dp),
+                    text = annotatedString,
+                    color = FakeLiveStreamTheme.colors.onSurface,
+                    style = FakeLiveStreamTheme.typography.bodySmall,
+                )
+            }
+        }
+        Icon(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .size(12.dp)
+                .clickableWithoutIndication {
+                    onAction(Stream.Action.CloseCurrentQuestion)
+                },
+            imageVector = ImageVector.vectorResource(R.drawable.ic_close),
+            contentDescription = "Close",
+            tint = FakeLiveStreamTheme.colors.icon,
+        )
+    }
+}
+
+@Composable
 private fun CommentItem(
     comment: CommentUi,
     modifier: Modifier = Modifier,
@@ -453,6 +533,7 @@ private fun CommentItem(
 
 @Composable
 private fun BottomPanel(
+    unreadQuestionCount: Int?,
     onAction: (Stream.Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -511,15 +592,32 @@ private fun BottomPanel(
             iconResId = R.drawable.ic_invite,
             contentDescription = "Invite",
         )
-        ActionIcon(
-            modifier = Modifier.clickableWithoutIndication(
-                onClick = {
-                    onAction(Stream.Action.ShowQuestions)
+        Box {
+            ActionIcon(
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .clickableWithoutIndication(
+                        onClick = {
+                            onAction(Stream.Action.ShowQuestions)
+                        }
+                    ),
+                iconResId = R.drawable.ic_question,
+                contentDescription = "Question",
+            )
+            unreadQuestionCount?.let {
+                Badge(
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    containerColor = FakeLiveStreamTheme.colors.important,
+                    contentColor = FakeLiveStreamTheme.colors.onSurface
+                ) {
+                    Text(
+                        text = unreadQuestionCount.toString(),
+                        color = FakeLiveStreamTheme.colors.onSurface,
+                        style = FakeLiveStreamTheme.typography.bodySmall.bold
+                    )
                 }
-            ),
-            iconResId = R.drawable.ic_question,
-            contentDescription = "Question",
-        )
+            }
+        }
         ActionIcon(
             modifier = Modifier.clickableWithoutIndication(
                 onClick = {
@@ -577,21 +675,6 @@ private fun InviteBottomSheet(
 }
 
 @Composable
-private fun QuestionsBottomSheet(
-    show: Boolean,
-    onDismiss: () -> Unit,
-) {
-    if (show) {
-        EmptyBottomSheet(
-            onDismissRequest = onDismiss,
-            titleResId = R.string.stream_questions_title,
-            bodyResId = R.string.stream_questions_body,
-            descriptionResId = R.string.stream_questions_description,
-        )
-    }
-}
-
-@Composable
 private fun DirectBottomSheet(
     show: Boolean,
     onDismiss: () -> Unit,
@@ -610,41 +693,51 @@ private fun DirectBottomSheet(
 @Composable
 private fun StreamScreenPreview() {
     FakeLiveStreamTheme {
-        StreamContent(
-            state = ViewState(
-                image = ImageSource.ResId(R.drawable.img_default_avatar),
-                username = "long_user_name",
-                viewersCount = ViewersCountUi.Thousands(
-                    thousands = "10",
-                    hundreds = "4",
+        Box(modifier = Modifier.background(Color.White)) {
+            StreamContent(
+                state = ViewState(
+                    image = ImageSource.ResId(R.drawable.img_default_avatar),
+                    username = "long_user_name",
+                    viewersCount = ViewersCountUi.Thousands(
+                        thousands = "10",
+                        hundreds = "4",
+                    ),
+                    comments = listOf(
+                        CommentUi(
+                            picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                            username = "username1",
+                            text = "Text 1",
+                        ),
+                        CommentUi(
+                            picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                            username = "username2",
+                            text = "Text 2",
+                        ),
+                        CommentUi(
+                            picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                            username = "username3",
+                            text = "Text 3",
+                        ),
+                    ),
+                    reactionCount = 10,
+                    mode = Mode.CAMERA,
+                    isCameraEnabled = true,
+                    isCameraFront = true,
+                    showJoinRequests = false,
+                    showInvite = false,
+                    questionState = QuestionState.Hidden,
+                    unreadQuestionCount = 1,
+                    selectedQuestion = QuestionUi(
+                        uuid = "",
+                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
+                        username = "username",
+                        text = "Question?",
+                        isSelected = true,
+                    ),
+                    showDirect = false,
                 ),
-                comments = listOf(
-                    CommentUi(
-                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
-                        username = "username1",
-                        text = "Text 1",
-                    ),
-                    CommentUi(
-                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
-                        username = "username2",
-                        text = "Text 2",
-                    ),
-                    CommentUi(
-                        picture = ImageSource.ResId(R.drawable.img_default_avatar),
-                        username = "username3",
-                        text = "Text 3",
-                    ),
-                ),
-                reactionCount = 10,
-                mode = Mode.CAMERA,
-                isCameraEnabled = true,
-                isCameraFront = true,
-                showJoinRequests = false,
-                showInvite = false,
-                showQuestions = false,
-                showDirect = false,
-            ),
-            onAction = {},
-        )
+                onAction = {},
+            )
+        }
     }
 }
