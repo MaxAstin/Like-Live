@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="intro_next">Siguiente</string>
+    <string name="intro_welcome">Bienvenido a %s</string>
+    <string name="intro_description">Ponemos su privacidad por encima de todo. Sus datos son sagrados para nosotros, por lo que se mantienen estrictamente confidenciales y seguros. Cuando se trata de Directs falsos, sólo tú tienes acceso a ellos. Así que relájate, diviértete y nosotros nos encargaremos del resto.</string>
+
+    <string name="sharing_text">¡Hola! Mira la aplicación %s en Google Play: %s</string>
+
+    <string name="stream_live">DIRECTO</string>
+    <string name="stream_thousands_viewers_count">%s.%sK</string>
+    <string name="stream_add_comment">Añadir comentario…</string>
+    <string name="stream_question_title">Pregunta</string>
+
+    <string name="required_camera_permisseon_title">Permitir que %s acceda a tu cámara</string>
+    <string name="required_camera_permisseon_body">Esto te permite iniciar el Directo. Puedes cambiar esto en cualquier momento en la configuración de tu dispositivo.</string>
+    <string name="settings">Configuraciones</string>
+
+    <string name="do_you_like">¿Te gusta la aplicación %s?</string>
+    <string name="help_us_improve">Por favor, ayúdanos a mejorar %s compartiendo tus comentarios</string>
+    <string name="do_not_ask">Por favor, no preguntes más</string>
+    <string name="feedback_yes">Sí</string>
+    <string name="feedback_no">No</string>
+
+    <string name="preparation_edit_photo">Editar foto</string>
+    <string name="preparation_username">Nombre de usuario</string>
+    <string name="preparation_username_hint">nombre_de_usuario</string>
+    <string name="preparation_viewer_count">Recuento de espectadores</string>
+    <string name="preparation_start_live">Comenzar Directo</string>
+
+    <string name="stream_join_requests_title">Solicitudes para unirse</string>
+    <string name="stream_join_requests_body">Aún no hay solicitudes</string>
+    <string name="stream_join_requests_description">Las solicitudes para ser co-anfitrión aparecerán aquí.</string>
+
+    <string name="stream_invite_title">Invitar a unirse</string>
+    <string name="stream_invite_body">Invitación no disponible</string>
+    <string name="stream_invite_description">Cuando alguien se une, cualquier persona que pueda ver sus videos en vivo también puede ver este.</string>
+
+    <string name="stream_questions_title">Preguntas</string>
+    <string name="stream_questions_body">Aún no hay preguntas</string>
+    <string name="stream_questions_description">Cualquier persona que esté mirando puede enviar y ver preguntas aquí.</string>
+    <string name="stream_questions_tap_to_answer">Toca una pregunta para responder</string>
+    <string name="stream_questions_answered">Preguntas respondidas</string>
+    <string name="stream_questions_everyone_watching">Todos los que estén mirando lo verán en la pantalla.</string>
+    <string name="stream_questions_delete">Eliminar</string>
+    <string name="stream_questions_report">Reportar</string>
+
+    <string name="stream_direct_title">Directo</string>
+    <string name="stream_direct_body">Directo no disponible</string>
+    <string name="stream_direct_description">No hay forma de enviar esta transmisión en vivo.</string>
+
+    <string-array name="one_letter_comments" tools:ignore="InconsistentArrays">
+        <item>M</item>
+        <item>O</item>
+        <item>S</item>
+        <item>U</item>
+        <item>+</item>
+        <item>)</item>
+        <item>-</item>
+        <item>(</item>
+        <item>!</item>
+    </string-array>
+
+    <string-array name="two_letter_comments" tools:ignore="InconsistentArrays">
+        <item>Ah</item>
+        <item>Oh</item>
+        <item>Eh</item>
+        <item>Uh</item>
+        <item>Sh</item>
+        <item>Ps</item>
+        <item>Uf</item>
+        <item>De</item>
+        <item>El</item>
+        <item>La</item>
+        <item>Le</item>
+        <item>Lo</item>
+        <item>Me</item>
+        <item>Mi</item>
+        <item>Si</item>
+        <item>Sí</item>
+        <item>Te</item>
+        <item>Tu</item>
+        <item>Ya</item>
+        <item>Ve</item>
+    </string-array>
+
+    <string-array name="three_letter_comments" tools:ignore="InconsistentArrays">
+        <item>Bah</item>
+        <item>Huy</item>
+        <item>Aun</item>
+        <item>Aún</item>
+        <item>Año</item>
+        <item>Año</item>
+        <item>Con</item>
+        <item>Del</item>
+        <item>Día</item>
+        <item>Dio</item>
+        <item>Dos</item>
+        <item>Ese</item>
+        <item>Fin</item>
+        <item>Hay</item>
+        <item>Más</item>
+        <item>Muy</item>
+        <item>Nos</item>
+        <item>Oye</item>
+        <item>Pan</item>
+        <item>Paz</item>
+        <item>Por</item>
+        <item>Qué</item>
+        <item>Son</item>
+        <item>Tal</item>
+        <item>Tan</item>
+        <item>Uno</item>
+        <item>Vas</item>
+    </string-array>
+
+    <string-array name="one_word_comment" tools:ignore="InconsistentArrays">
+        <item>Impresionante</item>
+        <item>Genial</item>
+        <item>Lindo</item>
+        <item>Estupendo</item>
+        <item>Asombroso</item>
+        <item>Fantástico</item>
+        <item>Súper</item>
+        <item>Excelente</item>
+        <item>Encanta</item>
+        <item>Hermoso</item>
+        <item>Bravo</item>
+        <item>Épico</item>
+        <item>Dulce</item>
+        <item>Sobresaliente</item>
+        <item>Terrífico</item>
+        <item>Increíble</item>
+        <item>Fabuloso</item>
+        <item>Perfecto</item>
+        <item>Maravilloso</item>
+        <item>Espléndido</item>
+        <item>Majestuoso</item>
+        <item>Deslumbrante</item>
+        <item>Encantador</item>
+        <item>Vibrante</item>
+        <item>Precioso</item>
+        <item>Delicioso</item>
+        <item>Exquisito</item>
+        <item>Excepcional</item>
+        <item>Espectacular</item>
+        <item>Fascinante</item>
+        <item>Estelar</item>
+    </string-array>
+
+    <string-array name="long_comments" tools:ignore="InconsistentArrays">
+        <item>Esto es increíble</item>
+        <item>Hiciste un trabajo asombroso</item>
+        <item>Es tan divertido de ver</item>
+        <item>Contenido absolutamente fantástico</item>
+        <item>Estoy disfrutando cada momento</item>
+        <item>Realmente tienes talento</item>
+        <item>Esto es puro entretenimiento</item>
+        <item>Gracias por alegrar mi día</item>
+        <item>Nunca decepcionas, siempre genial</item>
+        <item>Tu energía es contagiosa</item>
+        <item>Estoy enganchado, no puedo dejar de ver</item>
+        <item>Increíbles habilidades en exhibición</item>
+        <item>Siempre traes alegría</item>
+        <item>Estás marcando la diferencia</item>
+        <item>Qué agradable sorpresa</item>
+        <item>Eres una verdadera inspiración</item>
+        <item>Aquí hay una vibra tan positiva</item>
+        <item>Sigue con el buen trabajo</item>
+        <item>Tienes un fan de por vida</item>
+        <item>Tu creatividad es sobresaliente</item>
+        <item>Esto es tan entretenido</item>
+        <item>Estoy impresionado, sigue así</item>
+        <item>Eres una fuente de inspiración</item>
+        <item>No puedo tener suficiente de esto</item>
+        <item>Gracias por iluminar mi día</item>
+        <item>Tu contenido siempre es de primera</item>
+        <item>Nos traes tanta alegría</item>
+        <item>Amo absolutamente tu estilo</item>
+        <item>Aquí hay un ambiente tan genial</item>
+        <item>Haces que todo sea más divertido</item>
+        <item>Esto es absolutamente cautivador</item>
+        <item>Tienes un encanto único</item>
+        <item>Tu dedicación es admirable</item>
+        <item>Esto es una obra maestra</item>
+        <item>Tu pasión brilla</item>
+        <item>Has creado algo especial</item>
+        <item>Gracias por las vibras positivas</item>
+        <item>Tus esfuerzos son realmente apreciados</item>
+        <item>Esto es lo más destacado de mi día</item>
+        <item>Tienes un talento especial</item>
+        <item>Contenido constantemente atractivo, tu creatividad trae alegría a cada espectador</item>
+        <item>Tu narrativa cautiva; cada video es una aventura memorable y encantadora</item>
+        <item>Calidad de primer nivel, tu dedicación brilla en cada video que produces</item>
+        <item>Eres una fuente de inspiración, convirtiendo la creatividad en una obra maestra</item>
+        <item>Auténtico, entretenido y positivamente impactante: tu contenido es excepcional</item>
+        <item>Narrativas intrigantes, tus videos son un soplo de aire fresco creativo</item>
+        <item>Carisma cautivador, tu presencia hace que cada momento sea sumamente agradable</item>
+        <item>Contador de historias hábil, tus videos dejan una impresión positiva y duradera</item>
+        <item>Excelencia constante, tu contenido eleva la experiencia en línea para todos</item>
+        <item>Brillantez creativa, tu enfoque único te distingue en todos los aspectos</item>
+        <item>Escapadas entretenidas, tus videos son un viaje encantador de descubrimiento</item>
+        <item>Entusiasta y atractivo, tu contenido ilumina incluso los días más oscuros</item>
+        <item>Tu trabajo irradia pasión, haciendo que cada pieza sea verdaderamente extraordinaria e inolvidable</item>
+        <item>Toque artístico, tus videos son un testimonio de tu destreza creativa</item>
+        <item>Relatable y auténtico, tu contenido se siente como una conexión genuina</item>
+    </string-array>
+
+    <string-array name="question_comments">
+        <item>¿Cómo va tu día?</item>
+        <item>¿Cómo te va?</item>
+        <item>¿Cómo te sientes?</item>
+        <item>¿Qué te inspira?</item>
+        <item>¿Qué te gusta hacer en tu tiempo libre?</item>
+        <item>¿Qué pasatiempos tienes?</item>
+        <item>¿Cuál fue la última serie que viste?</item>
+        <item>¿Cuál fue el último evento u ocasión que recuerdas?</item>
+        <item>¿Qué es lo que más te gusta de tu trabajo/estudios?</item>
+        <item>¿Cómo estuvo tu fin de semana?</item>
+        <item>¿Cuál es tu superpoder?</item>
+        <item>¿Qué habilidad te gustaría aprender en un futuro cercano?</item>
+        <item>¿Cuál es tu serie o película favorita en este momento?</item>
+        <item>¿Has escuchado algo genial últimamente?</item>
+        <item>¿Qué música escuchas?</item>
+        <item>¿Qué haces por las noches?</item>
+        <item>¿Qué juegos te gusta jugar?</item>
+        <item>¿Qué harás después del stream?</item>
+        <item>¿Cine o sofá en casa?</item>
+        <item>¿Cuál es el último dato interesante que aprendiste?</item>
+        <item>¿Hay algo con lo que sueñes?</item>
+        <item>¿Alguna vez has estado en un concierto?</item>
+        <item>¿Con qué sueñas?</item>
+        <item>¿Estás esperando algún estreno?</item>
+        <item>¿En qué película te gustaría actuar?</item>
+        <item>Recomienda un libro</item>
+        <item>Recomienda una serie</item>
+        <item>Recomienda una película divertida</item>
+        <item>Recomienda una película amable</item>
+        <item>¿A dónde irías de viaje?</item>
+        <item>¿Qué libro crees que todos deberían leer?</item>
+        <item>¿Dónde te gustaría vivir?</item>
+        <item>¿Cómo te relajas?</item>
+        <item>¿Qué te motiva?</item>
+        <item>¿Qué película o libro tuvo el mayor impacto en ti?</item>
+        <item>Si pudieras elegir cualquier profesión sin preocuparte por el dinero, ¿cuál sería?</item>
+        <item>¿Hay algo que siempre hayas querido probar?</item>
+        <item>¿Estación favorita?</item>
+        <item>¿Qué evento dejó la mayor huella en tu vida?</item>
+        <item>¿Qué tres cosas llevarías contigo a una isla desierta?</item>
+        <item>¿Te gustaría visitar el pasado?</item>
+        <item>¿Te gusta cocinar?</item>
+        <item>¿Prefieres dar o recibir regalos?</item>
+        <item>¿Qué hacer en un día lluvioso?</item>
+        <item>Si pudieras cambiar un evento en tu vida, ¿cuál sería?</item>
+        <item>Describe el día perfecto</item>
+        <item>¿Cuál es tu recuerdo más feliz de la infancia?</item>
+        <item>¿Qué te motiva más cada día?</item>
+        <item>¿Qué te motiva a levantarte por la mañana?</item>
+        <item>Si pudieras obtener una respuesta a cualquier pregunta, ¿qué preguntarías?</item>
+        <item>¿Qué es lo más importante en la vida?</item>
+        <item>¿Qué querías ser cuando crecieras?</item>
+        <item>¿Cuál es tu festividad favorita?</item>
+        <item>¿Cuál es el plato más inusual que has probado?</item>
+        <item>¿Qué país o cultura te resulta más interesante y por qué?</item>
+        <item>¿Tienes un lugar favorito?</item>
+        <item>¿Tienes objetivos para el año?</item>
+        <item>Si pudieras elegir cualquier talento, ¿cuál querrías?</item>
+        <item>¿Tienes un talismán?</item>
+        <item>¿Qué género de música o películas crees que está más subestimado?</item>
+        <item>¿Cuál es tu aplicación favorita?</item>
+        <item>¿Cuál es tu sitio web favorito?</item>
+        <item>¿Te gusta correr riesgos?</item>
+        <item>¿Tienes mascotas?</item>
+        <item>Descríbete en tres palabras</item>
+        <item>¿Prefieres el verano o el invierno?</item>
+        <item>¿Qué idioma te gustaría conocer? ¿Por qué?</item>
+        <item>¿Cuál es tu lugar favorito?</item>
+        <item>¿Tienes plantas de interior?</item>
+        <item>¿Qué es lo que más te gusta del lugar donde vives ahora?</item>
+        <item>Cuéntanos acerca de tus pasatiempos</item>
+        <item>Si pudieras conocer a cualquier personaje de un libro/película, ¿quién sería?</item>
+        <item>¿Qué consejo le darías a cada persona en la Tierra?</item>
+        <item>¿Prefieres aventura o relajación?</item>
+        <item>¿Eres una persona madrugadora o nocturna?</item>
+        <item>¿Cuál es el mejor regalo que has recibido?</item>
+        <item>¿Qué piensas acerca de los viajes espaciales?</item>
+        <item>¿Café o té?</item>
+        <item>¿Libros o películas?</item>
+        <item>¿Perros o gatos?</item>
+        <item>¿Pizza o sushi?</item>
+        <item>¿Películas en casa o en el cine?</item>
+        <item>¿Te gustan las fiestas?</item>
+        <item>¿Prefieres películas o series?</item>
+        <item>¿Qué géneros de películas te gustan?</item>
+        <item>¿Qué géneros de música te gustan?</item>
+        <item>¿Prefieres el clima cálido o frío?</item>
+        <item>¿Prefieres el ocio activo o la relajación?</item>
+        <item>¿Prefieres dulce o salado?</item>
+        <item>¿Prefieres planificar con anticipación o vivir espontáneamente?</item>
+        <item>¿Juegos de mesa o videojuegos?</item>
+        <item>¿Prefieres pasar tiempo en compañía o solo?</item>
+        <item>¿Te gusta el café?</item>
+    </string-array>
+
+</resources>
