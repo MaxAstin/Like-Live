@@ -1,16 +1,17 @@
 package com.bunbeauty.fakelivestream.features.preparation.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +37,7 @@ import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.FakeLiveTextField
 import com.bunbeauty.fakelivestream.common.ui.components.GradientButton
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveIconButton
 import com.bunbeauty.fakelivestream.common.ui.noEffectClickable
 import com.bunbeauty.fakelivestream.common.ui.rippleClickable
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
@@ -82,6 +83,10 @@ fun PreparationScreen(
                 Preparation.Event.HandleShareClick -> {
                     onShareClick()
                 }
+
+                Preparation.Event.HandleDonateClick -> {
+                    // TODO go to Donate screen
+                }
             }
         }.launchIn(scope)
     }
@@ -113,23 +118,27 @@ private fun PreparationContent(
             .background(FakeLiveStreamTheme.colors.background)
             .padding(16.dp)
     ) {
-        IconButton(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .clip(RoundedCornerShape(6.dp))
-                .background(FakeLiveStreamTheme.colors.interactive)
-                .size(48.dp),
-            onClick = {
-                onAction(Preparation.Action.ShareClick)
-            }
+        Row(
+            modifier = Modifier.align(Alignment.TopEnd),
+            horizontalArrangement = spacedBy(8.dp)
         ) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(R.drawable.ic_share),
-                tint = FakeLiveStreamTheme.colors.onSurface,
-                contentDescription = "share"
+            FakeLiveIconButton(
+                iconId = R.drawable.ic_share,
+                contentDescription = "share",
+                onClick = {
+                    onAction(Preparation.Action.ShareClick)
+                }
+            )
+            FakeLiveIconButton(
+                iconId = R.drawable.ic_donate,
+                contentDescription = "donate",
+                hasMarker = state.highlightDonate,
+                onClick = {
+                    onAction(Preparation.Action.DonateClick)
+                }
             )
         }
+
         Column(modifier = Modifier.align(Alignment.Center)) {
             CachedImage(
                 modifier = Modifier
@@ -253,6 +262,7 @@ private fun PreparationContentPreview() {
                 image = ImageSource.ResId(R.drawable.img_default_avatar),
                 username = "",
                 viewerCount = ViewerCount.V_100_200,
+                highlightDonate = true,
                 showFeedbackDialog = false,
             ),
             onAction = {}

@@ -19,6 +19,8 @@ private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
 
 private const val SHARE_EVENT = "share"
 
+private const val DONATE_EVENT = "donate"
+
 @Singleton
 class AnalyticsManager @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
@@ -59,6 +61,10 @@ class AnalyticsManager @Inject constructor(
 
     fun trackShare() {
         firebaseAnalytics.logEvent(SHARE_EVENT) {}
+    }
+
+    fun trackDonate() {
+        firebaseAnalytics.logEvent(DONATE_EVENT) {}
     }
 
 }

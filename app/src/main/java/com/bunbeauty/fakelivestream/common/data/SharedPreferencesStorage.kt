@@ -13,6 +13,7 @@ private const val IMAGE_URI_KEY = "image uri"
 private const val USERNAME_KEY = "username"
 private const val VIEWER_COUNT_INDEX_KEY = "viewer count index"
 private const val SHOULD_ASK_FEEDBACK_KEY = "should ask feedback"
+private const val SHOULD_HIGHLIGHT_DONATE_KEY = "should highlight donate"
 private const val IS_INTRO_VIEWED = "is intro viewed"
 
 class SharedPreferencesStorage @Inject constructor(
@@ -47,6 +48,12 @@ class SharedPreferencesStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveShouldHighlightDonate(shouldHighlight: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(SHOULD_HIGHLIGHT_DONATE_KEY, shouldHighlight)
+        }
+    }
+
     override suspend fun saveIsIntroViewed(isIntroViewed: Boolean) {
         sharedPreferences.edit {
             putBoolean(IS_INTRO_VIEWED, isIntroViewed)
@@ -67,6 +74,10 @@ class SharedPreferencesStorage @Inject constructor(
 
     override suspend fun getShouldAskFeedback(defaultValue: Boolean): Boolean {
         return sharedPreferences.getBoolean(SHOULD_ASK_FEEDBACK_KEY, defaultValue)
+    }
+
+    override suspend fun getShouldHighlightDonate(defaultValue: Boolean): Boolean {
+        return sharedPreferences.getBoolean(SHOULD_HIGHLIGHT_DONATE_KEY, defaultValue)
     }
 
     override suspend fun getIsIntroViewed(defaultValue: Boolean): Boolean {
