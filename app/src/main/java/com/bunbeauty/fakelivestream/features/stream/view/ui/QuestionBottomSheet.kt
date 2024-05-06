@@ -36,6 +36,7 @@ import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheet
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheetContent
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import kotlinx.collections.immutable.ImmutableList
@@ -255,7 +256,7 @@ private fun QuestionItem(
 @LocalePreview
 @Composable
 private fun EmptyQuestionsBottomSheetPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         Column {
             QuestionsContent(
                 questionState = QuestionState.Empty,
@@ -268,7 +269,7 @@ private fun EmptyQuestionsBottomSheetPreview() {
 @LocalePreview
 @Composable
 private fun NotEmptyQuestionsBottomSheetPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         Column {
             QuestionsContent(
                 questionState = QuestionState.NotEmpty(

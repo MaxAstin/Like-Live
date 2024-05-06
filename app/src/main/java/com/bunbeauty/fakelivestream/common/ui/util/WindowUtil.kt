@@ -1,4 +1,4 @@
-package com.bunbeauty.fakelivestream.common.ui
+package com.bunbeauty.fakelivestream.common.ui.util
 
 import android.view.Window
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON

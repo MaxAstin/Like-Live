@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +67,7 @@ fun FakeLiveBottomSheetPreview() {
     LaunchedEffect(Unit) {
         sheetState.show()
     }
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         FakeLiveBottomSheet(
             onDismissRequest = {},
             sheetState = sheetState,

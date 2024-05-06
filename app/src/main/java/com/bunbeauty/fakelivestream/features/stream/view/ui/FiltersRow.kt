@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 
 private val filters = listOf(
     R.drawable.none_filter,
@@ -79,7 +80,7 @@ fun FiltersRow(
 @Preview
 @Composable
 fun FiltersRowPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         FiltersRow()
     }
 }

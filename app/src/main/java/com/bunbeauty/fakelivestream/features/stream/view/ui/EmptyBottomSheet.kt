@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +17,7 @@ import com.bunbeauty.fakelivestream.common.ui.LocalePreview
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheet
 import com.bunbeauty.fakelivestream.common.ui.components.bottomsheet.FakeLiveBottomSheetContent
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +85,7 @@ fun ColumnScope.EmptyBottomSheetContent(
 @LocalePreview
 @Composable
 private fun EmptyBottomSheetPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         Column {
             EmptyBottomSheetContent(
                 titleResId = R.string.stream_questions_title,

@@ -53,6 +53,7 @@ import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
@@ -692,7 +693,7 @@ private fun DirectBottomSheet(
 @LocalePreview
 @Composable
 private fun StreamScreenPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         Box(modifier = Modifier.background(Color.White)) {
             StreamContent(
                 state = ViewState(

@@ -28,8 +28,8 @@ import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
-import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
-import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.util.keepScreenOn
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.common.util.openSettings
 import com.bunbeauty.fakelivestream.common.util.openSharing
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            FakeLiveStreamTheme {
+            FakeLiveTheme {
                 val state by mainViewModel.state.collectAsStateWithLifecycle()
 
                 AppContent()

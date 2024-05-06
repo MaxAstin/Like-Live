@@ -35,12 +35,13 @@ import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.ui.LocalePreview
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.FakeLiveTextField
-import com.bunbeauty.fakelivestream.common.ui.components.GradientButton
+import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveGradientButton
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveIconButton
 import com.bunbeauty.fakelivestream.common.ui.noEffectClickable
 import com.bunbeauty.fakelivestream.common.ui.rippleClickable
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
 import com.bunbeauty.fakelivestream.features.main.view.FeedbackDialog
 import com.bunbeauty.fakelivestream.features.preparation.presentation.Preparation
@@ -223,7 +224,7 @@ private fun PreparationContent(
             }
         }
 
-        GradientButton(
+        FakeLiveGradientButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
@@ -256,7 +257,7 @@ private fun PreparationContent(
 @LocalePreview
 @Composable
 private fun PreparationContentPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         PreparationContent(
             state = Preparation.State(
                 image = ImageSource.ResId(R.drawable.img_default_avatar),
