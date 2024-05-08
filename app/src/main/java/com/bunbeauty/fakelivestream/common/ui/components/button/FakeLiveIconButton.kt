@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,18 +28,26 @@ fun FakeLiveIconButton(
     contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    iconTint: Color = FakeLiveStreamTheme.colors.interactive,
     hasMarker: Boolean = false,
+    withBorder: Boolean = true,
 ) {
     val multipleEventsCutter = rememberMultipleEventsCutter()
 
     IconButton(
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
-            .border(
-                width = 1.dp,
-                color = FakeLiveStreamTheme.colors.interactive,
-                shape = RoundedCornerShape(6.dp)
-            )
+            .run {
+                if (withBorder) {
+                    border(
+                        width = 1.dp,
+                        color = FakeLiveStreamTheme.colors.interactive,
+                        shape = RoundedCornerShape(6.dp)
+                    )
+                } else {
+                    this
+                }
+            }
             .size(48.dp),
         onClick = {
             multipleEventsCutter.processEvent(onClick)
@@ -50,7 +59,7 @@ fun FakeLiveIconButton(
                     .padding(2.dp)
                     .size(24.dp),
                 painter = painterResource(iconId),
-                tint = FakeLiveStreamTheme.colors.interactive,
+                tint = iconTint,
                 contentDescription = contentDescription
             )
             if (hasMarker) {

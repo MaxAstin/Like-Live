@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,7 +48,6 @@ fun IntroScreen(navController: NavHostController) {
         }
     }
 
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
@@ -61,7 +59,7 @@ fun IntroScreen(navController: NavHostController) {
                     }
                 }
             }
-        }.launchIn(scope)
+        }.launchIn(this)
     }
 
     IntroContent(

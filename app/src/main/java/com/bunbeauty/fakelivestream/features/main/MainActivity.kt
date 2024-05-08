@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,14 +24,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.DONATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
-import com.bunbeauty.fakelivestream.common.ui.util.keepScreenOn
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.fakelivestream.common.ui.util.keepScreenOn
 import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.common.util.openSettings
 import com.bunbeauty.fakelivestream.common.util.openSharing
+import com.bunbeauty.fakelivestream.features.donation.view.DonationScreen
 import com.bunbeauty.fakelivestream.features.intro.view.IntroScreen
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
@@ -122,7 +123,6 @@ class MainActivity : ComponentActivity() {
                 .statusBarsPadding()
                 .navigationBarsPadding()
         ) { padding ->
-            val scope = rememberCoroutineScope()
             val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 mainViewModel.event.onEach { event ->
@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(STREAM)
                         }
                     }
-                }.launchIn(scope)
+                }.launchIn(this)
             }
 
             LaunchedEffect(Unit) {
@@ -190,8 +190,14 @@ class MainActivity : ComponentActivity() {
                         if (!isSuccessful) {
                             // TODO show error
                         }
+                    },
+                    onDonateClick = {
+                        navController.navigate(DONATION)
                     }
                 )
+            }
+            composable(route = DONATION) {
+                DonationScreen(navController = navController)
             }
             composable(route = STREAM) {
                 StreamScreen(navController = navController)

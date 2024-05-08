@@ -29,6 +29,9 @@
     <string name="preparation_viewer_count">Contagem de espectadores</string>
     <string name="preparation_start_live">Iniciar Ao Vivo</string>
 
+    <string name="donation_title">Suporte %s</string>
+    <string name="donation_descriptio">Este aplicativo foi criado por um desenvolvedor independente sem suporte financeiro externo. Cada contribuição é muito importante e você tem o poder de influenciar o desenvolvimento deste projeto.</string>
+
     <string name="stream_join_requests_title">Solicitações para participar</string>
     <string name="stream_join_requests_body">Sem solicitações ainda</string>
     <string name="stream_join_requests_description">Os pedidos para co-anfitrião aparecem aqui.</string>

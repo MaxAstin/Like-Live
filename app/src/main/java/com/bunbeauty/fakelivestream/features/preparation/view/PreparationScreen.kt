@@ -11,14 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,8 +34,8 @@ import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.ui.LocalePreview
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.FakeLiveTextField
-import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveGradientButton
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
+import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveGradientButton
 import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveIconButton
 import com.bunbeauty.fakelivestream.common.ui.noEffectClickable
 import com.bunbeauty.fakelivestream.common.ui.rippleClickable
@@ -56,6 +55,7 @@ fun PreparationScreen(
     onStartStreamClick: () -> Unit,
     onPositiveFeedbackClick: () -> Unit,
     onShareClick: () -> Unit,
+    onDonateClick: () -> Unit,
 ) {
     val viewModel: PreparationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -65,7 +65,6 @@ fun PreparationScreen(
         }
     }
 
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
@@ -86,10 +85,10 @@ fun PreparationScreen(
                 }
 
                 Preparation.Event.HandleDonateClick -> {
-                    // TODO go to Donate screen
+                    onDonateClick()
                 }
             }
-        }.launchIn(scope)
+        }.launchIn(this)
     }
 
     LaunchedEffect(Unit) {

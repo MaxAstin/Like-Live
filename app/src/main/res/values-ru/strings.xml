@@ -28,6 +28,9 @@
     <string name="preparation_viewer_count">Количество зрителей</string>
     <string name="preparation_start_live">Начать стрим</string>
 
+    <string name="donation_title">Поддержите %s</string>
+    <string name="donation_descriptio">Это приложение создано независимым разработчиком без внешней финансовой поддержки. Каждый вклад имеет большое значение, и у вас есть возможность повлиять на развитие этого проекта.</string>
+
     <string name="stream_join_requests_title">Запросы на присоединение</string>
     <string name="stream_join_requests_body">Запросов пока нет</string>
     <string name="stream_join_requests_description">Здесь показываются запросы на роль соорганизатора.</string>

@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +65,7 @@ import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionsBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -82,7 +82,6 @@ fun StreamScreen(navController: NavHostController) {
         }
     }
 
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
@@ -93,7 +92,7 @@ fun StreamScreen(navController: NavHostController) {
                         ?.set(DURATION_NAV_PARAM, event.durationInSeconds)
                 }
             }
-        }.launchIn(scope)
+        }.launchIn(this)
     }
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         onAction(Stream.Action.Start)
@@ -703,7 +702,7 @@ private fun StreamScreenPreview() {
                         thousands = "10",
                         hundreds = "4",
                     ),
-                    comments = listOf(
+                    comments = persistentListOf(
                         CommentUi(
                             picture = ImageSource.ResId(R.drawable.img_default_avatar),
                             username = "username1",
