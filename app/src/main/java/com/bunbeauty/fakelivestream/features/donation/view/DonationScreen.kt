@@ -115,7 +115,7 @@ private fun DonationContent(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = spacedBy(4.dp)
         ) {
-            repeat(3) { i ->
+            repeat(options.size / 2) { i ->
                 Row(horizontalArrangement = spacedBy(12.dp)) {
                     repeat(2) { j ->
                         options.getOrNull(i * 2 + j)?.let { option ->
