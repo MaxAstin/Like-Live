@@ -37,7 +37,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun DonationScreen(navController: NavHostController) {
+fun DonationScreen(
+    navController: NavHostController,
+    onDonateClick: (String) -> Unit,
+) {
     val viewModel: DonationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onAction = remember {
@@ -58,14 +61,16 @@ fun DonationScreen(navController: NavHostController) {
 
     DonationContent(
         options = state.options,
-        onAction = onAction
+        onAction = onAction,
+        onDonateClick = onDonateClick,
     )
 }
 
 @Composable
 private fun DonationContent(
     options: ImmutableList<Donation.Option>,
-    onAction: (Donation.Action) -> Unit
+    onAction: (Donation.Action) -> Unit,
+    onDonateClick: (String) -> Unit,
 ) {
     Column(modifier = Modifier.background(FakeLiveStreamTheme.colors.background)) {
         Column(
@@ -124,6 +129,7 @@ private fun DonationContent(
                                 text = option.text,
                                 onClick = {
                                     onAction(Donation.Action.OptionClick(option = option))
+                                    onDonateClick(option.name)
                                 }
                             )
                         }
@@ -139,6 +145,7 @@ private fun DonationContent(
 fun IntroScreenPreview() {
     DonationContent(
         options = Donation.Option.entries.toImmutableList(),
-        onAction = {}
+        onAction = {},
+        onDonateClick = {},
     )
 }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,6 +34,7 @@ import com.bunbeauty.fakelivestream.common.ui.util.keepScreenOn
 import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.common.util.openSettings
 import com.bunbeauty.fakelivestream.common.util.openSharing
+import com.bunbeauty.fakelivestream.features.billing.BillingService
 import com.bunbeauty.fakelivestream.features.donation.view.DonationScreen
 import com.bunbeauty.fakelivestream.features.intro.view.IntroScreen
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
@@ -43,9 +45,12 @@ import com.bunbeauty.fakelivestream.features.stream.view.DURATION_NAV_PARAM
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
+import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.fakelivestream"
 
@@ -53,6 +58,9 @@ private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var billingService: Lazy<BillingService>
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -197,7 +205,21 @@ class MainActivity : ComponentActivity() {
                 )
             }
             composable(route = DONATION) {
-                DonationScreen(navController = navController)
+                val scope = rememberCoroutineScope()
+                DonationScreen(
+                    navController = navController,
+                    onDonateClick = { product ->
+                        scope.launch {
+                            val isSuccessful = billingService.get().launchOneTypeProductFlow(
+                                id = product,
+                                activity = this@MainActivity
+                            )
+                            if (!isSuccessful) {
+                                // TODO show error
+                            }
+                        }
+                    }
+                )
             }
             composable(route = STREAM) {
                 StreamScreen(navController = navController)
