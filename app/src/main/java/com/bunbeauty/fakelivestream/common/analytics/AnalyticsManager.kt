@@ -1,5 +1,6 @@
 package com.bunbeauty.fakelivestream.common.analytics
 
+import android.util.Log
 import com.bunbeauty.fakelivestream.common.util.toTimeString
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
@@ -14,12 +15,16 @@ private const val STREAM_STOPPED_EVENT = "stream_stopped"
 private const val STREAM_FINISHED_EVENT = "stream_finished"
 private const val STREAM_DURATION_PARAM = "stream_duration"
 
+private const val CAMERA_ERROR_EVENT = "camera_error"
+
 private const val FEEDBACK_POSITIVE_EVENT = "feedback_positive"
 private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
 
 private const val SHARE_EVENT = "share"
 
 private const val DONATE_EVENT = "donate"
+
+private const val ANALYTICS_TAG = "analytics"
 
 @Singleton
 class AnalyticsManager @Inject constructor(
@@ -35,36 +40,56 @@ class AnalyticsManager @Inject constructor(
             param(USERNAME_PARAM, username)
             param(VIEWER_COUNT_PARAM, viewerCount.toLong())
         }
+
+        Log.d(ANALYTICS_TAG, "$STREAM_STARTED_EVENT: $username, ${viewerCount.toLong()}")
     }
 
     fun trackStreamStop(durationInSeconds: Int) {
+        val durationString = durationInSeconds.toTimeString()
+
         firebaseAnalytics.logEvent(STREAM_STOPPED_EVENT) {
-            param(STREAM_DURATION_PARAM, durationInSeconds.toTimeString())
+            param(STREAM_DURATION_PARAM, durationString)
             param(FirebaseAnalytics.Param.VALUE, durationInSeconds.toLong())
         }
+
+        Log.d(ANALYTICS_TAG, "$STREAM_STOPPED_EVENT: $durationString, ${durationInSeconds.toLong()}")
     }
 
     fun trackStreamFinish(durationInSeconds: Int) {
+        val durationString = durationInSeconds.toTimeString()
+
         firebaseAnalytics.logEvent(STREAM_FINISHED_EVENT) {
-            param(STREAM_DURATION_PARAM, durationInSeconds.toTimeString())
+            param(STREAM_DURATION_PARAM, durationString)
             param(FirebaseAnalytics.Param.VALUE, durationInSeconds.toLong())
         }
+
+        Log.d(ANALYTICS_TAG, "$STREAM_FINISHED_EVENT: $durationString, ${durationInSeconds.toLong()}")
+    }
+
+    fun trackCameraError() {
+        firebaseAnalytics.logEvent(CAMERA_ERROR_EVENT) {}
+        Log.d(ANALYTICS_TAG, CAMERA_ERROR_EVENT)
     }
 
     fun trackFeedback(isPositive: Boolean) {
-        if (isPositive) {
-            firebaseAnalytics.logEvent(FEEDBACK_POSITIVE_EVENT) {}
+        val event = if (isPositive) {
+            FEEDBACK_POSITIVE_EVENT
         } else {
-            firebaseAnalytics.logEvent(FEEDBACK_NEGATIVE_EVENT) {}
+            FEEDBACK_NEGATIVE_EVENT
         }
+
+        firebaseAnalytics.logEvent(event) {}
+        Log.d(ANALYTICS_TAG, event)
     }
 
     fun trackShare() {
         firebaseAnalytics.logEvent(SHARE_EVENT) {}
+        Log.d(ANALYTICS_TAG, SHARE_EVENT)
     }
 
     fun trackDonate() {
         firebaseAnalytics.logEvent(DONATE_EVENT) {}
+        Log.d(ANALYTICS_TAG, DONATE_EVENT)
     }
 
 }

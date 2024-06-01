@@ -25,6 +25,7 @@ fun CameraComponent(
     isFront: Boolean,
     isEnabled: Boolean,
     image: ImageSource<*>,
+    onCameraError: (Exception) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (isEnabled) {
@@ -53,13 +54,17 @@ fun CameraComponent(
             val preview = Preview.Builder().build()
             val imageCapture = ImageCapture.Builder().build()
 
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
-                lifecycleOwner,
-                cameraSelector,
-                preview,
-                imageCapture
-            )
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    preview,
+                    imageCapture
+                )
+            } catch (exception: Exception) {
+                onCameraError(exception)
+            }
 
             preview.setSurfaceProvider(previewView.surfaceProvider)
         }

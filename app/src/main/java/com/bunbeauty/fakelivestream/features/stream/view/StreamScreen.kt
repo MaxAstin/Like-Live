@@ -143,7 +143,10 @@ fun StreamContent(
                             modifier = modifier,
                             isFront = state.isCameraFront,
                             isEnabled = state.isCameraEnabled,
-                            image = state.image
+                            image = state.image,
+                            onCameraError = { exception ->
+                                onAction(Stream.Action.CameraError(exception = exception))
+                            }
                         )
                     }
 

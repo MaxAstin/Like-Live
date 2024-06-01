@@ -213,6 +213,10 @@ class StreamViewModel @Inject constructor(
                 analyticsManager.trackStreamFinish(durationInSeconds = durationInSeconds)
                 sendEvent(Stream.Event.GoBack(durationInSeconds = durationInSeconds))
             }
+
+            is Stream.Action.CameraError -> {
+                analyticsManager.trackCameraError()
+            }
         }
     }
 
