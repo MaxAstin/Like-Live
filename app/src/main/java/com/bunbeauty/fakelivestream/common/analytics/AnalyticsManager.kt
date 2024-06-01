@@ -26,6 +26,9 @@ private const val SHARE_EVENT = "share"
 
 private const val DONATE_EVENT = "donate"
 
+private const val OPEN_QUESTIONS_EVENT = "open_questions"
+
+private const val SELECT_QUESTION_EVENT = "select_question"
 
 private const val ANALYTICS_TAG = "analytics"
 
@@ -90,6 +93,16 @@ class AnalyticsManager @Inject constructor(
     fun trackShare() {
         firebaseAnalytics.logEvent(SHARE_EVENT) {}
         Log.d(ANALYTICS_TAG, SHARE_EVENT)
+    }
+
+    fun trackOpenQuestions() {
+        firebaseAnalytics.logEvent(OPEN_QUESTIONS_EVENT) {}
+        Log.d(ANALYTICS_TAG, OPEN_QUESTIONS_EVENT)
+    }
+
+    fun trackSelectQuestion() {
+        firebaseAnalytics.logEvent(SELECT_QUESTION_EVENT) {}
+        Log.d(ANALYTICS_TAG, SELECT_QUESTION_EVENT)
     }
 
     fun trackDonate() {

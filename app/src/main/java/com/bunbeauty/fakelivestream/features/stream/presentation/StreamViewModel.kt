@@ -124,14 +124,14 @@ class StreamViewModel @Inject constructor(
                         )
                     )
                 }
+                analyticsManager.trackOpenQuestions()
             }
 
             Stream.Action.HideQuestions -> {
                 setState {
                     copy(
                         questionState = questionState.copy(
-                            show = false,
-                            currentQuestionToAnswer = questionState.selectedQuestion
+                            show = false
                         )
                     )
                 }
@@ -152,9 +152,19 @@ class StreamViewModel @Inject constructor(
                                         (question.question.uuid == questionState.currentQuestionToAnswer?.question?.uuid)
                                 )
                             },
-                            currentQuestionToAnswer = null,
                         )
                     )
+                }
+                if (currentState.questionState.selectedQuestion != null) {
+                    setState {
+                        copy(
+                            questionState = questionState.copy(
+                                show = false,
+                                currentQuestionToAnswer = questionState.selectedQuestion
+                            )
+                        )
+                    }
+                    analyticsManager.trackSelectQuestion()
                 }
             }
 
