@@ -208,11 +208,11 @@ class MainActivity : ComponentActivity() {
                 val scope = rememberCoroutineScope()
                 DonationScreen(
                     navController = navController,
-                    onDonateClick = { product ->
+                    onDonateClick = { productId ->
                         scope.launch {
                             val isSuccessful = billingService.get().launchOneTypeProductFlow(
-                                id = product,
-                                activity = this@MainActivity
+                                activity = this@MainActivity,
+                                id = productId,
                             )
                             if (!isSuccessful) {
                                 // TODO show error

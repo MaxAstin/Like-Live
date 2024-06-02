@@ -18,44 +18,27 @@ class BillingService @Inject constructor(
     private val billingClient: BillingClient
 ) {
 
-    suspend fun init(): Boolean {
-        return suspendCoroutine { continuation ->
-            billingClient.startConnection(
-                object : BillingClientStateListener {
-                    override fun onBillingSetupFinished(billingResult: BillingResult) {
-                        val isSuccessful = billingResult.responseCode == BillingClient.BillingResponseCode.OK
-                        continuation.resume(isSuccessful)
-                    }
-
-                    override fun onBillingServiceDisconnected() {
-                        continuation.resume(false)
-                    }
-                }
-            )
-        }
-    }
-
-    suspend fun getOneTypeProducts(ids: List<String>): List<String>? {
+    suspend fun getOneTypeProducts(ids: List<String>): List<Product>? {
         return getProducts(
-            ids = ids,
-            type = BillingClient.ProductType.INAPP
+            type = BillingClient.ProductType.INAPP,
+            ids = ids
         )
     }
 
-    suspend fun getSubscriptionProducts(ids: List<String>): List<String>? {
+    suspend fun getSubscriptionProducts(ids: List<String>): List<Product>? {
         return getProducts(
-            ids = ids,
-            type = BillingClient.ProductType.SUBS
+            type = BillingClient.ProductType.SUBS,
+            ids = ids
         )
     }
 
     suspend fun launchOneTypeProductFlow(
-        id: String,
-        activity: Activity
+        activity: Activity,
+        id: String
     ): Boolean {
         val product = getProductDetails(
-            ids = listOf(id),
-            type = BillingClient.ProductType.INAPP
+            type = BillingClient.ProductType.INAPP,
+            ids = listOf(id)
         )?.firstOrNull() ?: return false
 
         val productDetailsParams = listOf(
@@ -72,25 +55,55 @@ class BillingService @Inject constructor(
     }
 
     private suspend fun getProducts(
-        ids: List<String>,
         type: String,
-    ): List<String>? {
-        return getProductDetails(
-            ids = ids,
-            type = type
-        )?.map { productDetails ->
-            productDetails.name
+        ids: List<String>
+    ): List<Product>? {
+        val isSuccessful = init()
+        return if (isSuccessful) {
+            getProductDetails(
+                type = type,
+                ids = ids,
+            )?.mapNotNull { productDetails ->
+                productDetails.oneTimePurchaseOfferDetails?.formattedPrice?.let { price ->
+                    Product(
+                        id = productDetails.productId,
+                        name = productDetails.name,
+                        description = productDetails.description,
+                        price = price,
+                    )
+                }
+            }
+        } else {
+            emptyList()
         }
     }
 
-    private suspend fun getProductDetails(
-        ids: List<String>,
-        type: String,
-    ): List<ProductDetails>? {
+    private suspend fun init(): Boolean {
+        if (billingClient.isReady) {
+            return true
+        }
+
+        return suspendCoroutine { continuation ->
+            billingClient.startConnection(
+                object : BillingClientStateListener {
+                    override fun onBillingSetupFinished(billingResult: BillingResult) {
+                        val isSuccessful = billingResult.responseCode == BillingClient.BillingResponseCode.OK
+                        continuation.resume(isSuccessful)
+                    }
+
+                    override fun onBillingServiceDisconnected() {
+                        continuation.resume(false)
+                    }
+                }
+            )
+        }
+    }
+
+    private suspend fun getProductDetails(type: String, ids: List<String>): List<ProductDetails>? {
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(
                 ids.map { id ->
-                    getOneTypeProduct(
+                    getProductDetailsParams(
                         id = id,
                         type = type,
                     )
@@ -108,9 +121,9 @@ class BillingService @Inject constructor(
         }
     }
 
-    private fun getOneTypeProduct(
+    private fun getProductDetailsParams(
+        type: String,
         id: String,
-        type: String
     ): QueryProductDetailsParams.Product {
         return QueryProductDetailsParams.Product.newBuilder()
             .setProductId(id)

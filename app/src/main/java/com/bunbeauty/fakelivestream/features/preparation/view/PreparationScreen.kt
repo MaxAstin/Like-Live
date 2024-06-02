@@ -129,15 +129,14 @@ private fun PreparationContent(
                     onAction(Preparation.Action.ShareClick)
                 }
             )
-            // TODO uncomment when billing will be ready
-            //FakeLiveIconButton(
-            //    iconId = R.drawable.ic_donate,
-            //    contentDescription = "donate",
-            //    hasMarker = state.highlightDonate,
-            //    onClick = {
-            //        onAction(Preparation.Action.DonateClick)
-            //    }
-            //)
+            FakeLiveIconButton(
+                iconId = R.drawable.ic_donate,
+                contentDescription = "donate",
+                hasMarker = state.highlightDonate,
+                onClick = {
+                    onAction(Preparation.Action.DonateClick)
+                }
+            )
         }
 
         Column(modifier = Modifier.align(Alignment.Center)) {

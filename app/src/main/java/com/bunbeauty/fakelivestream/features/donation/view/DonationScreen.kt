@@ -29,6 +29,7 @@ import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLiveIconButt
 import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.common.ui.theme.bold
+import com.bunbeauty.fakelivestream.features.billing.Product
 import com.bunbeauty.fakelivestream.features.donation.presentation.Donation
 import com.bunbeauty.fakelivestream.features.donation.presentation.DonationViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -60,7 +61,7 @@ fun DonationScreen(
     }
 
     DonationContent(
-        options = state.options,
+        products = state.productList,
         onAction = onAction,
         onDonateClick = onDonateClick,
     )
@@ -68,7 +69,7 @@ fun DonationScreen(
 
 @Composable
 private fun DonationContent(
-    options: ImmutableList<Donation.Option>,
+    products: ImmutableList<Product>,
     onAction: (Donation.Action) -> Unit,
     onDonateClick: (String) -> Unit,
 ) {
@@ -120,16 +121,16 @@ private fun DonationContent(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = spacedBy(4.dp)
         ) {
-            repeat(options.size / 2) { i ->
+            repeat(products.size / 2) { i ->
                 Row(horizontalArrangement = spacedBy(12.dp)) {
                     repeat(2) { j ->
-                        options.getOrNull(i * 2 + j)?.let { option ->
+                        products.getOrNull(i * 2 + j)?.let { product ->
                             FakeLivePrimaryButton(
                                 modifier = Modifier.weight(1f),
-                                text = option.text,
+                                text = product.price,
                                 onClick = {
-                                    onAction(Donation.Action.OptionClick(option = option))
-                                    onDonateClick(option.name)
+                                    onAction(Donation.Action.OptionClick(productId = product.id))
+                                    onDonateClick(product.name)
                                 }
                             )
                         }
@@ -144,7 +145,32 @@ private fun DonationContent(
 @Composable
 fun IntroScreenPreview() {
     DonationContent(
-        options = Donation.Option.entries.toImmutableList(),
+        products = listOf(
+            Product(
+                id = "1",
+                name = "",
+                description = "",
+                price = "$1",
+            ),
+            Product(
+                id = "2",
+                name = "",
+                description = "",
+                price = "$2",
+            ),
+            Product(
+                id = "3",
+                name = "",
+                description = "",
+                price = "$3",
+            ),
+            Product(
+                id = "4",
+                name = "",
+                description = "",
+                price = "$4",
+            ),
+        ).toImmutableList(),
         onAction = {},
         onDonateClick = {},
     )
