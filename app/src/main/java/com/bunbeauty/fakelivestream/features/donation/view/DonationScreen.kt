@@ -1,15 +1,16 @@
 package com.bunbeauty.fakelivestream.features.donation.view
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +33,6 @@ import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.billing.Product
 import com.bunbeauty.fakelivestream.features.donation.presentation.Donation
 import com.bunbeauty.fakelivestream.features.donation.presentation.DonationViewModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -61,7 +61,7 @@ fun DonationScreen(
     }
 
     DonationContent(
-        products = state.productList,
+        state = state,
         onAction = onAction,
         onDonateClick = onDonateClick,
     )
@@ -69,75 +69,84 @@ fun DonationScreen(
 
 @Composable
 private fun DonationContent(
-    products: ImmutableList<Product>,
+    state: Donation.State,
     onAction: (Donation.Action) -> Unit,
     onDonateClick: (String) -> Unit,
 ) {
-    Column(modifier = Modifier.background(FakeLiveStreamTheme.colors.background)) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .weight(1f)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = spacedBy(16.dp)
-        ) {
-            FakeLiveIconButton(
-                iconId = R.drawable.ic_back,
-                iconTint = FakeLiveStreamTheme.colors.onBackground,
-                contentDescription = "Back",
-                withBorder = false,
-                onClick = {
-                    onAction(Donation.Action.BackClick)
-                }
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Row {
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = spacedBy(16.dp)
+            ) {
+                FakeLiveIconButton(
+                    iconId = R.drawable.ic_back,
+                    iconTint = FakeLiveStreamTheme.colors.onBackground,
+                    contentDescription = "Back",
+                    withBorder = false,
+                    onClick = {
+                        onAction(Donation.Action.BackClick)
+                    }
+                )
                 Spacer(modifier = Modifier.weight(1f))
-                Image(
-                    modifier = Modifier.weight(4f),
-                    painter = painterResource(R.drawable.img_logo),
-                    contentDescription = "Logo"
+                Row {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Image(
+                        modifier = Modifier.weight(4f),
+                        painter = painterResource(R.drawable.img_logo),
+                        contentDescription = "Logo"
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(
+                        id = R.string.donation_title,
+                        stringResource(R.string.app_name)
+                    ),
+                    style = FakeLiveStreamTheme.typography.titleLarge.bold,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.donation_descriptio),
+                    style = FakeLiveStreamTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Justify
                 )
                 Spacer(modifier = Modifier.weight(1f))
             }
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(
-                    id = R.string.donation_title,
-                    stringResource(R.string.app_name)
-                ),
-                style = FakeLiveStreamTheme.typography.titleLarge.bold,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.donation_descriptio),
-                style = FakeLiveStreamTheme.typography.bodyLarge,
-                textAlign = TextAlign.Justify
-            )
-            Spacer(modifier = Modifier.weight(1f))
-        }
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = spacedBy(4.dp)
-        ) {
-            repeat(products.size / 2) { i ->
-                Row(horizontalArrangement = spacedBy(12.dp)) {
-                    repeat(2) { j ->
-                        products.getOrNull(i * 2 + j)?.let { product ->
-                            FakeLivePrimaryButton(
-                                modifier = Modifier.weight(1f),
-                                text = product.price,
-                                onClick = {
-                                    onAction(Donation.Action.OptionClick(productId = product.id))
-                                    onDonateClick(product.name)
-                                }
-                            )
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = spacedBy(4.dp)
+            ) {
+                repeat(state.productList.size / 2) { i ->
+                    Row(horizontalArrangement = spacedBy(12.dp)) {
+                        repeat(2) { j ->
+                            state.productList.getOrNull(i * 2 + j)?.let { product ->
+                                FakeLivePrimaryButton(
+                                    modifier = Modifier.weight(1f),
+                                    text = product.price,
+                                    onClick = {
+                                        onAction(Donation.Action.DonationClick(productId = product.id))
+                                        onDonateClick(product.name)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
+
+        DonationBottomSheet(
+            product = state.shownProduct,
+            onAction = onAction
+        )
     }
 }
 
@@ -145,32 +154,35 @@ private fun DonationContent(
 @Composable
 fun IntroScreenPreview() {
     DonationContent(
-        products = listOf(
-            Product(
-                id = "1",
-                name = "",
-                description = "",
-                price = "$1",
-            ),
-            Product(
-                id = "2",
-                name = "",
-                description = "",
-                price = "$2",
-            ),
-            Product(
-                id = "3",
-                name = "",
-                description = "",
-                price = "$3",
-            ),
-            Product(
-                id = "4",
-                name = "",
-                description = "",
-                price = "$4",
-            ),
-        ).toImmutableList(),
+        state = Donation.State(
+            productList = listOf(
+                Product(
+                    id = "1",
+                    name = "",
+                    description = "",
+                    price = "$1",
+                ),
+                Product(
+                    id = "2",
+                    name = "",
+                    description = "",
+                    price = "$2",
+                ),
+                Product(
+                    id = "3",
+                    name = "",
+                    description = "",
+                    price = "$3",
+                ),
+                Product(
+                    id = "4",
+                    name = "",
+                    description = "",
+                    price = "$4",
+                ),
+            ).toImmutableList(),
+            shownProduct = null
+        ),
         onAction = {},
         onDonateClick = {},
     )

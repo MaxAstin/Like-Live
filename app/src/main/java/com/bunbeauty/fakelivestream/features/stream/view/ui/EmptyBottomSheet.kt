@@ -46,7 +46,9 @@ private fun ColumnScope.EmptyBottomSheetContent(
     @StringRes bodyResId: Int,
     @StringRes descriptionResId: Int,
 ) {
-    FakeLiveBottomSheetContent(titleResId = titleResId) {
+    FakeLiveBottomSheetContent(
+        title = stringResource(id = titleResId)
+    ) {
         EmptyBottomSheetContent(
             bodyResId = bodyResId,
             descriptionResId = descriptionResId,

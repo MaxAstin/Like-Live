@@ -31,6 +31,7 @@
 
     <string name="donation_title">Suporte %s</string>
     <string name="donation_descriptio">Este aplicativo foi criado por um desenvolvedor independente sem suporte financeiro externo. Cada contribuição é muito importante e você tem o poder de influenciar o desenvolvimento deste projeto.</string>
+    <string name="donation_donate">Doar %s</string>
 
     <string name="stream_join_requests_title">Solicitações para participar</string>
     <string name="stream_join_requests_body">Sem solicitações ainda</string>

@@ -94,7 +94,9 @@ private fun ColumnScope.QuestionsContent(
     questionState: QuestionState,
     onAction: (Stream.Action) -> Unit
 ) {
-    FakeLiveBottomSheetContent(titleResId = R.string.stream_questions_title) {
+    FakeLiveBottomSheetContent(
+        title = stringResource(id = R.string.stream_questions_title),
+    ) {
         when (questionState) {
             QuestionState.Empty -> {
                 EmptyBottomSheetContent(

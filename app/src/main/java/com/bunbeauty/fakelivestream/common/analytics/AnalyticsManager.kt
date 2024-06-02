@@ -10,25 +10,23 @@ import javax.inject.Singleton
 private const val STREAM_STARTED_EVENT = "stream_started"
 private const val USERNAME_PARAM = "username"
 private const val VIEWER_COUNT_PARAM = "viewer_count"
-
 private const val VIEWER_COUNT_EVENT = "viewer_count_"
 
 private const val STREAM_STOPPED_EVENT = "stream_stopped"
 private const val STREAM_FINISHED_EVENT = "stream_finished"
 private const val STREAM_DURATION_PARAM = "stream_duration"
-
 private const val CAMERA_ERROR_EVENT = "camera_error"
 
 private const val FEEDBACK_POSITIVE_EVENT = "feedback_positive"
 private const val FEEDBACK_NEGATIVE_EVENT = "feedback_negative"
 
-private const val SHARE_EVENT = "share"
+private const val OPEN_QUESTIONS_EVENT = "open_questions"
+private const val SELECT_QUESTION_EVENT = "select_question"
 
+private const val SHARE_EVENT = "share"
 private const val DONATE_EVENT = "donate"
 
-private const val OPEN_QUESTIONS_EVENT = "open_questions"
-
-private const val SELECT_QUESTION_EVENT = "select_question"
+private const val OPEN_DONATION_EVENT = "open_donation_"
 
 private const val ANALYTICS_TAG = "analytics"
 
@@ -90,11 +88,6 @@ class AnalyticsManager @Inject constructor(
         Log.d(ANALYTICS_TAG, event)
     }
 
-    fun trackShare() {
-        firebaseAnalytics.logEvent(SHARE_EVENT) {}
-        Log.d(ANALYTICS_TAG, SHARE_EVENT)
-    }
-
     fun trackOpenQuestions() {
         firebaseAnalytics.logEvent(OPEN_QUESTIONS_EVENT) {}
         Log.d(ANALYTICS_TAG, OPEN_QUESTIONS_EVENT)
@@ -105,9 +98,20 @@ class AnalyticsManager @Inject constructor(
         Log.d(ANALYTICS_TAG, SELECT_QUESTION_EVENT)
     }
 
+    fun trackShare() {
+        firebaseAnalytics.logEvent(SHARE_EVENT) {}
+        Log.d(ANALYTICS_TAG, SHARE_EVENT)
+    }
+
     fun trackDonate() {
         firebaseAnalytics.logEvent(DONATE_EVENT) {}
         Log.d(ANALYTICS_TAG, DONATE_EVENT)
+    }
+
+    fun trackOpenDonation(productId: String) {
+        val event = "$OPEN_DONATION_EVENT$productId"
+        firebaseAnalytics.logEvent(event) {}
+        Log.d(ANALYTICS_TAG, event)
     }
 
 }

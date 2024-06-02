@@ -8,11 +8,14 @@ import kotlinx.collections.immutable.persistentListOf
 interface Donation {
 
     data class State(
-        val productList: ImmutableList<Product> = persistentListOf()
+        val productList: ImmutableList<Product> = persistentListOf(),
+        val shownProduct: Product? = null,
     ) : Base.State
 
     sealed interface Action : Base.Action {
-        data class OptionClick(val productId: String): Action
+        data class DonationClick(val productId: String): Action
+        data object HideDonation: Action
+        data class DonateClick(val productId: String): Action
         data object BackClick: Action
     }
 

@@ -88,11 +88,19 @@ class BillingService @Inject constructor(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {
                         val isSuccessful = billingResult.responseCode == BillingClient.BillingResponseCode.OK
-                        continuation.resume(isSuccessful)
+                        try {
+                            continuation.resume(isSuccessful)
+                        } catch (exception: Exception) {
+                            // TODO handle
+                        }
                     }
 
                     override fun onBillingServiceDisconnected() {
-                        continuation.resume(false)
+                        try {
+                            continuation.resume(false)
+                        } catch (exception: Exception) {
+                            // TODO handle
+                        }
                     }
                 }
             )
