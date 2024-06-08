@@ -10,13 +10,14 @@ interface Donation {
     data class State(
         val productList: ImmutableList<Product> = persistentListOf(),
         val shownProduct: Product? = null,
-        val shownSuccessPurchase: Product? = null,
+        val shownSuccessDonation: Product? = null,
     ) : Base.State
 
     sealed interface Action : Base.Action {
         data class DonationClick(val productId: String) : Action
         data object HideDonation : Action
         data class DonateClick(val productId: String) : Action
+        data object HideSuccessDonation : Action
         data object BackClick : Action
     }
 

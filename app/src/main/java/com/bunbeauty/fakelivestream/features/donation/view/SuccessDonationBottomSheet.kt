@@ -24,7 +24,7 @@ import com.bunbeauty.fakelivestream.features.donation.presentation.Donation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DonationBottomSheet(
+fun SuccessDonationBottomSheet(
     product: Product?,
     onAction: (Donation.Action) -> Unit,
     modifier: Modifier = Modifier,
@@ -34,7 +34,7 @@ fun DonationBottomSheet(
             modifier = modifier,
             containerColor = FakeLiveStreamTheme.colors.background,
             onDismissRequest = {
-                onAction(Donation.Action.HideDonation)
+                onAction(Donation.Action.HideSuccessDonation)
             },
             dragHandle = {
                 FakeLiveBottomSheetDefaults.DragHandle(
@@ -42,7 +42,7 @@ fun DonationBottomSheet(
                 )
             },
         ) {
-            DonationBottomSheetContent(
+            SuccessDonationBottomSheetContent(
                 product = product,
                 onAction = onAction,
             )
@@ -51,12 +51,13 @@ fun DonationBottomSheet(
 }
 
 @Composable
-private fun ColumnScope.DonationBottomSheetContent(
+private fun ColumnScope.SuccessDonationBottomSheetContent(
     product: Product,
     onAction: (Donation.Action) -> Unit,
 ) {
     FakeLiveBottomSheetContent(
-        title = product.name,
+        title = stringResource(R.string.donation_success),
+        topIconId = R.drawable.ic_success,
         titleColor = FakeLiveStreamTheme.colors.onBackground,
         dividerColor = FakeLiveStreamTheme.colors.borderVariant,
     ) {
@@ -72,9 +73,9 @@ private fun ColumnScope.DonationBottomSheetContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
-            text = stringResource(id = R.string.donation_donate, product.price),
+            text = stringResource(id = R.string.donation_ok),
             onClick = {
-                onAction(Donation.Action.DonateClick(productId = product.id))
+                onAction(Donation.Action.HideSuccessDonation)
             },
         )
     }
@@ -82,10 +83,10 @@ private fun ColumnScope.DonationBottomSheetContent(
 
 @Preview
 @Composable
-private fun DonationBottomSheetPreview() {
+private fun SuccessDonationBottomSheetPreview() {
     FakeLiveTheme {
         Column {
-            DonationBottomSheetContent(
+            SuccessDonationBottomSheetContent(
                 product = Product(
                     id = "1",
                     name = "Good Samaritan \uD83D\uDE4F",

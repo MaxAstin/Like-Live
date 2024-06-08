@@ -30,6 +30,9 @@
 
     <string name="donation_title">Поддержите %s</string>
     <string name="donation_descriptio">Это приложение создано независимым разработчиком без внешней финансовой поддержки. Каждый вклад имеет большое значение, и у вас есть возможность повлиять на развитие этого проекта.</string>
+    <string name="donation_donate">Пожертвовать %s</string>
+    <string name="donation_success">Успешно</string>
+    <string name="donation_ok">ОК</string>
 
     <string name="stream_join_requests_title">Запросы на присоединение</string>
     <string name="stream_join_requests_body">Запросов пока нет</string>

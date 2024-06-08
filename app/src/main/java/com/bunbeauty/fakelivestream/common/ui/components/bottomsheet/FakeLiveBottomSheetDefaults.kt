@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 
@@ -21,14 +22,16 @@ object FakeLiveBottomSheetDefaults {
     )
 
     @Composable
-    fun DragHandle() {
+    fun DragHandle(
+        color: Color = FakeLiveStreamTheme.colors.border
+    ) {
         Spacer(
             modifier = Modifier
                 .padding(12.dp)
                 .width(36.dp)
                 .height(4.dp)
                 .background(
-                    color = FakeLiveStreamTheme.colors.border,
+                    color = color,
                     shape = RoundedCornerShape(size = 2.5.dp)
                 )
         )

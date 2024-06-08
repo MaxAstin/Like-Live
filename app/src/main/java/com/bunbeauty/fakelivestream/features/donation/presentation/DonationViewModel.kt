@@ -54,6 +54,12 @@ class DonationViewModel @Inject constructor(
                 }
             }
 
+            Donation.Action.HideSuccessDonation -> {
+                setState {
+                    copy(shownSuccessDonation = null)
+                }
+            }
+
             is Donation.Action.BackClick -> {
                 sendEvent(Donation.Event.GoBack)
             }
@@ -76,7 +82,7 @@ class DonationViewModel @Inject constructor(
         purchasesListener.successPurchaseFlow.onEach { productId ->
             setState {
                 copy(
-                    shownSuccessPurchase = productList.find { product ->
+                    shownSuccessDonation = productList.find { product ->
                         product.id == productId
                     }
                 )

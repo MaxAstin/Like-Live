@@ -56,6 +56,7 @@ fun DonationScreen(
                 Donation.Event.GoBack -> {
                     navController.popBackStack()
                 }
+
                 is Donation.Event.StartPurchaseFlow -> {
                     onDonateClick(event.productId)
                 }
@@ -75,7 +76,8 @@ private fun DonationContent(
     onAction: (Donation.Action) -> Unit,
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        containerColor = FakeLiveStreamTheme.colors.background
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             Column(
@@ -145,6 +147,11 @@ private fun DonationContent(
 
         DonationBottomSheet(
             product = state.shownProduct,
+            onAction = onAction
+        )
+
+        SuccessDonationBottomSheet(
+            product = state.shownSuccessDonation,
             onAction = onAction
         )
     }
