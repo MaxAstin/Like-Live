@@ -27,6 +27,21 @@ private const val SHARE_EVENT = "share"
 private const val DONATE_EVENT = "donate"
 
 private const val OPEN_DONATION_EVENT = "open_donation_"
+private const val PRODUCT_NOT_FOUND_EVENT = "product_not_found_"
+private const val START_BILLING_FLOW_EVENT = "start_billing_flow_"
+private const val FAIL_BILLING_FLOW_EVENT = "fail_billing_flow_"
+private const val PURCHASE_PRODUCT_EVENT = "purchase_product_"
+private const val FEATURE_NOT_SUPPORTED_EVENT = "billing_not_supported"
+private const val SERVICE_DISCONNECTED_EVENT = "billing_disconnected"
+private const val USER_CANCELED_EVENT = "billing_user_canceled"
+private const val SERVICE_UNAVAILABLE_EVENT = "billing_service_unavailable"
+private const val BILLING_UNAVAILABLE_EVENT = "billing_unavailable"
+private const val ITEM_UNAVAILABLE_EVENT = "billing_item_unavailable"
+private const val DEVELOPER_ERROR_EVENT = "billing_developer_error"
+private const val ERROR_EVENT = "billing_error"
+private const val ITEM_ALREADY_OWNED_EVENT = "billing_item_already_owned"
+private const val ITEM_NOT_OWNED_EVENT = "billing_item_not_owned"
+private const val NETWORK_ERROR_EVENT = "billing_network_error"
 
 private const val ANALYTICS_TAG = "analytics"
 
@@ -35,46 +50,37 @@ class AnalyticsManager @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ) {
 
-    private var startStreamTimeMillis: Long? = null
-
     fun trackStreamStart(username: String, viewerCount: Int) {
-        startStreamTimeMillis = System.currentTimeMillis()
-
-        firebaseAnalytics.logEvent(STREAM_STARTED_EVENT) {
-            param(USERNAME_PARAM, username)
-            param(VIEWER_COUNT_PARAM, viewerCount.toLong())
-        }
-        firebaseAnalytics.logEvent("$VIEWER_COUNT_EVENT$viewerCount") {}
-
-        Log.d(ANALYTICS_TAG, "$STREAM_STARTED_EVENT: $username, ${viewerCount.toLong()}")
-        Log.d(ANALYTICS_TAG, "$VIEWER_COUNT_EVENT$viewerCount")
+        trackEvent("$VIEWER_COUNT_EVENT$viewerCount")
+        trackEvent(
+            event = STREAM_STARTED_EVENT,
+            params = mapOf(
+                USERNAME_PARAM to username,
+                VIEWER_COUNT_PARAM to viewerCount
+            )
+        )
     }
 
     fun trackStreamStop(durationInSeconds: Int) {
-        val durationString = durationInSeconds.toTimeString()
-
-        firebaseAnalytics.logEvent(STREAM_STOPPED_EVENT) {
-            param(STREAM_DURATION_PARAM, durationString)
-            param(FirebaseAnalytics.Param.VALUE, durationInSeconds.toLong())
-        }
-
-        Log.d(ANALYTICS_TAG, "$STREAM_STOPPED_EVENT: $durationString, ${durationInSeconds.toLong()}")
+        trackEvent(
+            event = STREAM_STOPPED_EVENT,
+            params = mapOf(
+                STREAM_DURATION_PARAM to durationInSeconds.toTimeString()
+            )
+        )
     }
 
     fun trackStreamFinish(durationInSeconds: Int) {
-        val durationString = durationInSeconds.toTimeString()
-
-        firebaseAnalytics.logEvent(STREAM_FINISHED_EVENT) {
-            param(STREAM_DURATION_PARAM, durationString)
-            param(FirebaseAnalytics.Param.VALUE, durationInSeconds.toLong())
-        }
-
-        Log.d(ANALYTICS_TAG, "$STREAM_FINISHED_EVENT: $durationString, ${durationInSeconds.toLong()}")
+        trackEvent(
+            event = STREAM_FINISHED_EVENT,
+            params = mapOf(
+                STREAM_DURATION_PARAM to durationInSeconds.toTimeString()
+            )
+        )
     }
 
     fun trackCameraError() {
-        firebaseAnalytics.logEvent(CAMERA_ERROR_EVENT) {}
-        Log.d(ANALYTICS_TAG, CAMERA_ERROR_EVENT)
+        trackEvent(event = CAMERA_ERROR_EVENT)
     }
 
     fun trackFeedback(isPositive: Boolean) {
@@ -83,34 +89,102 @@ class AnalyticsManager @Inject constructor(
         } else {
             FEEDBACK_NEGATIVE_EVENT
         }
-
-        firebaseAnalytics.logEvent(event) {}
-        Log.d(ANALYTICS_TAG, event)
+        trackEvent(event = event)
     }
 
     fun trackOpenQuestions() {
-        firebaseAnalytics.logEvent(OPEN_QUESTIONS_EVENT) {}
-        Log.d(ANALYTICS_TAG, OPEN_QUESTIONS_EVENT)
+        trackEvent(event = OPEN_QUESTIONS_EVENT)
     }
 
     fun trackSelectQuestion() {
-        firebaseAnalytics.logEvent(SELECT_QUESTION_EVENT) {}
-        Log.d(ANALYTICS_TAG, SELECT_QUESTION_EVENT)
+        trackEvent(event = SELECT_QUESTION_EVENT)
     }
 
     fun trackShare() {
-        firebaseAnalytics.logEvent(SHARE_EVENT) {}
-        Log.d(ANALYTICS_TAG, SHARE_EVENT)
+        trackEvent(event = SHARE_EVENT)
     }
 
     fun trackDonate() {
-        firebaseAnalytics.logEvent(DONATE_EVENT) {}
-        Log.d(ANALYTICS_TAG, DONATE_EVENT)
+        trackEvent(event = DONATE_EVENT)
     }
 
     fun trackOpenDonation(productId: String) {
-        val event = "$OPEN_DONATION_EVENT$productId"
-        firebaseAnalytics.logEvent(event) {}
+        trackEvent(event = "$OPEN_DONATION_EVENT$productId")
+    }
+
+    fun trackProductNotFound(productId: String) {
+        trackEvent(event = "$PRODUCT_NOT_FOUND_EVENT$productId")
+    }
+
+    fun trackStartBillingFlow(productId: String) {
+        trackEvent(event = "$START_BILLING_FLOW_EVENT$productId")
+    }
+
+    fun trackFailBillingFlow(productId: String) {
+        trackEvent(event = "$FAIL_BILLING_FLOW_EVENT$productId")
+    }
+
+    fun trackPurchaseProduct(productId: String) {
+        trackEvent(event = "$PURCHASE_PRODUCT_EVENT$productId")
+    }
+
+    fun trackFeatureNotSupported() {
+        trackEvent(event = FEATURE_NOT_SUPPORTED_EVENT)
+    }
+
+    fun trackServiceDisconnected() {
+        trackEvent(event = SERVICE_DISCONNECTED_EVENT)
+    }
+
+    fun trackUserCanceled() {
+        trackEvent(event = USER_CANCELED_EVENT)
+    }
+
+    fun trackServiceUnavailable() {
+        trackEvent(event = SERVICE_UNAVAILABLE_EVENT)
+    }
+
+    fun trackBillingUnavailable() {
+        trackEvent(event = BILLING_UNAVAILABLE_EVENT)
+    }
+
+    fun trackItemUnavailable() {
+        trackEvent(event = ITEM_UNAVAILABLE_EVENT)
+    }
+
+    fun trackDeveloperError() {
+        trackEvent(event = DEVELOPER_ERROR_EVENT)
+    }
+
+    fun trackError() {
+        trackEvent(event = ERROR_EVENT)
+    }
+
+    fun trackItemAlreadyOwned() {
+        trackEvent(event = ITEM_ALREADY_OWNED_EVENT)
+    }
+
+    fun trackItemNotOwned() {
+        trackEvent(event = ITEM_NOT_OWNED_EVENT)
+    }
+
+    fun trackNetworkError() {
+        trackEvent(event = NETWORK_ERROR_EVENT)
+    }
+
+    private fun trackEvent(event: String, params: Map<String, Any> = emptyMap()) {
+        firebaseAnalytics.logEvent(event) {
+            params.forEach { (key, value) ->
+                when (value) {
+                    is String -> param(key, value)
+                    is Long -> param(key, value)
+                    is Int -> param(key, value.toLong())
+                    else -> {
+                        // Not supported
+                    }
+                }
+            }
+        }
         Log.d(ANALYTICS_TAG, event)
     }
 

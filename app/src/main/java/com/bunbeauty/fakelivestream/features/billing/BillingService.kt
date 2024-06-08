@@ -8,14 +8,18 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.queryProductDetails
+import com.bunbeauty.fakelivestream.common.analytics.AnalyticsManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@Singleton
 class BillingService @Inject constructor(
-    private val billingClient: BillingClient
+    private val billingClient: BillingClient,
+    private val analyticsManager: AnalyticsManager,
 ) {
 
     suspend fun getOneTypeProducts(ids: List<String>): List<Product>? {
@@ -39,7 +43,11 @@ class BillingService @Inject constructor(
         val product = getProductDetails(
             type = BillingClient.ProductType.INAPP,
             ids = listOf(id)
-        )?.firstOrNull() ?: return false
+        )?.firstOrNull()
+        if (product == null) {
+            analyticsManager.trackProductNotFound(productId = id)
+            return false
+        }
 
         val productDetailsParams = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -49,9 +57,15 @@ class BillingService @Inject constructor(
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(productDetailsParams)
             .build()
+        val result = billingClient.launchBillingFlow(activity, billingFlowParams)
+        val isSuccessful = result.responseCode == BillingClient.BillingResponseCode.OK
+        if (isSuccessful) {
+            analyticsManager.trackStartBillingFlow(productId = id)
+        } else {
+            analyticsManager.trackFailBillingFlow(productId = id)
+        }
 
-        billingClient.launchBillingFlow(activity, billingFlowParams)
-        return true
+        return isSuccessful
     }
 
     private suspend fun getProducts(

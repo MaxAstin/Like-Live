@@ -56,6 +56,9 @@ fun DonationScreen(
                 Donation.Event.GoBack -> {
                     navController.popBackStack()
                 }
+                is Donation.Event.StartPurchaseFlow -> {
+                    onDonateClick(event.productId)
+                }
             }
         }.launchIn(this)
     }
@@ -63,7 +66,6 @@ fun DonationScreen(
     DonationContent(
         state = state,
         onAction = onAction,
-        onDonateClick = onDonateClick,
     )
 }
 
@@ -71,7 +73,6 @@ fun DonationScreen(
 private fun DonationContent(
     state: Donation.State,
     onAction: (Donation.Action) -> Unit,
-    onDonateClick: (String) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -133,7 +134,6 @@ private fun DonationContent(
                                     text = product.price,
                                     onClick = {
                                         onAction(Donation.Action.DonationClick(productId = product.id))
-                                        onDonateClick(product.name)
                                     }
                                 )
                             }
@@ -184,6 +184,5 @@ fun IntroScreenPreview() {
             shownProduct = null
         ),
         onAction = {},
-        onDonateClick = {},
     )
 }
