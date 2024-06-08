@@ -53,11 +53,11 @@ private val LightColorScheme = ColorScheme(
     ),
 )
 
-val LocalFakeLiveStreamColors = staticCompositionLocalOf { LightColorScheme }
+val LocalFakeLiveColors = staticCompositionLocalOf { LightColorScheme }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FakeLiveStreamTheme(
+fun FakeLiveTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
@@ -71,8 +71,8 @@ fun FakeLiveStreamTheme(
 
     CompositionLocalProvider(
         LocalOverscrollConfiguration provides null,
-        LocalFakeLiveStreamColors provides rememberedColors,
-        LocalFakeLiveStreamTypography provides FakeLiveStreamTypography(),
+        LocalFakeLiveColors provides rememberedColors,
+        LocalFakeLiveTypography provides FakeLiveStreamTypography(),
         content = content
     )
 }
@@ -81,9 +81,9 @@ object FakeLiveStreamTheme {
     val colors: ColorScheme
         @Composable
         @ReadOnlyComposable
-        get() = LocalFakeLiveStreamColors.current
+        get() = LocalFakeLiveColors.current
     val typography: FakeLiveStreamTypography
         @Composable
         @ReadOnlyComposable
-        get() = LocalFakeLiveStreamTypography.current
+        get() = LocalFakeLiveTypography.current
 }

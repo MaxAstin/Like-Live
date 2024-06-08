@@ -25,14 +25,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.fakelivestream.R
+import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.DONATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.STREAM
-import com.bunbeauty.fakelivestream.common.ui.keepScreenOn
-import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.fakelivestream.common.ui.util.keepScreenOn
 import com.bunbeauty.fakelivestream.common.util.launchInAppReview
 import com.bunbeauty.fakelivestream.common.util.openSettings
 import com.bunbeauty.fakelivestream.common.util.openSharing
+import com.bunbeauty.fakelivestream.features.billing.BillingService
+import com.bunbeauty.fakelivestream.features.donation.view.DonationScreen
 import com.bunbeauty.fakelivestream.features.intro.view.IntroScreen
 import com.bunbeauty.fakelivestream.features.main.presentation.Main
 import com.bunbeauty.fakelivestream.features.main.presentation.MainViewModel
@@ -42,9 +45,12 @@ import com.bunbeauty.fakelivestream.features.stream.view.DURATION_NAV_PARAM
 import com.bunbeauty.fakelivestream.features.stream.view.StreamScreen
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
+import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=com.bunbeauty.fakelivestream"
 
@@ -52,6 +58,9 @@ private const val GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var billingService: Lazy<BillingService>
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -75,7 +84,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            FakeLiveStreamTheme {
+            FakeLiveTheme {
                 val state by mainViewModel.state.collectAsStateWithLifecycle()
 
                 AppContent()
@@ -122,7 +131,6 @@ class MainActivity : ComponentActivity() {
                 .statusBarsPadding()
                 .navigationBarsPadding()
         ) { padding ->
-            val scope = rememberCoroutineScope()
             val navController = rememberNavController()
             LaunchedEffect(Unit) {
                 mainViewModel.event.onEach { event ->
@@ -131,7 +139,7 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(STREAM)
                         }
                     }
-                }.launchIn(scope)
+                }.launchIn(this)
             }
 
             LaunchedEffect(Unit) {
@@ -189,6 +197,26 @@ class MainActivity : ComponentActivity() {
                         )
                         if (!isSuccessful) {
                             // TODO show error
+                        }
+                    },
+                    onDonateClick = {
+                        navController.navigate(DONATION)
+                    }
+                )
+            }
+            composable(route = DONATION) {
+                val scope = rememberCoroutineScope()
+                DonationScreen(
+                    navController = navController,
+                    onDonateClick = { productId ->
+                        scope.launch {
+                            val isSuccessful = billingService.get().launchOneTypeProductFlow(
+                                activity = this@MainActivity,
+                                id = productId,
+                            )
+                            if (!isSuccessful) {
+                                // TODO show error
+                            }
                         }
                     }
                 )

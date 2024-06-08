@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,12 +17,19 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +44,7 @@ fun FakeLiveBottomSheet(
     windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val systemBottomBarHeight = getSystemBottomBarHeight()
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
@@ -51,9 +58,27 @@ fun FakeLiveBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .navigationBarsPadding()
+                .padding(bottom = systemBottomBarHeight)
         ) {
             content()
+        }
+    }
+}
+
+@Composable
+fun getSystemBottomBarHeight(): Dp {
+    val view = LocalView.current
+    val density = LocalDensity.current
+
+    return remember {
+        val insets = ViewCompat.getRootWindowInsets(view)
+        if (insets != null) {
+            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            with(density) {
+                bottomInset.toDp().value.dp
+            }
+        } else {
+            0.dp
         }
     }
 }
@@ -66,7 +91,7 @@ fun FakeLiveBottomSheetPreview() {
     LaunchedEffect(Unit) {
         sheetState.show()
     }
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         FakeLiveBottomSheet(
             onDismissRequest = {},
             sheetState = sheetState,

@@ -29,6 +29,12 @@
     <string name="preparation_viewer_count">Viewer count</string>
     <string name="preparation_start_live">Start Live</string>
 
+    <string name="donation_title">Support %s</string>
+    <string name="donation_descriptio">This app is created by an indie developer without external financial support. Every contribution matters greatly, and you have the power to influence the development of this project.</string>
+    <string name="donation_donate">Donate %s</string>
+    <string name="donation_success">Success</string>
+    <string name="donation_ok">OK</string>
+
     <string name="stream_join_requests_title">Requests to join</string>
     <string name="stream_join_requests_body">No Requests Yet</string>
     <string name="stream_join_requests_description">Requests to co-host show up here.</string>

@@ -27,6 +27,12 @@
     <string name="preparation_viewer_count">Recuento de espectadores</string>
     <string name="preparation_start_live">Comenzar Directo</string>
 
+    <string name="donation_title">Soporte %s</string>
+    <string name="donation_descriptio">Esta aplicación fue creada por un desarrollador independiente sin apoyo financiero externo. Cada contribución es muy importante y usted tiene el poder de influir en el desarrollo de este proyecto.</string>
+    <string name="donation_donate">Donar %s</string>
+    <string name="donation_success">Éxito</string>
+    <string name="donation_ok">OK</string>
+
     <string name="stream_join_requests_title">Solicitudes para unirse</string>
     <string name="stream_join_requests_body">Aún no hay solicitudes</string>
     <string name="stream_join_requests_description">Las solicitudes para ser co-anfitrión aparecerán aquí.</string>

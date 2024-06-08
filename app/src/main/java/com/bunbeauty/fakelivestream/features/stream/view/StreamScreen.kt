@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +52,7 @@ import com.bunbeauty.fakelivestream.common.ui.clickableWithoutIndication
 import com.bunbeauty.fakelivestream.common.ui.components.CachedImage
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.stream.presentation.Stream
 import com.bunbeauty.fakelivestream.features.stream.presentation.StreamViewModel
@@ -65,6 +65,7 @@ import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionsBottomSheet
 import com.bunbeauty.fakelivestream.features.stream.view.ui.VideoComponent
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -81,7 +82,6 @@ fun StreamScreen(navController: NavHostController) {
         }
     }
 
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
@@ -92,7 +92,7 @@ fun StreamScreen(navController: NavHostController) {
                         ?.set(DURATION_NAV_PARAM, event.durationInSeconds)
                 }
             }
-        }.launchIn(scope)
+        }.launchIn(this)
     }
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         onAction(Stream.Action.Start)
@@ -119,7 +119,6 @@ fun StreamContent(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = FakeLiveStreamTheme.colors.surface,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { padding ->
         Column(
             modifier = Modifier
@@ -143,7 +142,10 @@ fun StreamContent(
                             modifier = modifier,
                             isFront = state.isCameraFront,
                             isEnabled = state.isCameraEnabled,
-                            image = state.image
+                            image = state.image,
+                            onCameraError = { exception ->
+                                onAction(Stream.Action.CameraError(exception = exception))
+                            }
                         )
                     }
 
@@ -692,7 +694,7 @@ private fun DirectBottomSheet(
 @LocalePreview
 @Composable
 private fun StreamScreenPreview() {
-    FakeLiveStreamTheme {
+    FakeLiveTheme {
         Box(modifier = Modifier.background(Color.White)) {
             StreamContent(
                 state = ViewState(
@@ -702,7 +704,7 @@ private fun StreamScreenPreview() {
                         thousands = "10",
                         hundreds = "4",
                     ),
-                    comments = listOf(
+                    comments = persistentListOf(
                         CommentUi(
                             picture = ImageSource.ResId(R.drawable.img_default_avatar),
                             username = "username1",

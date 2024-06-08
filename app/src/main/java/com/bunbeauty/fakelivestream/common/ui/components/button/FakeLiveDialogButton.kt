@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -18,20 +18,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
+import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.fakelivestream.common.ui.util.rememberMultipleEventsCutter
 
 @Composable
-fun DialogButton(
+fun FakeLiveDialogButton(
     text: String,
     background: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     @DrawableRes iconId: Int? = null,
 ) {
+    val multipleEventsCutter = rememberMultipleEventsCutter()
+
     Button(
         modifier = modifier,
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(containerColor = background),
-        onClick = onClick,
+        onClick = {
+            multipleEventsCutter.processEvent(onClick)
+        },
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -54,9 +60,9 @@ fun DialogButton(
 
 @Preview
 @Composable
-private fun DialogButtonPreview() {
-    FakeLiveStreamTheme {
-        DialogButton(
+private fun FakeLiveDialogButtonPreview() {
+    FakeLiveTheme {
+        FakeLiveDialogButton(
             text = "Button",
             iconId = R.drawable.thumbs_up,
             background = FakeLiveStreamTheme.colors.interactive,

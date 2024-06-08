@@ -63,6 +63,7 @@ interface Stream {
         data object Start : Action
         data object Stop : Action
         data object FinishStreamClick : Action
+        data class CameraError(val exception: Exception) : Action
     }
 
     sealed interface Event : Base.Event {

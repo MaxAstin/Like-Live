@@ -4,13 +4,14 @@ import androidx.compose.runtime.Immutable
 import com.bunbeauty.fakelivestream.common.ui.components.ImageSource
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionState
 import com.bunbeauty.fakelivestream.features.stream.view.ui.QuestionUi
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class ViewState(
     val image: ImageSource<*>,
     val username: String,
     val viewersCount: ViewersCountUi,
-    val comments: List<CommentUi>,
+    val comments: ImmutableList<CommentUi>,
     val reactionCount: Int,
     val mode: Mode,
     val isCameraEnabled: Boolean,

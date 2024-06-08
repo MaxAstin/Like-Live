@@ -29,7 +29,7 @@ fun Stream.State.toViewState(): ViewState {
         },
         comments = comments.map { comment ->
             comment.toCommentUi()
-        },
+        }.toImmutableList(),
         reactionCount = reactionCount,
         mode = if (BuildConfig.SHOW_CAMERA) Mode.CAMERA else Mode.VIDEO,
         isCameraEnabled = isCameraEnabled,

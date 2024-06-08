@@ -12,13 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,7 +30,7 @@ import com.bunbeauty.fakelivestream.R
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.fakelivestream.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.fakelivestream.common.ui.LocalePreview
-import com.bunbeauty.fakelivestream.common.ui.components.button.PrimaryButton
+import com.bunbeauty.fakelivestream.common.ui.components.button.FakeLivePrimaryButton
 import com.bunbeauty.fakelivestream.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.fakelivestream.common.ui.theme.bold
 import com.bunbeauty.fakelivestream.features.intro.presentation.Intro
@@ -49,7 +48,6 @@ fun IntroScreen(navController: NavHostController) {
         }
     }
 
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
             when (event) {
@@ -61,7 +59,7 @@ fun IntroScreen(navController: NavHostController) {
                     }
                 }
             }
-        }.launchIn(scope)
+        }.launchIn(this)
     }
 
     IntroContent(
@@ -111,12 +109,12 @@ private fun IntroContent(
                 )
                 Spacer(modifier = Modifier.weight(1f))
             }
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
                 color = FakeLiveStreamTheme.colors.borderVariant,
             )
-            PrimaryButton(
+            FakeLivePrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),

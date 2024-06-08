@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.bunbeauty.fakelivestream.R
 
-internal val LocalFakeLiveStreamTypography = staticCompositionLocalOf { FakeLiveStreamTypography() }
+internal val LocalFakeLiveTypography = staticCompositionLocalOf { FakeLiveStreamTypography() }
 
 @Immutable
 data class FakeLiveStreamTypography(

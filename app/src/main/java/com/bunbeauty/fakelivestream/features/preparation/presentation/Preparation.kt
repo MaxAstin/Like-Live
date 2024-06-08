@@ -11,6 +11,7 @@ interface Preparation {
         val image: ImageSource<*>,
         val username: String,
         val viewerCount: ViewerCount,
+        val highlightDonate: Boolean,
         val showFeedbackDialog: Boolean,
     ): Base.State
 
@@ -25,6 +26,7 @@ interface Preparation {
         data class FeedbackClick(val isPositive: Boolean): Action
         data class NotShowFeedbackChecked(val checked: Boolean): Action
         data object ShareClick: Action
+        data object DonateClick: Action
     }
 
     sealed interface Event: Base.Event {
@@ -32,6 +34,7 @@ interface Preparation {
         data object HandlePositiveFeedbackClick: Event
         data object HandleAvatarClick: Event
         data object HandleShareClick: Event
+        data object HandleDonateClick: Event
     }
 
 }

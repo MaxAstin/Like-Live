@@ -14,7 +14,9 @@ import com.bunbeauty.fakelivestream.features.domain.SaveUsernameUseCase
 import com.bunbeauty.fakelivestream.features.domain.SaveViewerCountUseCase
 import com.bunbeauty.fakelivestream.features.domain.model.ViewerCount
 import com.bunbeauty.fakelivestream.features.preparation.domain.SaveShouldAskFeedbackUseCase
+import com.bunbeauty.fakelivestream.features.preparation.domain.SaveShouldHighlightDonateUseCase
 import com.bunbeauty.fakelivestream.features.preparation.domain.ShouldAskFeedbackUseCase
+import com.bunbeauty.fakelivestream.features.preparation.domain.ShouldHighlightDonateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -36,6 +38,8 @@ class PreparationViewModel @Inject constructor(
     private val saveViewerCountUseCase: SaveViewerCountUseCase,
     private val shouldAskFeedbackUseCase: ShouldAskFeedbackUseCase,
     private val saveShouldAskFeedbackUseCase: SaveShouldAskFeedbackUseCase,
+    private val shouldHighlightDonateUseCase: ShouldHighlightDonateUseCase,
+    private val saveShouldHighlightDonateUseCase: SaveShouldHighlightDonateUseCase,
     private val analyticsManager: AnalyticsManager,
 ) : BaseViewModel<Preparation.State, Preparation.Action, Preparation.Event>(
     initState = {
@@ -43,6 +47,7 @@ class PreparationViewModel @Inject constructor(
             image = ImageSource.ResId(R.drawable.img_default_avatar),
             username = "",
             viewerCount = ViewerCount.V_100_200,
+            highlightDonate = false,
             showFeedbackDialog = false,
         )
     }
@@ -134,15 +139,26 @@ class PreparationViewModel @Inject constructor(
                 analyticsManager.trackShare()
                 sendEvent(Preparation.Event.HandleShareClick)
             }
+            Preparation.Action.DonateClick -> {
+                setState {
+                    copy(highlightDonate = false)
+                }
+                viewModelScope.launch {
+                    saveShouldHighlightDonateUseCase(shouldHighlight = false)
+                }
+                analyticsManager.trackDonate()
+                sendEvent(Preparation.Event.HandleDonateClick)
+            }
         }
     }
 
     private fun initState() {
         viewModelScope.launch {
-            mutableState.update { state ->
-                state.copy(
+            setState {
+                copy(
                     username = getUsernameUseCase(),
-                    viewerCount = getViewerCountUseCase()
+                    viewerCount = getViewerCountUseCase(),
+                    highlightDonate = shouldHighlightDonateUseCase()
                 )
             }
         }
