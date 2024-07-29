@@ -129,14 +129,15 @@ private fun PreparationContent(
                     onAction(Preparation.Action.ShareClick)
                 }
             )
-            FakeLiveIconButton(
-                iconId = R.drawable.ic_donate,
-                contentDescription = "donate",
-                hasMarker = state.highlightDonate,
-                onClick = {
-                    onAction(Preparation.Action.DonateClick)
-                }
-            )
+//          TODO uncomment after adding In-App products
+//          FakeLiveIconButton(
+//              iconId = R.drawable.ic_donate,
+//              contentDescription = "donate",
+//              hasMarker = state.highlightDonate,
+//              onClick = {
+//                  onAction(Preparation.Action.DonateClick)
+//              }
+//          )
         }
 
         Column(modifier = Modifier.align(Alignment.Center)) {
