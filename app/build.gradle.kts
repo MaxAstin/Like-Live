@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.bunbeauty.fakelivestream"
+    namespace = "com.bunbeauty.tiptoplive"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.bunbeauty.fakelivestream"
+        applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 34
         versionCode = 190
