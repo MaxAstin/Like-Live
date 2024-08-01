@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.FakeLiveStream" parent="Theme.AppCompat.Light">
+    <style name="Theme.TipTop" parent="Theme.AppCompat.Light">
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.TipTopSplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/anim_splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.TipTop</item>
     </style>
 
 
