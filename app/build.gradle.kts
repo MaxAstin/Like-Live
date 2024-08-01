@@ -15,8 +15,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 34
-        versionCode = 190
-        versionName = "1.9.0"
+        versionCode = 201
+        versionName = "2.0.1"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -67,6 +67,7 @@ dependencies {
     implementation("com.android.support:multidex:1.0.3")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Compose
     implementation("androidx.activity:activity-compose:1.9.0")
