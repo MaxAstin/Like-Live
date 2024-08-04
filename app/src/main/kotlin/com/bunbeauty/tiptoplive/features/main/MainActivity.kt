@@ -159,7 +159,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainNavigation(
+    private fun MainNavigation(
         navController: NavHostController,
         modifier: Modifier = Modifier,
     ) {

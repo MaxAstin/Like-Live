@@ -1,5 +1,6 @@
 package com.bunbeauty.tiptoplive.features.preparation.view
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +27,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -41,12 +45,16 @@ import com.bunbeauty.tiptoplive.common.ui.noEffectClickable
 import com.bunbeauty.tiptoplive.common.ui.rippleClickable
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveStreamTheme
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
+import com.bunbeauty.tiptoplive.common.util.roundToEvent
 import com.bunbeauty.tiptoplive.features.domain.model.ViewerCount
 import com.bunbeauty.tiptoplive.features.main.view.FeedbackDialog
 import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
+import com.bunbeauty.tiptoplive.features.recording.ScreenRecordingManager
+import com.bunbeauty.tiptoplive.features.recording.StartRecordingResultContract
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @Composable
 fun PreparationScreen(
@@ -224,6 +232,26 @@ private fun PreparationContent(
             }
         }
 
+        // TODO move to Live screen
+        val context = LocalContext.current
+        val scope = rememberCoroutineScope()
+        val screenRecordingManager = remember {
+            ScreenRecordingManager()
+        }
+        val configuration = LocalConfiguration.current
+        val startMediaProjection = rememberLauncherForActivityResult(StartRecordingResultContract()) { data ->
+            data?.let {
+                scope.launch {
+                    screenRecordingManager.startRecording(
+                        context = context,
+                        data = data,
+                        screenWidth = configuration.screenWidthDp.roundToEvent(),
+                        screenHeight = configuration.screenHeightDp.roundToEvent(),
+                    )
+                }
+            }
+        }
+
         FakeLiveGradientButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -239,7 +267,12 @@ private fun PreparationContent(
             ),
             shape = RoundedCornerShape(6.dp),
             onClick = {
-                onAction(Preparation.Action.StartStreamClick)
+                if (screenRecordingManager.started) {
+                    screenRecordingManager.stopRecording()
+                } else {
+                    startMediaProjection.launch(Unit)
+                }
+                //onAction(Preparation.Action.StartStreamClick)
             }
         ) {
             Text(
