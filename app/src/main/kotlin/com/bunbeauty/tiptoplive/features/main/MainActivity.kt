@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -26,16 +27,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.CROP_IMAGE
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.DONATION
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.STREAM
+import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.URI
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.util.keepScreenOn
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
 import com.bunbeauty.tiptoplive.common.util.openSharing
 import com.bunbeauty.tiptoplive.features.billing.BillingService
+import com.bunbeauty.tiptoplive.features.cropimage.CropImageScreen
 import com.bunbeauty.tiptoplive.features.donation.view.DonationScreen
 import com.bunbeauty.tiptoplive.features.intro.view.IntroScreen
 import com.bunbeauty.tiptoplive.features.main.presentation.Main
@@ -180,10 +184,8 @@ class MainActivity : ComponentActivity() {
             composable(route = PREPARATION) { entry ->
                 val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
                 PreparationScreen(
+                    navController = navController,
                     streamDurationInSeconds = streamDurationInSeconds,
-                    onAvatarClick = {
-                        launchAvatarSetting()
-                    },
                     onStartStreamClick = {
                         requestCameraPermission()
                     },
@@ -201,9 +203,6 @@ class MainActivity : ComponentActivity() {
                         if (!isSuccessful) {
                             // TODO show error
                         }
-                    },
-                    onDonateClick = {
-                        navController.navigate(DONATION)
                     }
                 )
             }
@@ -226,6 +225,13 @@ class MainActivity : ComponentActivity() {
             }
             composable(route = STREAM) {
                 StreamScreen(navController = navController)
+            }
+            composable(route = CROP_IMAGE) { navBackStackEntry ->
+                val uri = navBackStackEntry.arguments?.getString(URI)?.toUri()
+                CropImageScreen(
+                    navController = navController,
+                    uri = uri,
+                )
             }
         }
     }
