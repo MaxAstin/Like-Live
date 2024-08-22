@@ -1,5 +1,7 @@
 package com.bunbeauty.tiptoplive.features.preparation.view
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
@@ -30,7 +32,12 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.CROP_IMAGE
+import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.DONATION
+import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters
+import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.withBraces
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
@@ -47,15 +54,18 @@ import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.net.URLEncoder
+import kotlin.text.Charsets.UTF_8
+
+private const val IMAGE = "image/*"
 
 @Composable
 fun PreparationScreen(
+    navController: NavHostController,
     streamDurationInSeconds: Int?,
-    onAvatarClick: () -> Unit,
     onStartStreamClick: () -> Unit,
     onPositiveFeedbackClick: () -> Unit,
     onShareClick: () -> Unit,
-    onDonateClick: () -> Unit,
 ) {
     val viewModel: PreparationViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -63,6 +73,13 @@ fun PreparationScreen(
         { action: Preparation.Action ->
             viewModel.onAction(action)
         }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        val encodedUri = URLEncoder.encode(uri.toString(), UTF_8.toString())
+        navController.navigate(
+            CROP_IMAGE.replace(NavigationParameters.URI.withBraces(), encodedUri)
+        )
     }
 
     LaunchedEffect(Unit) {
@@ -77,7 +94,7 @@ fun PreparationScreen(
                 }
 
                 Preparation.Event.HandleAvatarClick -> {
-                    onAvatarClick()
+                    galleryLauncher.launch(IMAGE)
                 }
 
                 Preparation.Event.HandleShareClick -> {
@@ -85,7 +102,7 @@ fun PreparationScreen(
                 }
 
                 Preparation.Event.HandleDonateClick -> {
-                    onDonateClick()
+                    navController.navigate(DONATION)
                 }
             }
         }.launchIn(this)
