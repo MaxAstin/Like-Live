@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="common_under_development">Esta característica está en desarrollo</string>
+
     <string name="intro_next">Siguiente</string>
     <string name="intro_welcome">Bienvenido a %s</string>
     <string name="intro_description">Ponemos su privacidad por encima de todo. Sus datos son sagrados para nosotros, por lo que se mantienen estrictamente confidenciales y seguros. Cuando se trata de Directs falsos, sólo tú tienes acceso a ellos. Así que relájate, diviértete y nosotros nos encargaremos del resto.</string>
@@ -26,6 +29,8 @@
     <string name="preparation_username_hint">nombre_de_usuario</string>
     <string name="preparation_viewer_count">Recuento de espectadores</string>
     <string name="preparation_start_live">Comenzar Directo</string>
+
+    <string name="crop_image_next">Próximo</string>
 
     <string name="donation_title">Soporte %s</string>
     <string name="donation_descriptio">Esta aplicación fue creada por un desarrollador independiente sin apoyo financiero externo. Cada contribución es muy importante y usted tiene el poder de influir en el desarrollo de este proyecto.</string>

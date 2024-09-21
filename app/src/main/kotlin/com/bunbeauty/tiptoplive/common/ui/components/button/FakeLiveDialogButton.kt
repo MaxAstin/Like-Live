@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,13 +28,14 @@ fun FakeLiveDialogButton(
     background: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(6.dp),
     @DrawableRes iconId: Int? = null,
 ) {
     val multipleEventsCutter = rememberMultipleEventsCutter()
 
     Button(
         modifier = modifier,
-        shape = RoundedCornerShape(6.dp),
+        shape = shape,
         colors = ButtonDefaults.buttonColors(containerColor = background),
         onClick = {
             multipleEventsCutter.processEvent(onClick)
