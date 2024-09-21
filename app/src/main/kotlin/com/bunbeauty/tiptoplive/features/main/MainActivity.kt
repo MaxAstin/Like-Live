@@ -1,7 +1,9 @@
 package com.bunbeauty.tiptoplive.features.main
 
 import android.Manifest.permission.CAMERA
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +34,7 @@ import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.DONATIO
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.INTRO
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.PREPARATION
 import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.STREAM
+import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.CROPPED_IMAGE_URI
 import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.URI
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.util.keepScreenOn
@@ -48,8 +51,6 @@ import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
 import com.bunbeauty.tiptoplive.features.stream.view.DURATION_NAV_PARAM
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -66,14 +67,6 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var billingService: Lazy<BillingService>
-
-    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            mainViewModel.onAction(Main.Action.AvatarSelected(uri = result.uriContent))
-        } else {
-            // TODO show error
-        }
-    }
 
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -120,15 +113,6 @@ class MainActivity : ComponentActivity() {
         } else {
             requestCameraPermissionLauncher.launch(CAMERA)
         }
-    }
-
-    private fun launchAvatarSetting() {
-        cropImage.launch(
-            CropImageContractOptions(
-                uri = null,
-                cropImageOptions = CropImageDefaults.options()
-            )
-        )
     }
 
     @Composable
@@ -183,9 +167,11 @@ class MainActivity : ComponentActivity() {
             }
             composable(route = PREPARATION) { entry ->
                 val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
+                val croppedImageUri = entry.savedStateHandle.get<Uri>(CROPPED_IMAGE_URI)
                 PreparationScreen(
                     navController = navController,
                     streamDurationInSeconds = streamDurationInSeconds,
+                    croppedImageUri = croppedImageUri,
                     onStartStreamClick = {
                         requestCameraPermission()
                     },
@@ -231,6 +217,13 @@ class MainActivity : ComponentActivity() {
                 CropImageScreen(
                     navController = navController,
                     uri = uri,
+                    onMockClick = {
+                        Toast.makeText(
+                            this@MainActivity,
+                            getString(R.string.common_under_development),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 )
             }
         }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="common_under_development">Este recurso está em desenvolvimento</string>
+
     <string name="intro_next">Сontinuar</string>
     <string name="intro_welcome">Bem-vindo ao %s</string>
     <string name="intro_description">Colocamos a sua privacidade acima de tudo. Seus dados são sagrados para nós, por isso permanecem confidenciais e seguros. Quando se trata de transmissões falsas, só você tem acesso a elas. Então relaxe, divirta-se e nós cuidaremos do resto!</string>
@@ -28,6 +30,8 @@
     <string name="preparation_username_hint">user_name</string>
     <string name="preparation_viewer_count">Contagem de espectadores</string>
     <string name="preparation_start_live">Iniciar Ao Vivo</string>
+
+    <string name="crop_image_next">Próximo</string>
 
     <string name="donation_title">Suporte %s</string>
     <string name="donation_descriptio">Este aplicativo foi criado por um desenvolvedor independente sem suporte financeiro externo. Cada contribuição é muito importante e você tem o poder de influenciar o desenvolvimento deste projeto.</string>
