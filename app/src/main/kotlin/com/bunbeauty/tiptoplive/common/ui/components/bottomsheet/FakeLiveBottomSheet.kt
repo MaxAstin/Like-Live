@@ -41,7 +41,7 @@ fun FakeLiveBottomSheet(
     containerColor: Color = FakeLiveStreamTheme.colors.surfaceVariant,
     contentColor: Color = contentColorFor(containerColor),
     dragHandle: @Composable (() -> Unit)? = { FakeLiveBottomSheetDefaults.DragHandle() },
-    windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
+    contentWindowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val systemBottomBarHeight = getSystemBottomBarHeight()
@@ -52,7 +52,7 @@ fun FakeLiveBottomSheet(
         containerColor = containerColor,
         contentColor = contentColor,
         dragHandle = dragHandle,
-        windowInsets = windowInsets,
+        contentWindowInsets = { contentWindowInsets },
         modifier = modifier
     ) {
         Column(
