@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="common_under_development">Эта функция находится в стадии разработки</string>
+    <string name="common_something_went_wrong">Что-то пошло не так</string>
 
     <string name="intro_next">Продолжить</string>
     <string name="intro_welcome">Добро пожаловать в %s</string>

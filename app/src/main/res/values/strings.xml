@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">TipTop Live</string>
 
     <string name="common_under_development">This feature is under development</string>
+    <string name="common_something_went_wrong">Something went wrong</string>
 
     <string name="intro_next">Next</string>
     <string name="intro_welcome">Welcome to %s</string>

@@ -27,7 +27,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.CROPPED_IMAGE_URI
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
 import com.bunbeauty.tiptoplive.common.ui.components.button.FakeLiveDialogButton
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveStreamTheme
@@ -72,8 +72,7 @@ fun CropImageScreen(
                     .size(28.dp)
                     .clickableWithoutIndication {
                         onMockClick()
-                    }
-                ,
+                    },
                 imageVector = ImageVector.vectorResource(R.drawable.ic_magic_wand),
                 contentDescription = "Magic wand",
                 tint = FakeLiveStreamTheme.colors.onBackground,
@@ -133,10 +132,15 @@ private fun CropImageView(
                         setImageUriAsync(uri)
                     }.also { view ->
                         val listener = CropImageView.OnCropImageCompleteListener { _, result ->
-                            navController.popBackStack()
-                            navController.currentBackStackEntry
-                                ?.savedStateHandle
-                                ?.set(CROPPED_IMAGE_URI, result.uriContent)
+                            navController.navigate(
+                                route = NavigationRote.Preparation(
+                                    uri = result.uriContent.toString()
+                                )
+                            ) {
+                                popUpTo<NavigationRote.Preparation> {
+                                    inclusive = true
+                                }
+                            }
                         }
                         view.setOnCropImageCompleteListener(listener)
                     }

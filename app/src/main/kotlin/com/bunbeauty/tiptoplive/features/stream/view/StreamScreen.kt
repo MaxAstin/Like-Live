@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.blurTop
 import com.bunbeauty.tiptoplive.common.ui.clickableWithoutIndication
@@ -68,8 +69,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-const val DURATION_NAV_PARAM = "duration"
-
 @SuppressLint("DiscouragedApi")
 @Composable
 fun StreamScreen(navController: NavHostController) {
@@ -85,10 +84,15 @@ fun StreamScreen(navController: NavHostController) {
         viewModel.event.onEach { event ->
             when (event) {
                 is Stream.Event.GoBack -> {
-                    navController.popBackStack()
-                    navController.currentBackStackEntry
-                        ?.savedStateHandle
-                        ?.set(DURATION_NAV_PARAM, event.durationInSeconds)
+                    navController.navigate(
+                        route = NavigationRote.Preparation(
+                            durationInSeconds = event.durationInSeconds
+                        )
+                    ) {
+                        popUpTo<NavigationRote.Preparation> {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }.launchIn(this)

@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="common_under_development">Este recurso está em desenvolvimento</string>
+    <string name="common_something_went_wrong">Algo deu errado</string>
 
     <string name="intro_next">Сontinuar</string>
     <string name="intro_welcome">Bem-vindo ao %s</string>

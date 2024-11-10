@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -106,4 +107,7 @@ dependencies {
 
     // Billing
     implementation(libs.billing.ktx)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 }

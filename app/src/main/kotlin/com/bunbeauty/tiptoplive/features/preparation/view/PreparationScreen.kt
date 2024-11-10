@@ -35,10 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.CROP_IMAGE
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.DONATION
-import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters
-import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.withBraces
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.LocalePreview
 import com.bunbeauty.tiptoplive.common.ui.components.CachedImage
 import com.bunbeauty.tiptoplive.common.ui.components.FakeLiveTextField
@@ -55,8 +52,6 @@ import com.bunbeauty.tiptoplive.features.preparation.presentation.Preparation
 import com.bunbeauty.tiptoplive.features.preparation.presentation.PreparationViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.net.URLEncoder
-import kotlin.text.Charsets.UTF_8
 
 private const val IMAGE = "image/*"
 
@@ -77,10 +72,13 @@ fun PreparationScreen(
         }
     }
 
-    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        val encodedUri = URLEncoder.encode(uri.toString(), UTF_8.toString())
+    val galleryLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
         navController.navigate(
-            CROP_IMAGE.replace(NavigationParameters.URI.withBraces(), encodedUri)
+            NavigationRote.CropImage(
+                uri = uri.toString()
+            )
         )
     }
 
@@ -104,7 +102,7 @@ fun PreparationScreen(
                 }
 
                 Preparation.Event.HandleDonateClick -> {
-                    navController.navigate(DONATION)
+                    navController.navigate(NavigationRote.Donation)
                 }
             }
         }.launchIn(this)

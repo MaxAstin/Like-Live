@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="common_under_development">Esta característica está en desarrollo</string>
+    <string name="common_something_went_wrong">Algo salió mal</string>
 
     <string name="intro_next">Siguiente</string>
     <string name="intro_welcome">Bienvenido a %s</string>

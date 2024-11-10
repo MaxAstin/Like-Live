@@ -1,7 +1,6 @@
 package com.bunbeauty.tiptoplive.features.main
 
 import android.Manifest.permission.CAMERA
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -28,14 +27,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.bunbeauty.tiptoplive.R
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.CROP_IMAGE
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.DONATION
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.INTRO
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.PREPARATION
-import com.bunbeauty.tiptoplive.common.navigation.NavigationDestinations.STREAM
-import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.CROPPED_IMAGE_URI
-import com.bunbeauty.tiptoplive.common.navigation.NavigationParameters.URI
+import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
 import com.bunbeauty.tiptoplive.common.ui.util.keepScreenOn
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
@@ -49,7 +43,6 @@ import com.bunbeauty.tiptoplive.features.main.presentation.Main
 import com.bunbeauty.tiptoplive.features.main.presentation.MainViewModel
 import com.bunbeauty.tiptoplive.features.main.view.CameraIsRequiredDialog
 import com.bunbeauty.tiptoplive.features.preparation.view.PreparationScreen
-import com.bunbeauty.tiptoplive.features.stream.view.DURATION_NAV_PARAM
 import com.bunbeauty.tiptoplive.features.stream.view.StreamScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
@@ -127,7 +120,7 @@ class MainActivity : ComponentActivity() {
                 mainViewModel.event.onEach { event ->
                     when (event) {
                         Main.Event.OpenStream -> {
-                            navController.navigate(STREAM)
+                            navController.navigate(NavigationRote.Stream)
                         }
                     }
                 }.launchIn(this)
@@ -135,7 +128,7 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 navController.addOnDestinationChangedListener { _, destination, _ ->
-                    window.keepScreenOn = (destination.route == STREAM)
+                    window.keepScreenOn = destination.route == NavigationRote.Stream.javaClass.canonicalName
                 }
             }
 
@@ -153,7 +146,7 @@ class MainActivity : ComponentActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = INTRO,
+            startDestination = NavigationRote.Intro,
             modifier = modifier,
             enterTransition = {
                 EnterTransition.None
@@ -162,16 +155,15 @@ class MainActivity : ComponentActivity() {
                 ExitTransition.None
             },
         ) {
-            composable(route = INTRO) {
+            composable<NavigationRote.Intro> {
                 IntroScreen(navController = navController)
             }
-            composable(route = PREPARATION) { entry ->
-                val streamDurationInSeconds = entry.savedStateHandle.get<Int>(DURATION_NAV_PARAM)
-                val croppedImageUri = entry.savedStateHandle.get<Uri>(CROPPED_IMAGE_URI)
+            composable<NavigationRote.Preparation> { navBackStackEntry ->
+                val preparationRoute: NavigationRote.Preparation = navBackStackEntry.toRoute()
                 PreparationScreen(
                     navController = navController,
-                    streamDurationInSeconds = streamDurationInSeconds,
-                    croppedImageUri = croppedImageUri,
+                    streamDurationInSeconds = preparationRoute.durationInSeconds,
+                    croppedImageUri = preparationRoute.uri?.toUri(),
                     onStartStreamClick = {
                         requestCameraPermission()
                     },
@@ -187,12 +179,14 @@ class MainActivity : ComponentActivity() {
                             ),
                         )
                         if (!isSuccessful) {
-                            // TODO show error
+                            showToast(
+                                message = getString(R.string.common_something_went_wrong)
+                            )
                         }
                     }
                 )
             }
-            composable(route = DONATION) {
+            composable<NavigationRote.Donation> {
                 val scope = rememberCoroutineScope()
                 DonationScreen(
                     navController = navController,
@@ -203,21 +197,27 @@ class MainActivity : ComponentActivity() {
                                 id = productId,
                             )
                             if (!isSuccessful) {
-                                // TODO show error
+                                showToast(
+                                    message = getString(R.string.common_something_went_wrong)
+                                )
                             }
                         }
                     }
                 )
             }
-            composable(route = STREAM) {
+            composable<NavigationRote.Stream> {
                 StreamScreen(navController = navController)
             }
-            composable(route = CROP_IMAGE) { navBackStackEntry ->
-                val uri = navBackStackEntry.arguments?.getString(URI)?.toUri()
+            composable<NavigationRote.CropImage> { navBackStackEntry ->
+                val cropImageRoute: NavigationRote.CropImage = navBackStackEntry.toRoute()
+                val uri = cropImageRoute.uri.toUri()
                 CropImageScreen(
                     navController = navController,
                     uri = uri,
                     onMockClick = {
+                        showToast(
+                            message = getString(R.string.common_under_development)
+                        )
                         Toast.makeText(
                             this@MainActivity,
                             getString(R.string.common_under_development),
@@ -227,5 +227,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+            .show()
     }
 }
