@@ -17,8 +17,8 @@ android {
         applicationId = "com.bunbeauty.tiptoplive"
         minSdk = 27
         targetSdk = 35
-        versionCode = 204
-        versionName = "2.0.4"
+        versionCode = 205
+        versionName = "2.0.5"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
