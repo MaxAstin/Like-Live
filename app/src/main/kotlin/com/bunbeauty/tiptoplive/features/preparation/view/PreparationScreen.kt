@@ -75,10 +75,9 @@ fun PreparationScreen(
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
+        val uriParam = uri?.toString() ?: return@rememberLauncherForActivityResult
         navController.navigate(
-            NavigationRote.CropImage(
-                uri = uri.toString()
-            )
+            NavigationRote.CropImage(uri = uriParam)
         )
     }
 
