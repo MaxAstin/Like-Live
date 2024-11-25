@@ -137,6 +137,12 @@ class StreamViewModel @Inject constructor(
                 }
             }
 
+            is Stream.Action.FilterSelected -> {
+                if (action.index > 0) {
+                    sendEvent(event = Stream.Event.ShowFilterNotAvailable)
+                }
+            }
+
             is Stream.Action.ClickQuestion -> {
                 setState {
                     copy(

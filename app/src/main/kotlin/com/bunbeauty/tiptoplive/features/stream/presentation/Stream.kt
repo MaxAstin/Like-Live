@@ -55,6 +55,7 @@ interface Stream {
         data object HideInvite : Action
         data object ShowQuestions : Action
         data object HideQuestions : Action
+        data class FilterSelected(val index: Int) : Action
         data class ClickQuestion(val uuid: String) : Action
         data class DeleteQuestion(val uuid: String) : Action
         data object CloseCurrentQuestion : Action
@@ -68,5 +69,6 @@ interface Stream {
 
     sealed interface Event : Base.Event {
         data class GoBack(val durationInSeconds: Int) : Event
+        data object ShowFilterNotAvailable : Event
     }
 }

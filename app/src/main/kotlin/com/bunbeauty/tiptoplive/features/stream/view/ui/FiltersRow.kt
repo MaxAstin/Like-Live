@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,10 +39,11 @@ private val filters = listOf(
 
 @Composable
 fun FiltersRow(
+    onFilterChanged: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedIndex by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
     LazyRow(
@@ -66,6 +67,7 @@ fun FiltersRow(
                     modifier = Modifier
                         .clickableWithoutIndication {
                             selectedIndex = i
+                            onFilterChanged(i)
                         }
                         .size(48.dp)
                         .clip(CircleShape),
@@ -81,6 +83,8 @@ fun FiltersRow(
 @Composable
 fun FiltersRowPreview() {
     FakeLiveTheme {
-        FiltersRow()
+        FiltersRow(
+            onFilterChanged = {}
+        )
     }
 }

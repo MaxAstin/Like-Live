@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,7 +40,7 @@ fun AnimatedReaction(
     val xOffsetAnimation = remember { Animatable(0f) }
     val yOffsetAnimation = remember { Animatable(0f) }
     val alphaAnimation = remember { Animatable(1f) }
-    var emojiImageId by remember { mutableStateOf(R.drawable.heart) }
+    var emojiImageId by remember { mutableIntStateOf(R.drawable.heart) }
 
     LaunchedEffect(Unit) {
         val delayMillis = Random.nextLong(300, 500) * order

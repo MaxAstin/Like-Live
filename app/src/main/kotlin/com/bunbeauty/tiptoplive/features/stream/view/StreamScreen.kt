@@ -1,6 +1,8 @@
 package com.bunbeauty.tiptoplive.features.stream.view
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -33,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -79,6 +82,7 @@ fun StreamScreen(navController: NavHostController) {
             viewModel.onAction(action)
         }
     }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.event.onEach { event ->
@@ -93,6 +97,14 @@ fun StreamScreen(navController: NavHostController) {
                             inclusive = true
                         }
                     }
+                }
+
+                Stream.Event.ShowFilterNotAvailable -> {
+                    context.showToast(
+                        message = context.resources.getString(
+                            R.string.stream_filter_not_available
+                        )
+                    )
                 }
             }
         }.launchIn(this)
@@ -111,7 +123,7 @@ fun StreamScreen(navController: NavHostController) {
 }
 
 @Composable
-fun StreamContent(
+private fun StreamContent(
     state: ViewState,
     onAction: (Stream.Action) -> Unit,
 ) {
@@ -241,7 +253,13 @@ fun StreamContent(
                     onAction = onAction
                 )
                 if (showFilters) {
-                    FiltersRow()
+                    FiltersRow(
+                        onFilterChanged = { index ->
+                            onAction(
+                                Stream.Action.FilterSelected(index = index)
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -692,6 +710,11 @@ private fun DirectBottomSheet(
             descriptionResId = R.string.stream_direct_description,
         )
     }
+}
+
+private fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        .show()
 }
 
 @LocalePreview
