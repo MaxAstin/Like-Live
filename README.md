@@ -1,21 +1,24 @@
-# ❤️ Like Live
+# 💖 TipTop Live
 
 ## Overview
 
-An [Android](https://www.android.com/) app built using [Kotlin](https://kotlinlang.org/) that allows you to set up and run a fake live stream.
+**TipTop Live** is an Android application that allows users to set up and simulate Live streams. Whether for training on real live streaming, pranks, or just for fun, this app provides a platform to create realistic fake Lives.
 
-![Rus](https://github.com/MaxAstin/Like-Live/assets/36783631/1c90b80c-83b3-4ff1-bbe7-41f44c67f67e)
+![Preview](https://github.com/user-attachments/assets/ea743bc7-710a-4c4f-8cfa-60e61cd31e98)
 
 ## Features
 
 - Setting custom username and avatar
 - Setting preferred number of viewers
-- Launching a fake live stream
+- Launching a fake Live stream
 - Endless stream of fake comments
+- Answering questions of fake fans
 
-## Stack
+## Prlatforms
+- ✅ Instagram – supported
+- 🔜 TikTok – coming soon
 
-The project is built using the following technologies and libraries:
+## Technologies
 - [Kotlin](https://kotlinlang.org/): Programming language
 - [Jetpack compose](https://developer.android.com/jetpack/compose): UI
 - [Hilt](https://dagger.dev/hilt/): Dependency injection
@@ -25,7 +28,7 @@ The project is built using the following technologies and libraries:
 
 ## Download
 
-<a align="center" href="https://play.google.com/store/apps/details?id=com.bunbeauty.fakelivestream&gl=us"><img style="margin: 10px" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Git" height="80" /></a>
+<a align="center" href="https://play.google.com/store/apps/details?id=com.bunbeauty.tiptoplive"><img style="margin: 10px" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Git" height="80" /></a>
 
 ## Contacts
 
