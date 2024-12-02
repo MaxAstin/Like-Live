@@ -1,5 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="common_under_development">Эта функция находится в стадии разработки</string>
+    <string name="common_something_went_wrong">Что-то пошло не так</string>
+
     <string name="intro_next">Продолжить</string>
     <string name="intro_welcome">Добро пожаловать в %s</string>
     <string name="intro_description">Мы ставим вашу конфиденциальность превыше всего. Ваши данные для нас священны, поэтому они остаются конфиденциальными и безопасными. Когда дело доходит до фейковых трансляций, доступ к ним есть только у вас. Так что расслабьтесь, получайте удовольствие, а обо всем остальном позаботимся мы!</string>
@@ -10,6 +13,7 @@
     <string name="stream_thousands_viewers_count">%s,%s тыс.</string>
     <string name="stream_add_comment">Добавьте комментарий…</string>
     <string name="stream_question_title">Вопрос</string>
+    <string name="stream_filter_not_available">Этот фильтр недоступен</string>
 
     <string name="required_camera_permisseon_title">Разрешите %s to доступ к камере</string>
     <string name="required_camera_permisseon_body">Это позволит начть стрим.
@@ -27,6 +31,8 @@
     <string name="preparation_username_hint">user_name</string>
     <string name="preparation_viewer_count">Количество зрителей</string>
     <string name="preparation_start_live">Начать стрим</string>
+
+    <string name="crop_image_next">Далее</string>
 
     <string name="donation_title">Поддержите %s</string>
     <string name="donation_descriptio">Это приложение создано независимым разработчиком без внешней финансовой поддержки. Каждый вклад имеет большое значение, и у вас есть возможность повлиять на развитие этого проекта.</string>

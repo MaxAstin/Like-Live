@@ -1,0 +1,95 @@
+[versions]
+activityCompose = "1.9.3"
+application = "8.7.2"
+billingKtx = "7.1.1"
+camera2 = "1.4.0"
+coilCompose = "2.6.0"
+composeBom = "2024.11.00"
+coreKtx = "1.15.0"
+coreSplashscreen = "1.0.1"
+firebase = "33.6.0"
+googleServicesVersion = "4.4.2"
+hiltNavigationCompose = "1.2.0"
+imageCropper = "4.6.0"
+kotlin = "2.0.21"
+kotlinxCollectionsImmutable = "0.3.7"
+ksp = "2.0.21-1.0.26"
+hilt = "2.52"
+googleServices = "4.4.2"
+firebaseCrashlytics = "3.0.2"
+lifecycleRuntimeKtx = "2.8.7"
+media3 = "1.5.0"
+navigationCompose = "2.8.4"
+review = "2.0.2"
+kotlinxSerializationJson = "1.7.3"
+
+[libraries]
+billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServicesVersion" }
+image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# Compose
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+review = { module = "com.google.android.play:review", version.ref = "review" }
+
+# Camera
+camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera2" }
+camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera2" }
+camera-view = { module = "androidx.camera:camera-view", version.ref = "camera2" }
+
+# Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+# Firebase
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+
+# Media
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
+
+[plugins]
+application = { id = "com.android.application", version.ref = "application" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[bundles]
+compose = [
+    "compose-foundation",
+    "compose-foundation-layout",
+    "compose-ui",
+    "compose-material",
+    "compose-material3",
+    "compose-ui-tooling",
+    "compose-ui-tooling-preview"
+]
+camera2 = [
+    "camera-camera2",
+    "camera-lifecycle",
+    "camera-view"
+]
