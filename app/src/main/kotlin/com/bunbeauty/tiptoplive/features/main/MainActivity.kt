@@ -31,7 +31,6 @@ import androidx.navigation.toRoute
 import com.bunbeauty.tiptoplive.R
 import com.bunbeauty.tiptoplive.common.navigation.NavigationRote
 import com.bunbeauty.tiptoplive.common.ui.theme.FakeLiveTheme
-import com.bunbeauty.tiptoplive.common.ui.util.keepScreenOn
 import com.bunbeauty.tiptoplive.common.util.launchInAppReview
 import com.bunbeauty.tiptoplive.common.util.openSettings
 import com.bunbeauty.tiptoplive.common.util.openSharing
@@ -124,12 +123,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }.launchIn(this)
-            }
-
-            LaunchedEffect(Unit) {
-                navController.addOnDestinationChangedListener { _, destination, _ ->
-                    window.keepScreenOn = destination.route == NavigationRote.Stream.javaClass.canonicalName
-                }
             }
 
             MainNavigation(

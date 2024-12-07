@@ -59,7 +59,6 @@ fun FeedbackDialog(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(24.dp)
-                        .padding(4.dp)
                         .clickableWithoutIndication {
                             onAction(Preparation.Action.CloseFeedbackDialogClick)
                         },
