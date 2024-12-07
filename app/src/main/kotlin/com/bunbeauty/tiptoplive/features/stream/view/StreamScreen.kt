@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -120,6 +122,16 @@ fun StreamScreen(navController: NavHostController) {
         state = state.toViewState(),
         onAction = onAction,
     )
+
+    val view = LocalView.current
+    DisposableEffect(Unit) {
+        val originalState = view.keepScreenOn
+        view.keepScreenOn = true
+
+        onDispose {
+            view.keepScreenOn = originalState
+        }
+    }
 }
 
 @Composable
